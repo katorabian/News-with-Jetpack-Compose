@@ -3,41 +3,57 @@ package com.katorabian.compose_news
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
-import com.katorabian.compose_news.ui.theme.ComposeNewsTheme
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            UserInfo(name = "Alex", age = 20)
-        }
-    }
-}
-
-@Composable
-fun UserInfo(name: String, age: Int) {
-    Column {
-        repeat(10) {
-            Text("Hello, $name! You are $age years old")
+            TimesTable()
         }
     }
 }
 
 @Preview
 @Composable
-fun UserInfoPreview() {
-    UserInfo(name = "John", age = 26)
+fun TimesTable() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        for (column in 1 until 10) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1F)
+            ) {
+                for (row in 1 until 10) {
+                    val value = column * row
+                    val even = (column + row) % 2 == 0
+                    val color = if (even) Color.Yellow else Color.White
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1F)
+                            .border(width = 1.dp, color = Color.DarkGray)
+                            .background(color = color),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = value.toString())
+                    }
+                }
+            }
+        }
+    }
 }
