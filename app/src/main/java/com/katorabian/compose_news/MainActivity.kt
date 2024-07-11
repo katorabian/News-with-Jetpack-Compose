@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -28,24 +29,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun UserInfo(name: String, age: Int) {
-    Text("Hello, $name!\nyou are $age years old")
+    Column {
+        repeat(10) {
+            Text("Hello, $name! You are $age years old")
+        }
+    }
 }
 
 @Preview
 @Composable
 fun UserInfoPreview() {
     UserInfo(name = "John", age = 26)
-}
-
-@Preview
-@Composable
-fun Greeting() {
-    val a = 5
-    val name = "John"
-    Text(
-        text = "Hello $name!!!",
-        color = Color(0xff3aebca),
-        modifier = Modifier
-            .background(color = Color.White)
-    )
 }
