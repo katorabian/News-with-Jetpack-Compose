@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
@@ -22,8 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,6 +66,45 @@ fun InstagramProfileCard() {
             UserStatistics(title = "Posts", value = "6,950")
             UserStatistics(title = "Followers", value = "436M")
             UserStatistics(title = "Following", value = "76")
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        ) {
+            Text(
+                text = "Instagram",
+                fontFamily = FontFamily.Cursive,
+                fontSize = 32.sp
+            )
+            Text(
+                text = "#YoursToMake",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        append("www.facebook.com/")
+                    }
+                    append("emotional_health",)
+                },
+                fontSize = 14.sp,
+                lineHeight = 1.sp
+            )
+            Button(
+                onClick = {},
+                shape = RoundedCornerShape(4.dp),
+                colors = ButtonColors(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.onPrimary,
+                    MaterialTheme.colorScheme.secondary,
+                    MaterialTheme.colorScheme.onSecondary
+                )
+            ) {
+                Text(text = "Follow")
+            }
         }
     }
 }
