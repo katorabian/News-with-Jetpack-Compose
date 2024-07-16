@@ -43,8 +43,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                 ) {
-//                    InstagramProfileCard()
-                    TestText()
+                    InstagramProfileCard()
                 }
             }
         }
