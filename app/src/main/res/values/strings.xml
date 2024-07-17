@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Compose News</string>
+    <string name="template_desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
 </resources>
