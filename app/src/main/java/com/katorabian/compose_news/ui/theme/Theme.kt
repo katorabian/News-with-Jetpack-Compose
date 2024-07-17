@@ -12,29 +12,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    background = Color.Black,
-    surface = Color.Black,
-    onPrimary = Color.Black,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color.DarkGray,
-    onSurface = Color.White,
+    primary = Black900,
+    secondary = Black900,
+    tertiary = Black900,
+    onPrimary = Color.White,
+    onSecondary = Black500
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onTertiary = Color.Black,
-    onBackground = Color.LightGray,
-    onSurface = Color.Black
+    primary = Color.White,
+    secondary = Color.White,
+    tertiary = Color.White,
+    onPrimary = Black900,
+    onSecondary = Black500
 )
 
 @Composable
@@ -47,7 +37,8 @@ fun ComposeNewsTheme(
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (darkTheme) DarkColorScheme else LightColorScheme
         }
 
         darkTheme -> DarkColorScheme

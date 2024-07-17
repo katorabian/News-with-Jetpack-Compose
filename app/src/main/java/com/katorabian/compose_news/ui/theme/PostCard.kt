@@ -3,6 +3,7 @@ package com.katorabian.compose_news.ui.theme
 import android.widget.Space
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,8 +18,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,79 +42,102 @@ import com.katorabian.compose_news.R
 @Preview
 @Composable
 fun PostCard() {
-    Card(
-        shape = RoundedCornerShape(4.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                horizontal = 4.dp,
-                vertical = 8.dp
-            ),
-        colors = CardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface,
-            disabledContainerColor = MaterialTheme.colorScheme.surface,
-            disabledContentColor = MaterialTheme.colorScheme.onSurface
-        )
-    ) {
+    ComposeNewsTheme {
+        Card(
+            shape = RoundedCornerShape(4.dp),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContentColor = MaterialTheme.colorScheme.onSurface
+            )
+        ) {
 
-        Column(modifier = Modifier.padding(8.dp, 4.dp, 8.dp, 16.dp)) {
-            PostCardHeader()
-            Text(
-                text = "Description",
-                modifier = Modifier.padding(vertical = 12.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                contentScale = ContentScale.FillWidth
-            )
-            Row {
-                TextWithImage()
-                Spacer(modifier = Modifier.weight(1F))
-                TextWithImage()
-                Spacer(modifier = Modifier.width(12.dp))
-                TextWithImage()
-                Spacer(modifier = Modifier.width(12.dp))
-                TextWithImage()
+            Column(modifier = Modifier.padding(8.dp, 4.dp, 8.dp, 16.dp)) {
+                PostCardHeader()
+                Text(
+                    text = "Description",
+                    modifier = Modifier.padding(vertical = 12.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    contentScale = ContentScale.FillWidth
+                )
+                Row {
+                    TextWithImage()
+                    Spacer(modifier = Modifier.weight(1F))
+                    TextWithImage()
+                    Spacer(modifier = Modifier.width(12.dp))
+                    TextWithImage()
+                    Spacer(modifier = Modifier.width(12.dp))
+                    TextWithImage()
+                }
             }
         }
     }
 }
 
-@Preview
 @Composable
 fun PostCardHeader() {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.primary)
+            .padding(8.dp)
+    ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = R.drawable.post_comunity_thumbnail),
             contentDescription = null,
             modifier = Modifier
-                .size(40.dp)
+                .size(50.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
 
+        Spacer(modifier = Modifier.width(8.dp))
         Column(
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .weight(1F),
+            modifier = Modifier.weight(1F),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.Start,
         ) {
-            Text(text = "Nickname")
-            Text(text = "time")
+            Text(
+                text = "/dev/null",
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "14:00",
+                color = MaterialTheme.colorScheme.onSecondary
+            )
         }
 
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+        Icon(
+            imageVector = Icons.Rounded.MoreVert,
             contentDescription = "more",
-            modifier = Modifier.size(16.dp)
+            tint = MaterialTheme.colorScheme.onSecondary
         )
+    }
+}
+
+@Preview
+@Composable
+private fun PostCardHeaderLight() {
+    ComposeNewsTheme(darkTheme = false) {
+        PostCardHeader()
+    }
+}
+
+@Preview
+@Composable
+private fun PostCardHeaderDark() {
+    ComposeNewsTheme(darkTheme = true) {
+        PostCardHeader()
     }
 }
 
