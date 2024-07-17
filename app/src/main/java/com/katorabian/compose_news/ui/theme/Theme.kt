@@ -1,6 +1,5 @@
 package com.katorabian.compose_news.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +20,7 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.Black,
     onSecondary = Color.White,
     onTertiary = Color.White,
-    onBackground = Color.White,
+    onBackground = Color.DarkGray,
     onSurface = Color.White,
 )
 
@@ -34,7 +33,7 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onTertiary = Color.Black,
-    onBackground = Color.Black,
+    onBackground = Color.LightGray,
     onSurface = Color.Black
 )
 
