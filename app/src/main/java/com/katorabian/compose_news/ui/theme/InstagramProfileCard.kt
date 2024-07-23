@@ -13,17 +13,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,14 +31,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.katorabian.compose_news.MainViewModel
 import com.katorabian.compose_news.R
 
 @Composable
-fun InstagramProfileCard() {
-    val isFollowed = rememberSaveable { mutableStateOf(false) }
+fun InstagramProfileCard(
+    viewModel: MainViewModel
+) {
+    val isFollowed: State<Boolean> = viewModel.isFollowing.observeAsState(false)
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp,),
@@ -100,7 +99,7 @@ fun InstagramProfileCard() {
                 lineHeight = 1.sp
             )
             FollowButton(isFollowed.value) {
-                isFollowed.value = !isFollowed.value
+                viewModel.changeFollowingStatus()
             }
         }
     }
@@ -152,21 +151,5 @@ private fun UserStatistics(
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Bold
         )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewCardLight() {
-    ComposeNewsTheme(darkTheme = false) {
-        InstagramProfileCard()
-    }
-}
-
-@Preview
-@Composable
-fun PreviewCardDark() {
-    ComposeNewsTheme(darkTheme = true) {
-        InstagramProfileCard()
     }
 }
