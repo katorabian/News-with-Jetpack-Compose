@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.katorabian.compose_news.ui.theme.ComposeNewsTheme
+import com.katorabian.compose_news.ui.theme.InstagramProfileCard
 import com.katorabian.compose_news.ui.theme.MainScreen
 import com.katorabian.compose_news.ui.theme.PostCard
 
@@ -19,7 +20,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeNewsTheme {
-                MainScreen()
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
+                ) {
+                    InstagramProfileCard()
+                }
             }
         }
     }
