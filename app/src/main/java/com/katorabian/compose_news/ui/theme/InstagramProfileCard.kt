@@ -99,28 +99,37 @@ fun InstagramProfileCard() {
                 fontSize = 14.sp,
                 lineHeight = 1.sp
             )
-            Button(
-                onClick = {
-                    isFollowed.value = !isFollowed.value
-                },
-                shape = RoundedCornerShape(4.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isFollowed.value)
-                        MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5F)
-                    else
-                        MaterialTheme.colorScheme.onPrimary,
-                    contentColor = MaterialTheme.colorScheme.primary
-                )
-            ) {
-                val text = if (isFollowed.value)
-                    "Unfollow"
-                else
-                    "Follow"
-
-                Text(text = text)
+            FollowButton(isFollowed.value) {
+                isFollowed.value = !isFollowed.value
             }
         }
     }
+}
+
+@Composable
+fun FollowButton(
+    isFollowed: Boolean,
+    clickListener: () -> Unit
+) {
+    Button(
+        onClick = clickListener,
+        shape = RoundedCornerShape(4.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isFollowed)
+                MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5F)
+            else
+                MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.primary
+        )
+    ) {
+        val text = if (isFollowed)
+            "Unfollow"
+        else
+            "Follow"
+
+        Text(text = text)
+    }
+
 }
 
 @Composable
