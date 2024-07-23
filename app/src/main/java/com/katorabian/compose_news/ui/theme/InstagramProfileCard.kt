@@ -14,11 +14,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +41,7 @@ import com.katorabian.compose_news.R
 
 @Composable
 fun InstagramProfileCard() {
+    val isFollowed = rememberSaveable { mutableStateOf(false) }
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp,),
@@ -94,16 +100,24 @@ fun InstagramProfileCard() {
                 lineHeight = 1.sp
             )
             Button(
-                onClick = {},
+                onClick = {
+                    isFollowed.value = !isFollowed.value
+                },
                 shape = RoundedCornerShape(4.dp),
-                colors = ButtonColors(
-                    MaterialTheme.colorScheme.primary,
-                    MaterialTheme.colorScheme.onPrimary,
-                    MaterialTheme.colorScheme.secondary,
-                    MaterialTheme.colorScheme.onSecondary
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isFollowed.value)
+                        MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5F)
+                    else
+                        MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text(text = "Follow")
+                val text = if (isFollowed.value)
+                    "Unfollow"
+                else
+                    "Follow"
+
+                Text(text = text)
             }
         }
     }
