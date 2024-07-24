@@ -1,5 +1,6 @@
 package com.katorabian.compose_news.ui.theme
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +20,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -40,7 +42,8 @@ import com.katorabian.compose_news.R
 fun InstagramProfileCard(
     viewModel: MainViewModel
 ) {
-    val isFollowed by viewModel.isFollowing.observeAsState(false)
+    Log.d("Recomposition", "InstagramProfileCard")
+    val isFollowed = viewModel.isFollowing.observeAsState(false)
 
     Card(
         modifier = Modifier.padding(8.dp),
@@ -53,6 +56,7 @@ fun InstagramProfileCard(
             disabledContentColor = MaterialTheme.colorScheme.onBackground
         ),
     ) {
+        Log.d("Recomposition", "Card")
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -108,21 +112,22 @@ fun InstagramProfileCard(
 
 @Composable
 fun FollowButton(
-    isFollowed: Boolean,
+    isFollowed: State<Boolean>,
     clickListener: () -> Unit
 ) {
+    Log.d("Recomposition", "FollowButton")
     Button(
         onClick = clickListener,
         shape = RoundedCornerShape(4.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isFollowed)
+            containerColor = if (isFollowed.value)
                 MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5F)
             else
                 MaterialTheme.colorScheme.onPrimary,
             contentColor = MaterialTheme.colorScheme.primary
         )
     ) {
-        val text = if (isFollowed)
+        val text = if (isFollowed.value)
             "Unfollow"
         else
             "Follow"
