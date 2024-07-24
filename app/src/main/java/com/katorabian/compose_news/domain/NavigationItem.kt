@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.ui.theme
+package com.katorabian.compose_news.domain
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

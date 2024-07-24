@@ -16,23 +16,48 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.katorabian.compose_news.R
+import com.katorabian.compose_news.domain.StatisticItem
+import com.katorabian.compose_news.domain.StatisticType
 
 @Preview
 @Composable
-fun PostStatistics() {
+fun PostStatistics(
+    statistics: List<StatisticItem> = emptyList()
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Row(modifier = Modifier.weight(1F)) {
-            IconWithText(R.drawable.ic_views_count, "916")
+            val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
+            IconWithText(
+                R.drawable.ic_views_count,
+                viewsItem.count.toString()
+            )
         }
         Row(
             modifier = Modifier.weight(1F),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconWithText(R.drawable.ic_share, "7")
-            IconWithText(R.drawable.ic_comment, "8")
-            IconWithText(R.drawable.ic_like, "23")
+            val sharesItem = statistics.getItemByType(StatisticType.SHARES)
+            IconWithText(
+                R.drawable.ic_share,
+                sharesItem.count.toString()
+            )
+            val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
+            IconWithText(
+                R.drawable.ic_comment,
+                commentsItem.count.toString()
+            )
+            val likesItem = statistics.getItemByType(StatisticType.LIKES)
+            IconWithText(
+                R.drawable.ic_like,
+                likesItem.count.toString()
+            )
         }
     }
+}
+
+private fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticItem {
+    return this.find { it.type == type} ?: StatisticItem(StatisticType.VIEWS)
+        ?: throw IllegalStateException("There is no type ${type.name} in collection")
 }
 
 @Composable

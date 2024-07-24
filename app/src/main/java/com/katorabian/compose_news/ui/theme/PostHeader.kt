@@ -25,15 +25,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.katorabian.compose_news.R
+import com.katorabian.compose_news.domain.FeedPostItem
 
 @Composable
-fun PostHeader() {
+fun PostHeader(
+    feedPostItem: FeedPostItem = FeedPostItem()
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.background(MaterialTheme.colorScheme.primary)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.post_comunity_thumbnail),
+            painter = painterResource(id = feedPostItem.avatarResId),
             contentDescription = null,
             modifier = Modifier
                 .size(50.dp)
@@ -48,12 +51,12 @@ fun PostHeader() {
             horizontalAlignment = Alignment.Start,
         ) {
             Text(
-                text = "/dev/null",
+                text = feedPostItem.communityName,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "14:00",
+                text = feedPostItem.publicationDate,
                 color = MaterialTheme.colorScheme.onSecondary
             )
         }

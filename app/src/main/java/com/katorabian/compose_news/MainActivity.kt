@@ -19,6 +19,7 @@ import com.katorabian.compose_news.ui.theme.PostCard
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+/*
         setContent {
             val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
             ComposeNewsTheme {
@@ -29,6 +30,12 @@ class MainActivity : ComponentActivity() {
                 ) {
                     InstagramProfileCard(viewModel)
                 }
+            }
+        }
+*/
+        setContent {
+            ComposeNewsTheme {
+                MainScreen()
             }
         }
     }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,15 +26,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.katorabian.compose_news.R
+import com.katorabian.compose_news.domain.FeedPostItem
 
 @Preview
 @Composable
-fun PostCard() {
+fun PostCard(
+    modifier: Modifier = Modifier,
+    feedPost: FeedPostItem = FeedPostItem()
+) {
     ComposeNewsTheme {
         Card(
             shape = RoundedCornerShape(4.dp),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             colors = CardColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -43,18 +48,20 @@ fun PostCard() {
         ) {
 
             Column(modifier = Modifier.padding(8.dp)) {
-                PostHeader()
+                PostHeader(feedPost)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = stringResource(R.string.template_desc))
+                Text(text = feedPost.contentText)
                 Spacer(modifier = Modifier.height(8.dp))
                 Image(
-                    painter = painterResource(id = R.drawable.post_content_image),
+                    painter = painterResource(id = feedPost.contentImageResId),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1F),
                     contentScale = ContentScale.FillWidth
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                PostStatistics()
+                PostStatistics(statistics = feedPost.statistics)
             }
         }
     }
