@@ -19,7 +19,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +40,8 @@ import com.katorabian.compose_news.R
 fun InstagramProfileCard(
     viewModel: MainViewModel
 ) {
-    val isFollowed: State<Boolean> = viewModel.isFollowing.observeAsState(false)
+    val isFollowed by viewModel.isFollowing.observeAsState(false)
+
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp,),
@@ -98,7 +99,7 @@ fun InstagramProfileCard(
                 fontSize = 14.sp,
                 lineHeight = 1.sp
             )
-            FollowButton(isFollowed.value) {
+            FollowButton(isFollowed) {
                 viewModel.changeFollowingStatus()
             }
         }
