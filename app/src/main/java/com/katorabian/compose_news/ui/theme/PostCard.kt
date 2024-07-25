@@ -1,38 +1,32 @@
 package com.katorabian.compose_news.ui.theme
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.katorabian.compose_news.R
 import com.katorabian.compose_news.domain.FeedPostItem
+import com.katorabian.compose_news.domain.StatisticItem
 
-@Preview
 @Composable
 fun PostCard(
     modifier: Modifier = Modifier,
-    feedPost: FeedPostItem = FeedPostItem()
+    feedPost: FeedPostItem,
+    onStatisticItemClickListener: (StatisticItem) -> Unit
 ) {
     ComposeNewsTheme {
         Card(
@@ -61,8 +55,18 @@ fun PostCard(
                     contentScale = ContentScale.FillWidth
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                PostStatistics(statistics = feedPost.statistics)
+                PostStatistics(
+                    statistics = feedPost.statistics,
+                    onItemClickListener = onStatisticItemClickListener
+                )
             }
         }
     }
 }
+
+@Preview
+@Composable
+fun PostCardPreview() = PostCard(
+    feedPost = FeedPostItem(),
+    onStatisticItemClickListener = {}
+)

@@ -22,6 +22,8 @@ import com.katorabian.compose_news.domain.NavigationItem
 @Preview
 @Composable
 fun MainScreen() {
+    val feedPost = remember { mutableStateOf(FeedPostItem()) }
+
     Scaffold(
         bottomBar = {
             NavigationBar(containerColor = Color.White) {
@@ -58,7 +60,24 @@ fun MainScreen() {
     ) { it
         PostCard(
             modifier = Modifier.padding(8.dp),
-            feedPost = FeedPostItem()
+            feedPost = feedPost.value,
+            onStatisticItemClickListener = { newItem ->
+                val oldStatistics = feedPost.value.statistics
+                val newStatistics = oldStatistics.toMutableList().apply {
+                    replaceAll { oldItem ->
+                        if (oldItem.type == newItem.type) {
+                            oldItem.copy(
+                                count = oldItem.count + 1
+                            )
+                        } else {
+                            oldItem
+                        }
+                    }
+                }
+                feedPost.value = feedPost.value.copy(
+                    statistics = newStatistics
+                )
+            }
         )
     }
 }
