@@ -1,9 +1,12 @@
 package com.katorabian.compose_news.domain
 
+import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import com.katorabian.compose_news.R
+import kotlinx.parcelize.Parcelize
 
 @TempClass("Until REST provide")
+@Parcelize
 data class FeedPostItem(
     val communityName: String = "/dev/null",
     val publicationDate: String = "14:00",
@@ -16,4 +19,4 @@ data class FeedPostItem(
         StatisticItem(StatisticType.COMMENTS, 8),
         StatisticItem(StatisticType.LIKES, 27)
     )
-)
+): Parcelable
