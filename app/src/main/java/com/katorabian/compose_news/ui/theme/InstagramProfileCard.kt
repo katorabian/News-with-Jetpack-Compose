@@ -21,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,12 +34,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.katorabian.compose_news.MainViewModel
+import com.katorabian.compose_news.InstagramViewModel
 import com.katorabian.compose_news.R
 
 @Composable
 fun InstagramProfileCard(
-    viewModel: MainViewModel
+    viewModel: InstagramViewModel
 ) {
     Log.d("Recomposition", "InstagramProfileCard")
     val isFollowed = viewModel.isFollowing.observeAsState(false)

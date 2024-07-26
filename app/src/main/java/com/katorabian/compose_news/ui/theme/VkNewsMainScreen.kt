@@ -9,22 +9,19 @@ import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.katorabian.compose_news.PostViewModel
 import com.katorabian.compose_news.domain.FeedPostItem
 import com.katorabian.compose_news.domain.NavigationItem
 
-@Preview
 @Composable
-fun MainScreen() {
-    val feedPost = rememberSaveable { mutableStateOf(FeedPostItem()) }
-
+fun MainScreen(viewModel: PostViewModel) {
     Scaffold(
         bottomBar = {
             NavigationBar(containerColor = Color.White) {
@@ -59,26 +56,11 @@ fun MainScreen() {
 
         }
     ) { it
+        val feedPost = viewModel.feedPost.observeAsState(FeedPostItem())
         PostCard(
             modifier = Modifier.padding(8.dp),
             feedPost = feedPost.value,
-            onStatisticItemClickListener = { newItem ->
-                val oldStatistics = feedPost.value.statistics
-                val newStatistics = oldStatistics.toMutableList().apply {
-                    replaceAll { oldItem ->
-                        if (oldItem.type == newItem.type) {
-                            oldItem.copy(
-                                count = oldItem.count + 1
-                            )
-                        } else {
-                            oldItem
-                        }
-                    }
-                }
-                feedPost.value = feedPost.value.copy(
-                    statistics = newStatistics
-                )
-            }
+            onStatisticItemClickListener = viewModel::updateCount
         )
     }
 }
