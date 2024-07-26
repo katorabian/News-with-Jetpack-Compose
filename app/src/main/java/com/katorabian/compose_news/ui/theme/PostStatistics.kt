@@ -32,7 +32,10 @@ import com.katorabian.compose_news.domain.StatisticType
 @Composable
 fun PostStatistics(
     statistics: List<StatisticItem>,
-    onItemClickListener: (StatisticItem) -> Unit
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Row(modifier = Modifier.weight(1F)) {
@@ -40,7 +43,7 @@ fun PostStatistics(
             IconWithText(
                 R.drawable.ic_views_count,
                 viewsItem.count.toString(),
-                onItemClickListener = { onItemClickListener(viewsItem) }
+                onItemClickListener = { onViewsClickListener(viewsItem) }
             )
         }
         Row(
@@ -51,19 +54,19 @@ fun PostStatistics(
             IconWithText(
                 R.drawable.ic_share,
                 sharesItem.count.toString(),
-                onItemClickListener = { onItemClickListener(sharesItem) }
+                onItemClickListener = { onShareClickListener(sharesItem) }
             )
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
                 R.drawable.ic_comment,
                 commentsItem.count.toString(),
-                onItemClickListener = { onItemClickListener(commentsItem) }
+                onItemClickListener = { onCommentClickListener(commentsItem) }
             )
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
                 R.drawable.ic_like,
                 likesItem.count.toString(),
-                onItemClickListener = { onItemClickListener(likesItem) }
+                onItemClickListener = { onLikeClickListener(likesItem) }
             )
         }
     }

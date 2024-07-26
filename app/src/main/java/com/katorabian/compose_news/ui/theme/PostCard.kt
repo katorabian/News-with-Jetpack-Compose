@@ -26,7 +26,10 @@ import com.katorabian.compose_news.domain.StatisticItem
 fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPostItem,
-    onStatisticItemClickListener: (StatisticItem) -> Unit
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit
 ) {
     ComposeNewsTheme {
         Card(
@@ -57,7 +60,10 @@ fun PostCard(
                 Spacer(modifier = Modifier.height(8.dp))
                 PostStatistics(
                     statistics = feedPost.statistics,
-                    onItemClickListener = onStatisticItemClickListener
+                    onViewsClickListener = onViewsClickListener,
+                    onShareClickListener = onShareClickListener,
+                    onCommentClickListener = onCommentClickListener,
+                    onLikeClickListener = onLikeClickListener
                 )
             }
         }
@@ -68,5 +74,8 @@ fun PostCard(
 @Composable
 fun PostCardPreview() = PostCard(
     feedPost = FeedPostItem(),
-    onStatisticItemClickListener = {}
+    onViewsClickListener = {},
+    onShareClickListener = {},
+    onCommentClickListener = {},
+    onLikeClickListener = {}
 )
