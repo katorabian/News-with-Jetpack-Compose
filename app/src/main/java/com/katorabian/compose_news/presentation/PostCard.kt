@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.ui.theme
+package com.katorabian.compose_news.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.katorabian.compose_news.domain.FeedPostItem
 import com.katorabian.compose_news.domain.StatisticItem
+import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 
 @Composable
 fun PostCard(

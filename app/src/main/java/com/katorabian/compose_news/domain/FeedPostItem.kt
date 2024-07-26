@@ -3,6 +3,7 @@ package com.katorabian.compose_news.domain
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import com.katorabian.compose_news.R
+import com.katorabian.compose_news.domain.annotation.TempClass
 import kotlinx.parcelize.Parcelize
 
 @TempClass("Until REST provide")

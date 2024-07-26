@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.ui.theme
+package com.katorabian.compose_news.presentation.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

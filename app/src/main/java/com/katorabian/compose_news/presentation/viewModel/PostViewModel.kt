@@ -1,4 +1,4 @@
-package com.katorabian.compose_news
+package com.katorabian.compose_news.presentation.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

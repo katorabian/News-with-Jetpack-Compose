@@ -1,5 +1,6 @@
-package com.katorabian.compose_news.domain
+package com.katorabian.compose_news.domain.annotation
 
+import com.katorabian.compose_news.domain.constant.EMPTY_STRING
 import kotlin.annotation.AnnotationTarget.CLASS
 import kotlin.annotation.AnnotationTarget.CONSTRUCTOR
 import kotlin.annotation.AnnotationTarget.FUNCTION

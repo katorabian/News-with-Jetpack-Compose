@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.ui.theme
+package com.katorabian.compose_news.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

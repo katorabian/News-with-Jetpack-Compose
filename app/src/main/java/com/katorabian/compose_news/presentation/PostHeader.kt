@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.ui.theme
+package com.katorabian.compose_news.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -24,8 +23,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.katorabian.compose_news.R
 import com.katorabian.compose_news.domain.FeedPostItem
+import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 
 @Composable
 fun PostHeader(

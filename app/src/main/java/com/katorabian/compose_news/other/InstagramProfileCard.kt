@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.ui.theme
+package com.katorabian.compose_news.other
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.katorabian.compose_news.InstagramViewModel
 import com.katorabian.compose_news.R
 
 @Composable

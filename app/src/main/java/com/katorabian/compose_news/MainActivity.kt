@@ -16,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
-import com.katorabian.compose_news.ui.theme.ComposeNewsTheme
-import com.katorabian.compose_news.ui.theme.InstagramProfileCard
+import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
+import com.katorabian.compose_news.other.InstagramProfileCard
+import com.katorabian.compose_news.other.InstagramViewModel
+import com.katorabian.compose_news.presentation.viewModel.PostViewModel
 
 class MainActivity : ComponentActivity() {
     private val postViewModel by viewModels<PostViewModel>()

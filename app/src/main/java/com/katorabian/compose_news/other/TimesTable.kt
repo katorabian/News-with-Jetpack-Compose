@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.ui.theme
+package com.katorabian.compose_news.other
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
