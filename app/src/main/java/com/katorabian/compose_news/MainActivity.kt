@@ -7,8 +7,9 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -46,7 +47,7 @@ private fun InstagramTest(viewModel: InstagramViewModel) {
                 .background(MaterialTheme.colorScheme.background),
         ) {
             val models = viewModel.models.observeAsState(emptyList())
-            LazyColumn {
+            LazyVerticalGrid(columns = GridCells.Fixed(2)) {
                 items(models.value) { instagramItem ->
                     InstagramProfileCard(
                         instagramItem = instagramItem,
