@@ -7,17 +7,21 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.katorabian.compose_news.other.InstagramProfileCard
 import com.katorabian.compose_news.other.InstagramViewModel
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 import com.katorabian.compose_news.presentation.viewModel.PostViewModel
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val postViewModel by viewModels<PostViewModel>()
@@ -47,7 +51,9 @@ private fun InstagramTest(viewModel: InstagramViewModel) {
                 .background(MaterialTheme.colorScheme.background),
         ) {
             val models = viewModel.models.observeAsState(emptyList())
-            LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+            val scope = rememberCoroutineScope()
+            val lazyListState = rememberLazyListState()
+            LazyColumn(state = lazyListState) {
                 items(models.value) { instagramItem ->
                     InstagramProfileCard(
                         instagramItem = instagramItem,
@@ -55,6 +61,14 @@ private fun InstagramTest(viewModel: InstagramViewModel) {
                     )
                 }
             }
+
+            FloatingActionButton(
+                onClick = {
+                    scope.launch {
+                        lazyListState.scrollToItem(0, 0)
+                    }
+                }
+            ) {}
         }
     }
 }
