@@ -41,4 +41,19 @@ class InstagramViewModel: ViewModel() {
         }
         _models.value = modifiedList
     }
+
+    fun removeItem(item: InstagramItem) {
+        val modifiedList = _models.value?.toMutableList()
+            ?: throw NullPointerException("InstagramViewModel::changeFollowedStatus")
+
+        val iterator = modifiedList.listIterator()
+        while (iterator.hasNext()) {
+            val curr = iterator.next()
+            if (curr == item) {
+                iterator.remove()
+                break
+            }
+        }
+        _models.value = modifiedList
+    }
 }
