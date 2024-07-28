@@ -1,6 +1,8 @@
 package com.katorabian.compose_news.presentation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -19,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.katorabian.compose_news.presentation.viewModel.PostViewModel
 import com.katorabian.compose_news.domain.FeedPostItem
 import com.katorabian.compose_news.domain.NavigationItem
+import com.katorabian.compose_news.domain.StatisticType
 
 @Composable
 fun MainScreen(viewModel: PostViewModel) {
@@ -55,15 +58,24 @@ fun MainScreen(viewModel: PostViewModel) {
             }
 
         }
-    ) { it
-        val feedPost = viewModel.feedPost.observeAsState(FeedPostItem())
-        PostCard(
-            modifier = Modifier.padding(8.dp),
-            feedPost = feedPost.value,
-            onViewsClickListener = viewModel::updateCount,
-            onShareClickListener = viewModel::updateCount,
-            onCommentClickListener = viewModel::updateCount,
-            onLikeClickListener = viewModel::updateCount
-        )
+    ) {
+        val feedPost = viewModel.feedList.observeAsState(emptyList())
+        LazyColumn(modifier = Modifier.padding(it)) {
+            items(
+                items = feedPost.value,
+                key = { it.id }
+            ) { post ->
+                fun updateCount(type: StatisticType) = viewModel.updateCount(post, type)
+
+                PostCard(
+                    modifier = Modifier.padding(8.dp),
+                    feedPost = post,
+                    onViewsClickListener = { updateCount(StatisticType.VIEWS) },
+                    onShareClickListener = { updateCount(StatisticType.SHARES) },
+                    onCommentClickListener = { updateCount(StatisticType.COMMENTS) },
+                    onLikeClickListener = { updateCount(StatisticType.LIKES) }
+                )
+            }
+        }
     }
 }

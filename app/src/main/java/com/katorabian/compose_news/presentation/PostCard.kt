@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.katorabian.compose_news.domain.FeedPostItem
 import com.katorabian.compose_news.domain.StatisticItem
+import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 
 @Composable
@@ -74,7 +75,7 @@ fun PostCard(
 @Preview
 @Composable
 fun PostCardPreview() = PostCard(
-    feedPost = FeedPostItem(),
+    feedPost = FeedPostItem(ZERO_INT),
     onViewsClickListener = {},
     onShareClickListener = {},
     onCommentClickListener = {},

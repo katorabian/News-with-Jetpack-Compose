@@ -9,6 +9,7 @@ import kotlinx.parcelize.Parcelize
 @TempClass("Until REST provide")
 @Parcelize
 data class FeedPostItem(
+    val id: Int,
     val communityName: String = "/dev/null",
     val publicationDate: String = "14:00",
     val avatarResId: Int = R.drawable.post_comunity_thumbnail,

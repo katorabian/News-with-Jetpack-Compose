@@ -24,11 +24,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.katorabian.compose_news.domain.FeedPostItem
+import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 
 @Composable
 fun PostHeader(
-    feedPostItem: FeedPostItem = FeedPostItem()
+    feedPostItem: FeedPostItem = FeedPostItem(ZERO_INT)
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
