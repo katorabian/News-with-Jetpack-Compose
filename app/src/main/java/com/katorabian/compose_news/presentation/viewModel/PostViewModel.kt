@@ -45,4 +45,19 @@ class PostViewModel: ViewModel() {
 
         _feedList.value = postsToUpdate
     }
+
+    fun removeItem(post: FeedPostItem) {
+        val listToUpdate = feedList.value?.toMutableList()?: mutableListOf()
+        val iterator = listToUpdate.listIterator()
+
+        while (iterator.hasNext()) {
+            val currPost = iterator.next()
+            if (currPost.id == post.id) {
+                iterator.remove()
+                break
+            }
+        }
+
+        _feedList.value = listToUpdate
+    }
 }
