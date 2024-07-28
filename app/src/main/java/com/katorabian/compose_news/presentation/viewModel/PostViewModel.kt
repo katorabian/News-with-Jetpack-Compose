@@ -8,56 +8,41 @@ import com.katorabian.compose_news.domain.StatisticType
 
 class PostViewModel: ViewModel() {
 
-    private val initialList: List<FeedPostItem> = MutableList(3) { FeedPostItem(it) }
+    private val initialList: List<FeedPostItem> = MutableList(10) { FeedPostItem(it) }
 
-    private val _feedList = MutableLiveData(initialList)
-    val feedList: LiveData<List<FeedPostItem>> = _feedList
+    private val _feedPosts = MutableLiveData(initialList)
+    val feedPosts: LiveData<List<FeedPostItem>> = _feedPosts
 
     @Throws(IllegalStateException::class)
     fun updateCount(post: FeedPostItem, statisticType: StatisticType) {
-        val postsToUpdate = feedList.value?.toMutableList()?: throw NullPointerException()
-
-        val postsIterator = postsToUpdate.listIterator()
-        while(postsIterator.hasNext()) {
-            val currPost = postsIterator.next()
-            if (currPost.id == post.id) {
-
-                val oldStatistics = currPost.statistics
-                val newStatistics = oldStatistics.toMutableList().apply {
-                    replaceAll { oldItem ->
-                        if (oldItem.type == statisticType) {
-                            oldItem.copy(
-                                count = oldItem.count + 1
-                            )
-                        } else {
-                            oldItem
-                        }
-                    }
+        val oldPosts = feedPosts.value?.toMutableList()?: throw NullPointerException()
+        val oldStatistics = post.statistics
+        val newStatistics = oldStatistics.toMutableList().apply {
+            replaceAll { oldItem ->
+                if (oldItem.type == statisticType) {
+                    oldItem.copy(
+                        count = oldItem.count + 1
+                    )
+                } else {
+                    oldItem
                 }
-
-                val postUpdated = currPost.copy(
-                    statistics = newStatistics
-                )
-                postsIterator.set(postUpdated)
-                break
             }
         }
 
-        _feedList.value = postsToUpdate
+        val newFeedPost = post.copy(statistics = newStatistics)
+        _feedPosts.value = oldPosts.apply {
+            replaceAll {
+                if (it.id == newFeedPost.id)
+                    newFeedPost
+                else
+                    it
+            }
+        }
     }
 
     fun removeItem(post: FeedPostItem) {
-        val listToUpdate = feedList.value?.toMutableList()?: mutableListOf()
-        val iterator = listToUpdate.listIterator()
-
-        while (iterator.hasNext()) {
-            val currPost = iterator.next()
-            if (currPost.id == post.id) {
-                iterator.remove()
-                break
-            }
-        }
-
-        _feedList.value = listToUpdate
+        val oldPosts = feedPosts.value?.toMutableList()?: throw NullPointerException()
+        oldPosts.removeIf { it.id == post.id }
+        _feedPosts.value = oldPosts
     }
 }

@@ -1,6 +1,10 @@
 package com.katorabian.compose_news.presentation
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,8 +28,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.katorabian.compose_news.presentation.viewModel.PostViewModel
-import com.katorabian.compose_news.domain.FeedPostItem
 import com.katorabian.compose_news.domain.NavigationItem
 import com.katorabian.compose_news.domain.StatisticType
 
@@ -34,7 +38,10 @@ import com.katorabian.compose_news.domain.StatisticType
 fun MainScreen(viewModel: PostViewModel) {
     Scaffold(
         bottomBar = {
-            NavigationBar(containerColor = Color.White) {
+            NavigationBar(
+                modifier = Modifier.height(58.dp),
+                containerColor = MaterialTheme.colorScheme.primary
+            ) {
                 val selectedItemPos = remember { mutableStateOf(0) }
                 val items = listOf(
                     NavigationItem.Home,
@@ -43,13 +50,20 @@ fun MainScreen(viewModel: PostViewModel) {
                 )
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
+                        modifier = Modifier.height(20.dp),
                         selected = selectedItemPos.value == index,
                         onClick = { selectedItemPos.value = index },
                         icon = {
-                            Icon(item.icon, contentDescription = null)
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = null
+                            )
                         },
                         label = {
-                            Text(text = stringResource(id = item.titleResId))
+                            Text(
+                                text = stringResource(id = item.titleResId),
+                                fontSize = 11.sp
+                            )
                         },
                         colors = NavigationBarItemColors(
                             selectedIconColor = MaterialTheme.colorScheme.onPrimary,
@@ -66,17 +80,23 @@ fun MainScreen(viewModel: PostViewModel) {
 
         }
     ) {
-        val feedPost = viewModel.feedList.observeAsState(emptyList())
+        val feedPosts = viewModel.feedPosts.observeAsState(emptyList())
         val screenWidth = with(LocalDensity.current) {
             LocalConfiguration.current.screenWidthDp.dp.toPx()
         }
 
-        LazyColumn(modifier = Modifier.padding(it)) {
+        LazyColumn(
+            modifier = Modifier.padding(it),
+            contentPadding = PaddingValues(
+                vertical = 16.dp,
+                horizontal = 8.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             items(
-                items = feedPost.value,
+                items = feedPosts.value,
                 key = { item -> item.id }
             ) { post ->
-                fun updateCount(type: StatisticType) = viewModel.updateCount(post, type)
                 val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
                     positionalThreshold = { screenWidth / 2 },
                     confirmValueChange = { value: SwipeToDismissBoxValue ->
@@ -89,12 +109,15 @@ fun MainScreen(viewModel: PostViewModel) {
                     }
                 )
 
+                fun updateCount(type: StatisticType) = viewModel.updateCount(post, type)
+
                 SwipeToDismissBox(
                     state = swipeToDismissBoxState,
-                    backgroundContent = {}
+                    backgroundContent = {},
+                    enableDismissFromEndToStart = true,
+                    enableDismissFromStartToEnd = false
                 ) {
                     PostCard(
-                        modifier = Modifier.padding(8.dp),
                         feedPost = post,
                         onViewsClickListener = { updateCount(StatisticType.VIEWS) },
                         onShareClickListener = { updateCount(StatisticType.SHARES) },
