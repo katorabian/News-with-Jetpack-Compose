@@ -1,5 +1,6 @@
 package com.katorabian.compose_news.presentation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
@@ -33,7 +34,7 @@ import com.katorabian.compose_news.presentation.viewModel.PostViewModel
 import com.katorabian.compose_news.domain.NavigationItem
 import com.katorabian.compose_news.domain.StatisticType
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(viewModel: PostViewModel) {
     Scaffold(
@@ -112,6 +113,7 @@ fun MainScreen(viewModel: PostViewModel) {
                 fun updateCount(type: StatisticType) = viewModel.updateCount(post, type)
 
                 SwipeToDismissBox(
+                    modifier = Modifier.animateItemPlacement(),
                     state = swipeToDismissBoxState,
                     backgroundContent = {},
                     enableDismissFromEndToStart = true,
