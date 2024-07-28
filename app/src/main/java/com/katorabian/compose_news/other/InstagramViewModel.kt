@@ -22,15 +22,21 @@ class InstagramViewModel: ViewModel() {
     private val _models = MutableLiveData<List<InstagramItem>>(initialList)
     val models: LiveData<List<InstagramItem>> = _models
 
+    @Throws(NullPointerException::class)
     fun changeFollowedStatus(item: InstagramItem) {
         val modifiedList = _models.value?.toMutableList()
             ?: throw NullPointerException("InstagramViewModel::changeFollowedStatus")
 
-        modifiedList.replaceAll {
-            if (it == item) {
-                it.copy(isFollowed = !it.isFollowed)
-            } else {
-                it
+        val iterator = modifiedList.listIterator()
+        while (iterator.hasNext()) {
+            val curr = iterator.next()
+            if (curr == item) {
+                iterator.set(
+                    curr.copy(
+                        isFollowed = !curr.isFollowed
+                    )
+                )
+                break
             }
         }
         _models.value = modifiedList
