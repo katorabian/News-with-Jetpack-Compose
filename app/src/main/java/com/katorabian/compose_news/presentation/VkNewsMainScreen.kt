@@ -1,11 +1,11 @@
 package com.katorabian.compose_news.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,9 +20,11 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -30,30 +32,31 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.katorabian.compose_news.presentation.viewModel.PostViewModel
+import com.katorabian.compose_news.presentation.viewModel.MainViewModel
 import com.katorabian.compose_news.domain.NavigationItem
 import com.katorabian.compose_news.domain.StatisticType
+import com.katorabian.compose_news.domain.constant.ZERO_INT
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen(viewModel: PostViewModel) {
+fun MainScreen(viewModel: MainViewModel) {
+    val selectedNavItem by viewModel.selectedNavItem.observeAsState(NavigationItem.Home)
     Scaffold(
         bottomBar = {
             NavigationBar(
                 modifier = Modifier.height(58.dp),
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                val selectedItemPos = remember { mutableStateOf(0) }
                 val items = listOf(
                     NavigationItem.Home,
                     NavigationItem.Favorite,
                     NavigationItem.Profile
                 )
-                items.forEachIndexed { index, item ->
+                items.forEach { item ->
                     NavigationBarItem(
                         modifier = Modifier.height(20.dp),
-                        selected = selectedItemPos.value == index,
-                        onClick = { selectedItemPos.value = index },
+                        selected = selectedNavItem == item,
+                        onClick = { viewModel.selectNavItem(item) },
                         icon = {
                             Icon(
                                 imageVector = item.icon,
@@ -80,54 +83,28 @@ fun MainScreen(viewModel: PostViewModel) {
             }
 
         }
-    ) {
-        val feedPosts = viewModel.feedPosts.observeAsState(emptyList())
-        val screenWidth = with(LocalDensity.current) {
-            LocalConfiguration.current.screenWidthDp.dp.toPx()
-        }
-
-        LazyColumn(
-            modifier = Modifier.padding(it),
-            contentPadding = PaddingValues(
-                vertical = 16.dp,
-                horizontal = 8.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                items = feedPosts.value,
-                key = { item -> item.id }
-            ) { post ->
-                val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
-                    positionalThreshold = { screenWidth / 2 },
-                    confirmValueChange = { value: SwipeToDismissBoxValue ->
-                        val isDismissed = value != SwipeToDismissBoxValue.Settled
-                        if (isDismissed) {
-                            viewModel.removeItem(post)
-                        }
-
-                        return@rememberSwipeToDismissBoxState isDismissed
-                    }
-                )
-
-                fun updateCount(type: StatisticType) = viewModel.updateCount(post, type)
-
-                SwipeToDismissBox(
-                    modifier = Modifier.animateItemPlacement(),
-                    state = swipeToDismissBoxState,
-                    backgroundContent = {},
-                    enableDismissFromEndToStart = true,
-                    enableDismissFromStartToEnd = false
-                ) {
-                    PostCard(
-                        feedPost = post,
-                        onViewsClickListener = { updateCount(StatisticType.VIEWS) },
-                        onShareClickListener = { updateCount(StatisticType.SHARES) },
-                        onCommentClickListener = { updateCount(StatisticType.COMMENTS) },
-                        onLikeClickListener = { updateCount(StatisticType.LIKES) }
-                    )
-                }
+    ) { paddingValues ->
+        when (selectedNavItem) {
+            NavigationItem.Home -> {
+                HomeScreen(viewModel = viewModel, paddingValues = paddingValues)
+            }
+            NavigationItem.Favorite -> {
+                TextCounter(name = "NavigationItem.Favorite")
+            }
+            NavigationItem.Profile -> {
+                TextCounter(name = "NavigationItem.Profile")
             }
         }
+
     }
+}
+
+@Composable
+fun TextCounter(name: String) {
+    var clickCount by remember { mutableStateOf(ZERO_INT) }
+    Text(
+        modifier = Modifier.clickable { clickCount++ },
+        text = "$name Count: $clickCount",
+        color = Color.Black
+    )
 }

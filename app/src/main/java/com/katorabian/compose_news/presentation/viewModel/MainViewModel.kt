@@ -4,14 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.katorabian.compose_news.domain.FeedPostItem
+import com.katorabian.compose_news.domain.NavigationItem
 import com.katorabian.compose_news.domain.StatisticType
 
-class PostViewModel: ViewModel() {
+class MainViewModel: ViewModel() {
 
-    private val initialList: List<FeedPostItem> = MutableList(10) { FeedPostItem(it) }
+    private val sourceList: List<FeedPostItem> = MutableList(10) { FeedPostItem(it) }
 
-    private val _feedPosts = MutableLiveData(initialList)
+    private val _feedPosts = MutableLiveData(sourceList)
     val feedPosts: LiveData<List<FeedPostItem>> = _feedPosts
+
+    private val _selectedNavItem = MutableLiveData<NavigationItem>(NavigationItem.Home)
+    val selectedNavItem: LiveData<NavigationItem> = _selectedNavItem
+
+    fun selectNavItem(navItem: NavigationItem) {
+        _selectedNavItem.value = navItem
+    }
 
     @Throws(IllegalStateException::class)
     fun updateCount(post: FeedPostItem, statisticType: StatisticType) {

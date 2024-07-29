@@ -4,14 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.katorabian.compose_news.other.InstagramScreen
 import com.katorabian.compose_news.other.InstagramViewModel
 import com.katorabian.compose_news.presentation.MainScreen
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
-import com.katorabian.compose_news.presentation.viewModel.PostViewModel
+import com.katorabian.compose_news.presentation.viewModel.MainViewModel
 
 class MainActivity : ComponentActivity() {
-    private val postViewModel by viewModels<PostViewModel>()
+    private val mainViewModel by viewModels<MainViewModel>()
     private val instagramViewModel by viewModels<InstagramViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +24,7 @@ class MainActivity : ComponentActivity() {
 */
         setContent {
             ComposeNewsTheme {
-                MainScreen(postViewModel)
+                MainScreen(mainViewModel)
             }
         }
     }
