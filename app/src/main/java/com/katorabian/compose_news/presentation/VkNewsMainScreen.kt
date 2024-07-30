@@ -12,7 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.katorabian.compose_news.domain.NavigationItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
+import com.katorabian.compose_news.presentation.navigation.Screen
 import com.katorabian.compose_news.presentation.viewModel.MainViewModel
 
 @Composable
@@ -47,7 +48,15 @@ fun MainScreen(viewModel: MainViewModel) {
                     NavigationBarItem(
                         modifier = Modifier.height(20.dp),
                         selected = currentRoute == item.screen.route,
-                        onClick = { navHostController.navigate(item.screen.route) },
+                        onClick = {
+                            navHostController.navigate(item.screen.route) {
+                                popUpTo(Screen.NewsFeed.route) { // remove screens between
+                                    saveState = true // save state of removed screens
+                                }
+                                launchSingleTop = true // do not make new copy of already exits screen
+                                restoreState = true // restore screen state if exist
+                            }
+                        },
                         icon = {
                             Icon(
                                 imageVector = item.icon,
@@ -86,7 +95,7 @@ fun MainScreen(viewModel: MainViewModel) {
 
 @Composable
 fun TextCounter(name: String) {
-    var clickCount by remember { mutableStateOf(ZERO_INT) }
+    var clickCount by rememberSaveable { mutableStateOf(ZERO_INT) }
     Text(
         modifier = Modifier.clickable { clickCount++ },
         text = "$name Count: $clickCount",
