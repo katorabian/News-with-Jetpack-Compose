@@ -20,23 +20,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.katorabian.compose_news.domain.NavigationItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
-import com.katorabian.compose_news.presentation.navigation.Screen
+import com.katorabian.compose_news.presentation.navigation.rememberNavigationState
 import com.katorabian.compose_news.presentation.viewModel.MainViewModel
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
-    val navHostController = rememberNavController()
+    val navigationState = rememberNavigationState()
+
     Scaffold(
         bottomBar = {
             NavigationBar(
                 modifier = Modifier.height(58.dp),
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
                 val items = listOf(
@@ -49,13 +49,7 @@ fun MainScreen(viewModel: MainViewModel) {
                         modifier = Modifier.height(20.dp),
                         selected = currentRoute == item.screen.route,
                         onClick = {
-                            navHostController.navigate(item.screen.route) {
-                                popUpTo(Screen.NewsFeed.route) { // remove screens between
-                                    saveState = true // save state of removed screens
-                                }
-                                launchSingleTop = true // do not make new copy of already exits screen
-                                restoreState = true // restore screen state if exist
-                            }
+                            navigationState.navigateTo(item.screen.route)
                         },
                         icon = {
                             Icon(
@@ -85,7 +79,7 @@ fun MainScreen(viewModel: MainViewModel) {
         }
     ) { paddingValues ->
         AppNavGraph(
-            navHostController = navHostController,
+            navHostController = navigationState.navHostController,
             homeScreenContent = { HomeScreen(viewModel = viewModel, paddingValues = paddingValues) },
             favoriteScreenContent = { TextCounter(name = "NavigationItem.Favorite") },
             profileScreenContent = { TextCounter(name = "NavigationItem.Profile") }
