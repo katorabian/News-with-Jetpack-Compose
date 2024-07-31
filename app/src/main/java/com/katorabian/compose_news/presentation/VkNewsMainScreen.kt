@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,7 +34,9 @@ fun MainScreen(viewModel: MainViewModel) {
     Scaffold(
         bottomBar = {
             NavigationBar(
-                modifier = Modifier.height(58.dp),
+                modifier = Modifier
+                    .height(58.dp)
+                    .shadow(4.dp),
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()

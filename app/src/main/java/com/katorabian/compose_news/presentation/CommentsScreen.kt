@@ -25,6 +25,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -76,6 +77,7 @@ fun CommentsScreenPreview() = ComposeNewsTheme {
 @Composable
 fun CommentsScreenHeader(postItem: FeedPostItem) {
     TopAppBar(
+        modifier = Modifier.shadow(4.dp),
         title = {
             Text(
                 text = "Comments for FeedPost Id: ${postItem.id}",
