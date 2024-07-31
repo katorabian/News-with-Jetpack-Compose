@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,13 +27,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.katorabian.compose_news.R
 import com.katorabian.compose_news.domain.FeedPostItem
 import com.katorabian.compose_news.domain.PostCommentItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
@@ -52,11 +53,18 @@ fun CommentsScreen(
     ) {
         LazyColumn(
             modifier = Modifier.padding(it),
-            contentPadding = PaddingValues(vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            contentPadding = PaddingValues(
+                top = 16.dp,
+                start = 8.dp,
+                end = 8.dp,
+                bottom = 72.dp
+            )
         ) {
-            items(comments) { commentItem ->
-                SingleComment(
+            items(
+                items = comments,
+                key = { item -> item.id }
+            ) { commentItem ->
+                CommentItem(
                     commentItem = commentItem
                 )
             }
@@ -112,32 +120,41 @@ private fun CommentsScreenHeaderPreview()  = ComposeNewsTheme {
 
 
 @Composable
-private fun SingleComment(
+private fun CommentItem(
     modifier: Modifier = Modifier,
     commentItem: PostCommentItem
 ) {
-    Row(modifier = modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.width(24.dp))
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+    ) {
         Image(
-            painter = painterResource(id = R.drawable.comment_author_avatar),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(id = commentItem.authorAvatarId),
+            contentDescription = null
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Column(modifier = Modifier.weight(1F)) {
+        Column {
             Text(
-                text = "Author Comment Id: ${commentItem.id}",
-                fontSize = 13.sp
+                text = "${commentItem.authorName} CommentId: ${commentItem.id}",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onPrimary,
+                lineHeight = 17.sp
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = commentItem.commentText,
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onPrimary,
+                lineHeight = 17.sp
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = commentItem.publicationDate,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSecondary,
+                lineHeight = 17.sp
             )
         }
     }
@@ -145,8 +162,8 @@ private fun SingleComment(
 
 @Preview
 @Composable
-private fun SingleCommentPreview() = ComposeNewsTheme {
-    SingleComment(
+private fun CommentItemPreview() = ComposeNewsTheme {
+    CommentItem(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
         commentItem = PostCommentItem(ZERO_INT)
     )
