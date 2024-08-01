@@ -5,17 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticType
+import com.katorabian.compose_news.presentation.model.HomeScreenState
 
 class MainViewModel: ViewModel() {
 
     private val sourceList: List<FeedPostItem> = MutableList(10) { FeedPostItem(it) }
+    private val initialState: HomeScreenState.Posts = HomeScreenState.Posts(posts = sourceList)
 
-    private val _feedPosts = MutableLiveData(sourceList)
-    val feedPosts: LiveData<List<FeedPostItem>> = _feedPosts
+    private val _screenState = MutableLiveData<HomeScreenState>(initialState)
+    val screenState: LiveData<HomeScreenState> = _screenState
     
     @Throws(IllegalStateException::class)
     fun updateCount(post: FeedPostItem, statisticType: StatisticType) {
-        val oldPosts = feedPosts.value?.toMutableList()?: throw NullPointerException()
+        val oldPosts = screenState.value?.toMutableList()?: throw NullPointerException()
         val oldStatistics = post.statistics
         val newStatistics = oldStatistics.toMutableList().apply {
             replaceAll { oldItem ->
@@ -30,7 +32,7 @@ class MainViewModel: ViewModel() {
         }
 
         val newFeedPost = post.copy(statistics = newStatistics)
-        _feedPosts.value = oldPosts.apply {
+        _screenState.value = oldPosts.apply {
             replaceAll {
                 if (it.id == newFeedPost.id)
                     newFeedPost
@@ -41,8 +43,8 @@ class MainViewModel: ViewModel() {
     }
 
     fun removeItem(post: FeedPostItem) {
-        val oldPosts = feedPosts.value?.toMutableList()?: throw NullPointerException()
+        val oldPosts = screenState.value?.toMutableList()?: throw NullPointerException()
         oldPosts.removeIf { it.id == post.id }
-        _feedPosts.value = oldPosts
+        _screenState.value = oldPosts
     }
 }

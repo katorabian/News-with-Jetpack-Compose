@@ -16,16 +16,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticType
+import com.katorabian.compose_news.presentation.model.HomeScreenState
 import com.katorabian.compose_news.presentation.viewModel.MainViewModel
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     viewModel: MainViewModel,
     paddingValues: PaddingValues
 ) {
-    val feedPosts = viewModel.feedPosts.observeAsState(emptyList())
+    val screenState = viewModel.screenState.observeAsState(HomeScreenState.Initial)
+    when(val currentState = screenState.value) {
+        is HomeScreenState.Posts -> {
+            FeedPosts(
+                viewModel = viewModel,
+                paddingValues = paddingValues,
+                posts = currentState.posts
+            )
+        }
+        is HomeScreenState.Comments -> {
+            CommentsScreen(postItem = currentState.feedPost, comments = currentState.comments)
+        }
+        HomeScreenState.Initial -> {
+            /* do nothing */
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun FeedPosts(
+    viewModel: MainViewModel,
+    paddingValues: PaddingValues,
+    posts: List<FeedPostItem>
+) {
     val screenWidth = with(LocalDensity.current) {
         LocalConfiguration.current.screenWidthDp.dp.toPx()
     }
@@ -39,7 +64,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
-            items = feedPosts.value,
+            items = posts,
             key = { item -> item.id }
         ) { post ->
             val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
