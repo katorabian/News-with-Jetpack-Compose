@@ -7,6 +7,7 @@ import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
 import com.katorabian.compose_news.domain.model.StatisticType
 import com.katorabian.compose_news.presentation.model.HomeScreenState
+import com.katorabian.compose_news.presentation.navigation.NavigationItem
 
 class MainViewModel: ViewModel() {
 
@@ -17,11 +18,18 @@ class MainViewModel: ViewModel() {
     private val _screenState = MutableLiveData<HomeScreenState>(initialState)
     val screenState: LiveData<HomeScreenState> = _screenState
 
+    private var savedState: HomeScreenState = initialState
+
     fun showComments(postItem: FeedPostItem) {
+        savedState = screenState.value?: HomeScreenState.Initial
         _screenState.value = HomeScreenState.Comments(
             feedPost = postItem,
             comments = comments
         )
+    }
+
+    fun closeComments() {
+        _screenState.value = savedState
     }
     
     @Throws(IllegalStateException::class)

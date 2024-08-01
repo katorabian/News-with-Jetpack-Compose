@@ -1,5 +1,6 @@
 package com.katorabian.compose_news.presentation.layout
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,7 +37,12 @@ fun HomeScreen(
             )
         }
         is HomeScreenState.Comments -> {
-            CommentsScreen(postItem = currentState.feedPost, comments = currentState.comments)
+            CommentsScreen(
+                postItem = currentState.feedPost,
+                comments = currentState.comments,
+                onNavigateUp = viewModel::closeComments
+            )
+            BackHandler(onBack = viewModel::closeComments)
         }
         HomeScreenState.Initial -> {
             /* do nothing */

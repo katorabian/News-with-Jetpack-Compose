@@ -40,12 +40,16 @@ import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 fun CommentsScreen(
     modifier: Modifier = Modifier,
     postItem: FeedPostItem,
-    comments: List<PostCommentItem>
+    comments: List<PostCommentItem>,
+    onNavigateUp: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            CommentsScreenHeader(postItem = postItem)
+            CommentsScreenHeader(
+                postItem = postItem,
+                onNavigateUp = onNavigateUp
+            )
         }
     ) {
         LazyColumn(
@@ -74,13 +78,17 @@ fun CommentsScreen(
 fun CommentsScreenPreview() = ComposeNewsTheme {
     CommentsScreen(
         postItem = FeedPostItem(ZERO_INT),
-        comments = List(16) { PostCommentItem(it) }
+        comments = List(16) { PostCommentItem(it) },
+        onNavigateUp = {}
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommentsScreenHeader(postItem: FeedPostItem) {
+fun CommentsScreenHeader(
+    postItem: FeedPostItem,
+    onNavigateUp: () -> Unit
+) {
     TopAppBar(
         modifier = Modifier.shadow(4.dp),
         title = {
@@ -92,9 +100,7 @@ fun CommentsScreenHeader(postItem: FeedPostItem) {
         },
         navigationIcon = {
             Spacer(modifier = Modifier.width(16.dp))
-            IconButton(
-                onClick = {}
-            ) {
+            IconButton(onClick = onNavigateUp) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = null
@@ -112,7 +118,10 @@ fun CommentsScreenHeader(postItem: FeedPostItem) {
 @Preview
 @Composable
 private fun CommentsScreenHeaderPreview()  = ComposeNewsTheme {
-    CommentsScreenHeader(postItem = FeedPostItem(id = ZERO_INT))
+    CommentsScreenHeader(
+        postItem = FeedPostItem(id = ZERO_INT),
+        onNavigateUp = {}
+    )
 }
 
 
