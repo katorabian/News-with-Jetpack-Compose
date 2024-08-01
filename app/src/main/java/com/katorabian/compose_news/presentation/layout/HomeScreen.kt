@@ -72,14 +72,14 @@ fun FeedPosts(
                 confirmValueChange = { value: SwipeToDismissBoxValue ->
                     val isDismissed = value != SwipeToDismissBoxValue.Settled
                     if (isDismissed) {
-                        viewModel.removeItem(post)
+                        viewModel.removePostItem(post)
                     }
 
                     return@rememberSwipeToDismissBoxState isDismissed
                 }
             )
 
-            fun updateCount(type: StatisticType) = viewModel.updateCount(post, type)
+            fun updateCount(type: StatisticType) = viewModel.updateStatisticCount(post, type)
 
             SwipeToDismissBox(
                 modifier = Modifier.animateItemPlacement(),

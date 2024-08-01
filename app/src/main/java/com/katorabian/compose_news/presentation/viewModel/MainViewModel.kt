@@ -16,8 +16,11 @@ class MainViewModel: ViewModel() {
     val screenState: LiveData<HomeScreenState> = _screenState
     
     @Throws(IllegalStateException::class)
-    fun updateCount(post: FeedPostItem, statisticType: StatisticType) {
-        val oldPosts = screenState.value?.toMutableList()?: throw NullPointerException()
+    fun updateStatisticCount(post: FeedPostItem, statisticType: StatisticType) {
+        val currentState = screenState.value
+        if (currentState !is HomeScreenState.Posts) return
+
+        val oldPosts = currentState.posts.toMutableList()
         val oldStatistics = post.statistics
         val newStatistics = oldStatistics.toMutableList().apply {
             replaceAll { oldItem ->
@@ -32,7 +35,7 @@ class MainViewModel: ViewModel() {
         }
 
         val newFeedPost = post.copy(statistics = newStatistics)
-        _screenState.value = oldPosts.apply {
+        val newPosts = oldPosts.apply {
             replaceAll {
                 if (it.id == newFeedPost.id)
                     newFeedPost
@@ -40,11 +43,15 @@ class MainViewModel: ViewModel() {
                     it
             }
         }
+        _screenState.value = HomeScreenState.Posts(newPosts)
     }
 
-    fun removeItem(post: FeedPostItem) {
-        val oldPosts = screenState.value?.toMutableList()?: throw NullPointerException()
-        oldPosts.removeIf { it.id == post.id }
-        _screenState.value = oldPosts
+    fun removePostItem(post: FeedPostItem) {
+        val currentState = screenState.value
+        if (currentState !is HomeScreenState.Posts) return
+
+        val postsToUpdate = currentState.posts.toMutableList()
+        postsToUpdate.removeIf { it.id == post.id }
+        _screenState.value = HomeScreenState.Posts(postsToUpdate)
     }
 }
