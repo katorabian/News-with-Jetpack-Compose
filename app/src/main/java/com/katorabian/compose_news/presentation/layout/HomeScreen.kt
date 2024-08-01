@@ -79,8 +79,6 @@ fun FeedPosts(
                 }
             )
 
-            fun updateCount(type: StatisticType) = viewModel.updateStatisticCount(post, type)
-
             SwipeToDismissBox(
                 modifier = Modifier.animateItemPlacement(),
                 state = swipeToDismissBoxState,
@@ -90,10 +88,18 @@ fun FeedPosts(
             ) {
                 PostCard(
                     feedPost = post,
-                    onViewsClickListener = { updateCount(StatisticType.VIEWS) },
-                    onShareClickListener = { updateCount(StatisticType.SHARES) },
-                    onCommentClickListener = { updateCount(StatisticType.COMMENTS) },
-                    onLikeClickListener = { updateCount(StatisticType.LIKES) }
+                    onViewsClickListener = {
+                        viewModel.updateStatisticCount(post, StatisticType.VIEWS)
+                    },
+                    onShareClickListener = {
+                        viewModel.updateStatisticCount(post, StatisticType.SHARES)
+                    },
+                    onCommentClickListener = {
+                        viewModel.showComments(post)
+                    },
+                    onLikeClickListener = {
+                        viewModel.updateStatisticCount(post, StatisticType.LIKES)
+                    }
                 )
             }
         }

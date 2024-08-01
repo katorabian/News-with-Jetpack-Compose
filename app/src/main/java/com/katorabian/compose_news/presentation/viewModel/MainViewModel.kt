@@ -4,16 +4,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.katorabian.compose_news.domain.model.FeedPostItem
+import com.katorabian.compose_news.domain.model.PostCommentItem
 import com.katorabian.compose_news.domain.model.StatisticType
 import com.katorabian.compose_news.presentation.model.HomeScreenState
 
 class MainViewModel: ViewModel() {
 
-    private val sourceList: List<FeedPostItem> = MutableList(10) { FeedPostItem(it) }
+    private val comments: List<PostCommentItem> = List(10) { PostCommentItem(it) }
+    private val sourceList: List<FeedPostItem> = List(10) { FeedPostItem(it) }
     private val initialState: HomeScreenState.Posts = HomeScreenState.Posts(posts = sourceList)
 
     private val _screenState = MutableLiveData<HomeScreenState>(initialState)
     val screenState: LiveData<HomeScreenState> = _screenState
+
+    fun showComments(postItem: FeedPostItem) {
+        _screenState.value = HomeScreenState.Comments(
+            feedPost = postItem,
+            comments = comments
+        )
+    }
     
     @Throws(IllegalStateException::class)
     fun updateStatisticCount(post: FeedPostItem, statisticType: StatisticType) {
