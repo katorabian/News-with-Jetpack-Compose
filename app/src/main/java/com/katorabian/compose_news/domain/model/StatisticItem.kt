@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.domain
+package com.katorabian.compose_news.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

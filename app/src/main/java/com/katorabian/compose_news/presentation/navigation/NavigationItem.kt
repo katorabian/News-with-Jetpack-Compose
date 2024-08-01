@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.domain
+package com.katorabian.compose_news.presentation.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -7,7 +7,6 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.katorabian.compose_news.R
-import com.katorabian.compose_news.presentation.navigation.Screen
 
 sealed class NavigationItem(
     val screen: Screen,

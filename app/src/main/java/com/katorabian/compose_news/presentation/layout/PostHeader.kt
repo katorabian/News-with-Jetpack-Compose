@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation
+package com.katorabian.compose_news.presentation.layout
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.katorabian.compose_news.domain.FeedPostItem
+import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 

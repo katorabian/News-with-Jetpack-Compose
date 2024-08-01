@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.domain
+package com.katorabian.compose_news.domain.model
 
 import androidx.annotation.DrawableRes
 import com.katorabian.compose_news.R

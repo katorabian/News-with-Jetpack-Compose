@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation
+package com.katorabian.compose_news.presentation.layout
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.katorabian.compose_news.domain.NavigationItem
+import com.katorabian.compose_news.presentation.navigation.NavigationItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
 import com.katorabian.compose_news.presentation.navigation.rememberNavigationState

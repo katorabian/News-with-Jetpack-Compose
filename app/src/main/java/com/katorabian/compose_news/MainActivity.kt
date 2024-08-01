@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.katorabian.compose_news.other.InstagramViewModel
-import com.katorabian.compose_news.presentation.MainScreen
+import com.katorabian.compose_news.presentation.layout.MainScreen
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 import com.katorabian.compose_news.presentation.viewModel.MainViewModel
 

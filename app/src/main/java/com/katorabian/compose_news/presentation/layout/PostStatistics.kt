@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation
+package com.katorabian.compose_news.presentation.layout
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
@@ -16,8 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.katorabian.compose_news.R
-import com.katorabian.compose_news.domain.StatisticItem
-import com.katorabian.compose_news.domain.StatisticType
+import com.katorabian.compose_news.domain.model.StatisticItem
+import com.katorabian.compose_news.domain.model.StatisticType
 
 @Composable
 fun PostStatistics(

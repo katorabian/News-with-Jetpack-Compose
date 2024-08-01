@@ -3,8 +3,8 @@ package com.katorabian.compose_news.presentation.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.katorabian.compose_news.domain.FeedPostItem
-import com.katorabian.compose_news.domain.StatisticType
+import com.katorabian.compose_news.domain.model.FeedPostItem
+import com.katorabian.compose_news.domain.model.StatisticType
 
 class MainViewModel: ViewModel() {
 

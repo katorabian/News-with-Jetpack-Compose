@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation
+package com.katorabian.compose_news.presentation.layout
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.katorabian.compose_news.domain.StatisticType
+import com.katorabian.compose_news.domain.model.StatisticType
 import com.katorabian.compose_news.presentation.viewModel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
