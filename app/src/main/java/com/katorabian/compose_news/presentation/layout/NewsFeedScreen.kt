@@ -23,7 +23,7 @@ import com.katorabian.compose_news.presentation.model.NewsFeedScreenState
 import com.katorabian.compose_news.presentation.viewModel.NewsFeedViewModel
 
 @Composable
-fun HomeScreen(
+fun NewsFeedScreen(
     paddingValues: PaddingValues,
     onCommentClickListener: (FeedPostItem) -> Unit
 ) {

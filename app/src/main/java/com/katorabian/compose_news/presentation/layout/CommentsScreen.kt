@@ -33,19 +33,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
-import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.model.CommentsScreenState
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 import com.katorabian.compose_news.presentation.viewModel.CommentsViewModel
+import com.katorabian.compose_news.presentation.viewModel.CommentsViewModelFactory
 
 @Composable
 fun CommentsScreen(
     modifier: Modifier = Modifier,
+    feedPost: FeedPostItem,
     onNavigateUp: () -> Unit
 ) {
-    val viewModel: CommentsViewModel = viewModel()
+    val viewModel: CommentsViewModel = viewModel(
+        factory = CommentsViewModelFactory(feedPost)
+    )
     val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
 
     when (val currentState = screenState.value) {
@@ -89,6 +93,7 @@ fun CommentsScreen(
 @Composable
 fun CommentsScreenPreview() = ComposeNewsTheme {
     CommentsScreen(
+        feedPost = FeedPostItem(ZERO_INT),
         onNavigateUp = {}
     )
 }

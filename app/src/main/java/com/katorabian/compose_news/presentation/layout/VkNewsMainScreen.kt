@@ -94,7 +94,7 @@ fun MainScreen() {
             navHostController = navigationState.navHostController,
             homeScreenContent = {
                 if (commentsToPost.value == null) {
-                    HomeScreen(
+                    NewsFeedScreen(
                         paddingValues = paddingValues,
                         onCommentClickListener = { postItem ->
                             commentsToPost.value = postItem
@@ -102,7 +102,7 @@ fun MainScreen() {
                     )
                 } else {
                     fun navigateUp() { commentsToPost.value = null }
-                    CommentsScreen(onNavigateUp = ::navigateUp)
+                    CommentsScreen(feedPost = commentsToPost.value!!, onNavigateUp = ::navigateUp)
                     BackHandler(onBack = ::navigateUp)
                 }
             },

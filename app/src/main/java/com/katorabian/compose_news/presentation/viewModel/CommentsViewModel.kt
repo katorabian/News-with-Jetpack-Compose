@@ -9,17 +9,19 @@ import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
 import com.katorabian.compose_news.presentation.model.CommentsScreenState
 
-class CommentsViewModel: ViewModel() {
+class CommentsViewModel(
+    feedPost: FeedPostItem
+): ViewModel() {
 
     private val _screenState = MutableLiveData<CommentsScreenState>(CommentsScreenState.Initial)
     val screenState: LiveData<CommentsScreenState> = _screenState
 
     init {
         @Temp
-        loadComments(FeedPostItem(ZERO_INT))
+        loadComments(feedPost)
     }
 
-    fun loadComments(feedPost: FeedPostItem) {
+    private fun loadComments(feedPost: FeedPostItem) {
         val comments = List(10) { PostCommentItem(it) }
         _screenState.value = CommentsScreenState.Comments(
             feedPost = feedPost,
