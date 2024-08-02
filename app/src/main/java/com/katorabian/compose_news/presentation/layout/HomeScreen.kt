@@ -1,6 +1,5 @@
 package com.katorabian.compose_news.presentation.layout
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,34 +16,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticType
-import com.katorabian.compose_news.presentation.model.HomeScreenState
-import com.katorabian.compose_news.presentation.viewModel.MainViewModel
+import com.katorabian.compose_news.presentation.model.NewsFeedScreenState
+import com.katorabian.compose_news.presentation.viewModel.NewsFeedViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: MainViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    onCommentClickListener: (FeedPostItem) -> Unit
 ) {
-    val screenState = viewModel.screenState.observeAsState(HomeScreenState.Initial)
+    val viewModel: NewsFeedViewModel = viewModel()
+    val screenState = viewModel.screenState.observeAsState(NewsFeedScreenState.Initial)
+
     when(val currentState = screenState.value) {
-        is HomeScreenState.Posts -> {
+        is NewsFeedScreenState.Posts -> {
             FeedPosts(
                 viewModel = viewModel,
                 paddingValues = paddingValues,
-                posts = currentState.posts
+                posts = currentState.posts,
+                onCommentClickListener = onCommentClickListener
             )
         }
-        is HomeScreenState.Comments -> {
-            CommentsScreen(
-                postItem = currentState.feedPost,
-                comments = currentState.comments,
-                onNavigateUp = viewModel::closeComments
-            )
-            BackHandler(onBack = viewModel::closeComments)
-        }
-        HomeScreenState.Initial -> {
+        NewsFeedScreenState.Initial -> {
             /* do nothing */
         }
     }
@@ -53,9 +48,10 @@ fun HomeScreen(
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FeedPosts(
-    viewModel: MainViewModel,
+    viewModel: NewsFeedViewModel,
     paddingValues: PaddingValues,
-    posts: List<FeedPostItem>
+    posts: List<FeedPostItem>,
+    onCommentClickListener: (FeedPostItem) -> Unit
 ) {
     val screenWidth = with(LocalDensity.current) {
         LocalConfiguration.current.screenWidthDp.dp.toPx()
@@ -101,7 +97,7 @@ fun FeedPosts(
                         viewModel.updateStatisticCount(post, StatisticType.SHARES)
                     },
                     onCommentClickListener = {
-                        viewModel.showComments(post)
+                        onCommentClickListener(post)
                     },
                     onLikeClickListener = {
                         viewModel.updateStatisticCount(post, StatisticType.LIKES)

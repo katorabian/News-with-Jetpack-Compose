@@ -3,10 +3,10 @@ package com.katorabian.compose_news.domain.model
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import com.katorabian.compose_news.R
-import com.katorabian.compose_news.domain.annotation.TempClass
+import com.katorabian.compose_news.domain.annotation.Temp
 import kotlinx.parcelize.Parcelize
 
-@TempClass("Until REST provide")
+@Temp("Until REST provide")
 @Parcelize
 data class FeedPostItem(
     val id: Int,

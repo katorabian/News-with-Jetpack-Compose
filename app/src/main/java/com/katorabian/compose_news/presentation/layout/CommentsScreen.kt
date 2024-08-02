@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
@@ -31,44 +32,55 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
+import com.katorabian.compose_news.presentation.model.CommentsScreenState
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
+import com.katorabian.compose_news.presentation.viewModel.CommentsViewModel
 
 @Composable
 fun CommentsScreen(
     modifier: Modifier = Modifier,
-    postItem: FeedPostItem,
-    comments: List<PostCommentItem>,
     onNavigateUp: () -> Unit
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            CommentsScreenHeader(
-                postItem = postItem,
-                onNavigateUp = onNavigateUp
-            )
-        }
-    ) {
-        LazyColumn(
-            modifier = Modifier.padding(it),
-            contentPadding = PaddingValues(
-                top = 16.dp,
-                start = 8.dp,
-                end = 8.dp,
-                bottom = 72.dp
-            )
-        ) {
-            items(
-                items = comments,
-                key = { item -> item.id }
-            ) { commentItem ->
-                CommentItem(
-                    commentItem = commentItem
-                )
+    val viewModel: CommentsViewModel = viewModel()
+    val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
+
+    when (val currentState = screenState.value) {
+        is CommentsScreenState.Comments -> {
+            Scaffold(
+                modifier = modifier,
+                topBar = {
+                    CommentsScreenHeader(
+                        postItem = currentState.feedPost,
+                        onNavigateUp = onNavigateUp
+                    )
+                }
+            ) {
+                LazyColumn(
+                    modifier = Modifier.padding(it),
+                    contentPadding = PaddingValues(
+                        top = 16.dp,
+                        start = 8.dp,
+                        end = 8.dp,
+                        bottom = 72.dp
+                    )
+                ) {
+                    items(
+                        items = currentState.comments,
+                        key = { item -> item.id }
+                    ) { commentItem ->
+                        CommentItem(
+                            commentItem = commentItem
+                        )
+                    }
+                }
             }
+        }
+        CommentsScreenState.Initial -> {
+            /* do nothing */
         }
     }
 }
@@ -77,8 +89,6 @@ fun CommentsScreen(
 @Composable
 fun CommentsScreenPreview() = ComposeNewsTheme {
     CommentsScreen(
-        postItem = FeedPostItem(ZERO_INT),
-        comments = List(16) { PostCommentItem(it) },
         onNavigateUp = {}
     )
 }
