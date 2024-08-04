@@ -19,6 +19,12 @@ class NavigationState(
             restoreState = true // restore screen state if exist
         }
     }
+
+    fun navigateToComments() {
+        // prevent drop of this screen from inner graph backStack, when graph calls again
+        // (opens on this screen)
+        navHostController.navigate(Screen.Comments.route)
+    }
 }
 
 @Composable
