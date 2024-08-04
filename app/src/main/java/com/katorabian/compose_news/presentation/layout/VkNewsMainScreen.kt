@@ -66,7 +66,9 @@ fun MainScreen() {
                         modifier = Modifier.height(20.dp),
                         selected = isSelected,
                         onClick = {
-                            navigationState.navigateTo(item.screen.route)
+                            if (!isSelected) {
+                                navigationState.navigateTo(item.screen.route)
+                            }
                         },
                         icon = {
                             Icon(
