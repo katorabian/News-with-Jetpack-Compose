@@ -29,6 +29,7 @@ import com.katorabian.compose_news.presentation.navigation.NavigationItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
+import com.katorabian.compose_news.presentation.navigation.Screen
 import com.katorabian.compose_news.presentation.navigation.rememberNavigationState
 
 @Composable
@@ -92,19 +93,19 @@ fun MainScreen() {
     ) { paddingValues ->
         AppNavGraph(
             navHostController = navigationState.navHostController,
-            homeScreenContent = {
-                if (commentsToPost.value == null) {
-                    NewsFeedScreen(
-                        paddingValues = paddingValues,
-                        onCommentClickListener = { postItem ->
-                            commentsToPost.value = postItem
-                        }
-                    )
-                } else {
-                    fun navigateUp() { commentsToPost.value = null }
-                    CommentsScreen(feedPost = commentsToPost.value!!, onNavigateUp = ::navigateUp)
-                    BackHandler(onBack = ::navigateUp)
-                }
+            newsFeedScreenContent = {
+                NewsFeedScreen(
+                    paddingValues = paddingValues,
+                    onCommentClickListener = { postItem ->
+                        commentsToPost.value = postItem
+                        navigationState.navigateTo(Screen.Comments.route)
+                    }
+                )
+            },
+            commentsScreenContent = {
+                fun navigateUp() { commentsToPost.value = null }
+                CommentsScreen(feedPost = commentsToPost.value!!, onNavigateUp = ::navigateUp)
+                BackHandler(onBack = ::navigateUp)
             },
             favoriteScreenContent = { TextCounter(name = "NavigationItem.Favorite") },
             profileScreenContent = { TextCounter(name = "NavigationItem.Profile") }
