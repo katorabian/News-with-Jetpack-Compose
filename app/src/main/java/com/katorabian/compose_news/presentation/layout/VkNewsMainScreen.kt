@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.katorabian.compose_news.domain.annotation.Temp
 import com.katorabian.compose_news.presentation.navigation.NavigationItem
@@ -50,7 +51,6 @@ fun MainScreen() {
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry?.destination?.route
 
                 val items = listOf(
                     NavigationItem.Home,
@@ -58,9 +58,13 @@ fun MainScreen() {
                     NavigationItem.Profile
                 )
                 items.forEach { item ->
+                    val isSelected = navBackStackEntry?.destination?.hierarchy?.any {
+                        it.route == item.screen.route
+                    } ?: false
+
                     NavigationBarItem(
                         modifier = Modifier.height(20.dp),
-                        selected = currentRoute == item.screen.route,
+                        selected = isSelected,
                         onClick = {
                             navigationState.navigateTo(item.screen.route)
                         },
