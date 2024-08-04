@@ -107,7 +107,7 @@ fun MainScreen() {
                 )
             },
             commentsScreenContent = {
-                fun navigateUp() { commentsToPost.value = null }
+                fun navigateUp() { navigationState.navHostController.popBackStack() }
                 CommentsScreen(feedPost = commentsToPost.value!!, onNavigateUp = ::navigateUp)
                 BackHandler(onBack = ::navigateUp)
             },
