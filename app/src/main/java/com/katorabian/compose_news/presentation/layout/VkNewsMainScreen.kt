@@ -1,6 +1,5 @@
 package com.katorabian.compose_news.presentation.layout
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
@@ -11,10 +10,8 @@ import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,21 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.katorabian.compose_news.domain.annotation.Temp
-import com.katorabian.compose_news.presentation.navigation.BottomNavItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
-import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
+import com.katorabian.compose_news.presentation.navigation.BottomNavItem
 import com.katorabian.compose_news.presentation.navigation.rememberNavigationState
 
 @Composable
 fun MainScreen() {
     val navigationState = rememberNavigationState()
-
-    @Temp
-    val commentsToPost: MutableState<FeedPostItem?> = remember {
-        mutableStateOf(null)
-    }
 
     Scaffold(
         bottomBar = {
@@ -102,15 +92,17 @@ fun MainScreen() {
                 NewsFeedScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = { postItem ->
-                        commentsToPost.value = postItem
-                        navigationState.navigateToComments()
+                        navigationState.navigateToComments(postItem)
                     }
                 )
             },
-            commentsScreenContent = {
-                fun navigateUp() { navigationState.navHostController.popBackStack() }
-                CommentsScreen(feedPost = commentsToPost.value!!, onNavigateUp = ::navigateUp)
-                BackHandler(onBack = ::navigateUp)
+            commentsScreenContent = { postItem ->
+                CommentsScreen(
+                    feedPost = postItem,
+                    onNavigateUp = {
+                        navigationState.navHostController.popBackStack()
+                    }
+                )
             },
             favoriteScreenContent = { TextCounter(name = "NavigationItem.Favorite") },
             profileScreenContent = { TextCounter(name = "NavigationItem.Profile") }

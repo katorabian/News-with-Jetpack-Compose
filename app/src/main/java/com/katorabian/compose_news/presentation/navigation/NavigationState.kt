@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.katorabian.compose_news.domain.model.FeedPostItem
 
 class NavigationState(
     val navHostController: NavHostController
@@ -20,10 +21,10 @@ class NavigationState(
         }
     }
 
-    fun navigateToComments() {
+    fun navigateToComments(postItem: FeedPostItem) {
         // prevent drop of this screen from inner graph backStack, when graph calls again
         // (opens on this screen)
-        navHostController.navigate(Screen.Comments.route)
+        navHostController.navigate(Screen.Comments.getRouteWithArgs(postItem))
     }
 }
 

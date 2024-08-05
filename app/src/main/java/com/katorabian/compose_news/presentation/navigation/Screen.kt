@@ -1,18 +1,26 @@
 package com.katorabian.compose_news.presentation.navigation
 
+import com.katorabian.compose_news.domain.model.FeedPostItem
+
 sealed class Screen (val route: String) {
 
     data object Home: Screen(ROUTE_HOME)
     data object NewsFeed: Screen(ROUTE_NEWS_FEED)
-    data object Comments: Screen(ROUTE_COMMENTS)
+    data object Comments: Screen(ROUTE_COMMENTS) {
+        internal const val ROUTE_FOR_ARGS = "comments"
+
+        fun getRouteWithArgs(feedPost: FeedPostItem): String {
+            return "$ROUTE_FOR_ARGS/${feedPost.id}" // "comments/15"
+        }
+    }
 
     data object Favourite: Screen(ROUTE_FAVOURITE)
     data object Profile: Screen(ROUTE_PROFILE)
 
-    private companion object {
-
+    companion object {
+        const val KEY_FEED_POST_ID = "feed_post_id"
         const val ROUTE_HOME = "home"
-        const val ROUTE_COMMENTS = "route_comments"
+        const val ROUTE_COMMENTS = "${Comments.ROUTE_FOR_ARGS}/{${KEY_FEED_POST_ID}}" // "comments/{feed_post_id}"
         const val ROUTE_NEWS_FEED = "news_feed"
 
         const val ROUTE_FAVOURITE = "favourite"

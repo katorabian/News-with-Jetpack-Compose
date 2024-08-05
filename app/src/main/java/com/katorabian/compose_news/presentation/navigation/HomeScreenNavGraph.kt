@@ -4,10 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.katorabian.compose_news.domain.constant.ZERO_INT
+import com.katorabian.compose_news.domain.model.FeedPostItem
 
 fun NavGraphBuilder.homeScreenNavGraph(
     newsFeedScreenContent: @Composable () -> Unit,
-    commentsScreenContent: @Composable () -> Unit
+    commentsScreenContent: @Composable (FeedPostItem) -> Unit
 ) {
     navigation(
         startDestination = Screen.NewsFeed.route,
@@ -16,8 +18,9 @@ fun NavGraphBuilder.homeScreenNavGraph(
         composable(route = Screen.NewsFeed.route) {
             newsFeedScreenContent()
         }
-        composable(route = Screen.Comments.route) {
-            commentsScreenContent()
+        composable(route = Screen.Comments.route) { // "comments/{feed_post_id}"
+            val feedPostId = it.arguments?.getInt(Screen.KEY_FEED_POST_ID)?: ZERO_INT
+            commentsScreenContent(FeedPostItem(id = feedPostId))
         }
     }
 }
