@@ -1,5 +1,6 @@
 package com.katorabian.compose_news.presentation.navigation
 
+import android.net.Uri
 import com.katorabian.compose_news.domain.model.FeedPostItem
 
 sealed class Screen (val route: String) {
@@ -10,7 +11,7 @@ sealed class Screen (val route: String) {
         internal const val ROUTE_FOR_ARGS = "comments"
 
         fun getRouteWithArgs(feedPost: FeedPostItem): String {
-            return "$ROUTE_FOR_ARGS/${feedPost.id}/${feedPost.contentText}" // "comments/15/lorem ipsum"
+            return "$ROUTE_FOR_ARGS/${feedPost.id}/${feedPost.contentText.encode()}" // "comments/15/lorem ipsum"
         }
     }
 
@@ -31,3 +32,5 @@ sealed class Screen (val route: String) {
         const val ROUTE_PROFILE = "profile"
     }
 }
+
+fun String.encode(): String = Uri.encode(this)

@@ -12,7 +12,7 @@ class NewsFeedViewModel: ViewModel() {
     private val sourceList: List<FeedPostItem> = List(10) {
         FeedPostItem(
             id = it,
-            contentText = "Content: $it"
+            contentText = "Con/tent: $it"
         )
     }
     private val initialState: NewsFeedScreenState.Posts = NewsFeedScreenState.Posts(posts = sourceList)
