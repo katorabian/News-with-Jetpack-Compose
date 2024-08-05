@@ -26,11 +26,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.katorabian.compose_news.domain.annotation.Temp
-import com.katorabian.compose_news.presentation.navigation.NavigationItem
+import com.katorabian.compose_news.presentation.navigation.BottomNavItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
-import com.katorabian.compose_news.presentation.navigation.Screen
 import com.katorabian.compose_news.presentation.navigation.rememberNavigationState
 
 @Composable
@@ -53,9 +52,9 @@ fun MainScreen() {
                 val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
 
                 val items = listOf(
-                    NavigationItem.Home,
-                    NavigationItem.Favorite,
-                    NavigationItem.Profile
+                    BottomNavItem.Home,
+                    BottomNavItem.Favorite,
+                    BottomNavItem.Profile
                 )
                 items.forEach { item ->
                     val isSelected = navBackStackEntry?.destination?.hierarchy?.any {
