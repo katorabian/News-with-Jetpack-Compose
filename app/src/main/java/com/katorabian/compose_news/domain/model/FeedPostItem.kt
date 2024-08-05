@@ -1,7 +1,10 @@
 package com.katorabian.compose_news.domain.model
 
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
+import androidx.navigation.NavType
+import com.google.gson.Gson
 import com.katorabian.compose_news.R
 import com.katorabian.compose_news.domain.annotation.Temp
 import kotlinx.parcelize.Parcelize
@@ -21,4 +24,22 @@ data class FeedPostItem(
         StatisticItem(StatisticType.COMMENTS, 8),
         StatisticItem(StatisticType.LIKES, 27)
     )
-): Parcelable
+): Parcelable {
+    companion object {
+        val NavigationType: NavType<FeedPostItem> = object : NavType<FeedPostItem>(
+            isNullableAllowed = false
+        ) {
+            override fun get(bundle: Bundle, key: String): FeedPostItem? {
+                return bundle.getParcelable(key)
+            }
+
+            override fun parseValue(value: String): FeedPostItem {
+                return Gson().fromJson(value, FeedPostItem::class.java)
+            }
+
+            override fun put(bundle: Bundle, key: String, value: FeedPostItem) {
+                bundle.putParcelable(key, value)
+            }
+        }
+    }
+}

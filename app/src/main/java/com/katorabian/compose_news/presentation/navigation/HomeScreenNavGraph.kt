@@ -1,13 +1,11 @@
 package com.katorabian.compose_news.presentation.navigation
 
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import com.google.gson.Gson
-import com.katorabian.compose_news.domain.constant.EMPTY_STRING
 import com.katorabian.compose_news.domain.model.FeedPostItem
 
 fun NavGraphBuilder.homeScreenNavGraph(
@@ -25,12 +23,22 @@ fun NavGraphBuilder.homeScreenNavGraph(
             route = Screen.Comments.route,
             arguments = listOf(
                 navArgument(Screen.KEY_FEED_POST) {
-                    type = NavType.StringType
+                    type = FeedPostItem.NavigationType
                 }
             )
         ) { // "comments/{feed_post_json}"
-            val feedPostJson = it.arguments?.getString(Screen.KEY_FEED_POST)?: EMPTY_STRING
-            val feedPost = Gson().fromJson(feedPostJson, FeedPostItem::class.java)
+            val args = it.arguments
+            val feedPost = kotlin.runCatching { //null safety
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    args?.getParcelable(Screen.KEY_FEED_POST)
+                } else {
+                    args?.getParcelable(
+                        Screen.KEY_FEED_POST,
+                        FeedPostItem::class.java
+                    )
+                }
+            }.getOrNull()
+                ?: throw ClassCastException("Args is null")
             commentsScreenContent(feedPost)
         }
     }
