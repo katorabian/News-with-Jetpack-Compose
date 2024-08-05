@@ -9,7 +9,12 @@ import com.katorabian.compose_news.presentation.model.NewsFeedScreenState
 
 class NewsFeedViewModel: ViewModel() {
 
-    private val sourceList: List<FeedPostItem> = List(10) { FeedPostItem(it) }
+    private val sourceList: List<FeedPostItem> = List(10) {
+        FeedPostItem(
+            id = it,
+            contentText = "Content: $it"
+        )
+    }
     private val initialState: NewsFeedScreenState.Posts = NewsFeedScreenState.Posts(posts = sourceList)
 
     private val _screenState = MutableLiveData<NewsFeedScreenState>(initialState)

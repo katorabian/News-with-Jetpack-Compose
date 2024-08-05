@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,6 +73,17 @@ fun CommentsScreen(
                         bottom = 72.dp
                     )
                 ) {
+                    if (feedPost.contentText.isNotBlank()) {
+                        item {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = feedPost.contentText,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
                     items(
                         items = currentState.comments,
                         key = { item -> item.id }
