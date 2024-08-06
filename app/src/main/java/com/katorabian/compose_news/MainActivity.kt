@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.katorabian.compose_news.other.ActivityResultTest
 import com.katorabian.compose_news.other.InstagramViewModel
 import com.katorabian.compose_news.presentation.layout.MainScreen
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
@@ -21,9 +22,17 @@ class MainActivity : ComponentActivity() {
             }
         }
 */
+
+/*
         setContent {
             ComposeNewsTheme {
                 MainScreen()
+            }
+        }
+*/
+        setContent {
+            ComposeNewsTheme {
+                ActivityResultTest()
             }
         }
     }
