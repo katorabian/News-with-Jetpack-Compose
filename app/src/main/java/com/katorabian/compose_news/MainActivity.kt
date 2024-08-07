@@ -8,6 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.katorabian.compose_news.other.ActivityResultTest
 import com.katorabian.compose_news.other.InstagramViewModel
+import com.katorabian.compose_news.other.MyNumber
+import com.katorabian.compose_news.other.SideEffectText
 import com.katorabian.compose_news.presentation.layout.MainScreen
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 import com.katorabian.compose_news.presentation.viewModel.NewsFeedViewModel
@@ -28,7 +30,13 @@ class MainActivity : ComponentActivity() {
             }
         }
 */
+        setContent {
+            ComposeNewsTheme {
+                SideEffectText(number = MyNumber(10))
+            }
+        }
 
+/*
         setContent {
             ComposeNewsTheme {
                 val launcher = rememberLauncherForActivityResult(
@@ -47,5 +55,6 @@ class MainActivity : ComponentActivity() {
                 MainScreen()
             }
         }
+*/
     }
 }
