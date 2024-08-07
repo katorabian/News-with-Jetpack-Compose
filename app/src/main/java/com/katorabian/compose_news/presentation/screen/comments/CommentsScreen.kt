@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.layout
+package com.katorabian.compose_news.presentation.screen.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,10 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
-import com.katorabian.compose_news.presentation.model.CommentsScreenState
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
-import com.katorabian.compose_news.presentation.viewModel.CommentsViewModel
-import com.katorabian.compose_news.presentation.viewModel.CommentsViewModelFactory
 
 @Composable
 fun CommentsScreen(

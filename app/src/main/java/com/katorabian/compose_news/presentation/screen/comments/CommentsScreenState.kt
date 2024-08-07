@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.model
+package com.katorabian.compose_news.presentation.screen.comments
 
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem

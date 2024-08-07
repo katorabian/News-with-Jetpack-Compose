@@ -1,13 +1,11 @@
-package com.katorabian.compose_news.presentation.viewModel
+package com.katorabian.compose_news.presentation.screen.comments
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.katorabian.compose_news.domain.annotation.Temp
-import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
-import com.katorabian.compose_news.presentation.model.CommentsScreenState
 
 class CommentsViewModel(
     feedPost: FeedPostItem

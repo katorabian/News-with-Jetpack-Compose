@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.model
+package com.katorabian.compose_news.presentation.screen.main.models
 
 sealed class AuthState {
 

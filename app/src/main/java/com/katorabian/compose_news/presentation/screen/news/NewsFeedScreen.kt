@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.layout
+package com.katorabian.compose_news.presentation.screen.news
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticType
-import com.katorabian.compose_news.presentation.model.NewsFeedScreenState
-import com.katorabian.compose_news.presentation.viewModel.NewsFeedViewModel
 
 @Composable
 fun NewsFeedScreen(
@@ -47,7 +45,7 @@ fun NewsFeedScreen(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun FeedPosts(
+private fun FeedPosts(
     viewModel: NewsFeedViewModel,
     paddingValues: PaddingValues,
     posts: List<FeedPostItem>,

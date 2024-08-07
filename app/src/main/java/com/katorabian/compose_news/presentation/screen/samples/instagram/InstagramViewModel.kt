@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.other
+package com.katorabian.compose_news.presentation.screen.samples.instagram
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

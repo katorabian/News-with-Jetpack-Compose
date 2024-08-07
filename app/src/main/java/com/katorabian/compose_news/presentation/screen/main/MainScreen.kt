@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.layout
+package com.katorabian.compose_news.presentation.screen.main
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
@@ -24,8 +24,10 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
-import com.katorabian.compose_news.presentation.navigation.BottomNavItem
 import com.katorabian.compose_news.presentation.navigation.rememberNavigationState
+import com.katorabian.compose_news.presentation.screen.comments.CommentsScreen
+import com.katorabian.compose_news.presentation.screen.main.models.BottomNavItem
+import com.katorabian.compose_news.presentation.screen.news.NewsFeedScreen
 
 @Composable
 fun MainScreen() {

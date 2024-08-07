@@ -1,11 +1,10 @@
-package com.katorabian.compose_news.presentation.viewModel
+package com.katorabian.compose_news.presentation.screen.news
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticType
-import com.katorabian.compose_news.presentation.model.NewsFeedScreenState
 
 class NewsFeedViewModel: ViewModel() {
 

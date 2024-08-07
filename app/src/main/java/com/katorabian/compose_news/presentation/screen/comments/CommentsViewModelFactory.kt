@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.viewModel
+package com.katorabian.compose_news.presentation.screen.comments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

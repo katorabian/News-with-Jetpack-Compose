@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.layout
+package com.katorabian.compose_news.presentation.screen.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

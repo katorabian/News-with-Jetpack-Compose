@@ -1,10 +1,10 @@
-package com.katorabian.compose_news.presentation.viewModel
+package com.katorabian.compose_news.presentation.screen.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.katorabian.compose_news.presentation.model.AuthState
+import com.katorabian.compose_news.presentation.screen.main.models.AuthState
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAuthenticationResult
 

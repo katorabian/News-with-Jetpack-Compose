@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.other
+package com.katorabian.compose_news.presentation.screen.samples.instagram
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
