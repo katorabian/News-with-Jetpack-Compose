@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.SideEffect
 import com.katorabian.compose_news.other.ActivityResultTest
 import com.katorabian.compose_news.other.InstagramViewModel
 import com.katorabian.compose_news.other.MyNumber
@@ -30,13 +31,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 */
-        setContent {
-            ComposeNewsTheme {
-                SideEffectText(number = MyNumber(10))
-            }
-        }
 
-/*
         setContent {
             ComposeNewsTheme {
                 val launcher = rememberLauncherForActivityResult(
@@ -51,10 +46,11 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-                launcher.launch(listOf(VKScope.WALL))
+                SideEffect {
+                    launcher.launch(listOf(VKScope.WALL))
+                }
                 MainScreen()
             }
         }
-*/
     }
 }
