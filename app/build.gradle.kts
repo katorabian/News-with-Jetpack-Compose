@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.gson)
     implementation(libs.coil.compose)
+    implementation(libs.android.sdk.core)
+    implementation(libs.android.sdk.api)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
