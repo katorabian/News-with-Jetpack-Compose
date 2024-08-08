@@ -32,7 +32,7 @@ fun PostStatistics(
             val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
                 R.drawable.ic_views_count,
-                viewsItem.count.toString(),
+                viewsItem.getCountFormated(),
                 onItemClickListener = { onViewsClickListener(viewsItem) }
             )
         }
@@ -43,19 +43,19 @@ fun PostStatistics(
             val sharesItem = statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
                 R.drawable.ic_share,
-                sharesItem.count.toString(),
+                sharesItem.getCountFormated(),
                 onItemClickListener = { onShareClickListener(sharesItem) }
             )
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
                 R.drawable.ic_comment,
-                commentsItem.count.toString(),
+                commentsItem.getCountFormated(),
                 onItemClickListener = { onCommentClickListener(commentsItem) }
             )
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
                 R.drawable.ic_like,
-                likesItem.count.toString(),
+                likesItem.getCountFormated(),
                 onItemClickListener = { onLikeClickListener(likesItem) }
             )
         }
