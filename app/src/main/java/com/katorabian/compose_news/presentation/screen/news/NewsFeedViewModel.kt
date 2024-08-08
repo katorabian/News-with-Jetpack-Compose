@@ -1,23 +1,46 @@
 package com.katorabian.compose_news.presentation.screen.news
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import coil.map.Mapper
+import com.katorabian.compose_news.data.network.ApiFactory
+import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticType
+import com.vk.api.sdk.VKPreferencesKeyValueStorage
+import com.vk.api.sdk.auth.VKAccessToken
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
-class NewsFeedViewModel: ViewModel() {
+class NewsFeedViewModel(application: Application): AndroidViewModel(application) {
 
-    private val sourceList: List<FeedPostItem> = List(10) {
-        FeedPostItem(
-            id = it,
-            contentText = "Con/tent: $it"
-        )
-    }
-    private val initialState: NewsFeedScreenState.Posts = NewsFeedScreenState.Posts(posts = sourceList)
+    private val initialState = NewsFeedScreenState.Initial
 
     private val _screenState = MutableLiveData<NewsFeedScreenState>(initialState)
     val screenState: LiveData<NewsFeedScreenState> = _screenState
+
+    private val mapper = NewsFeedMapper()
+
+    init {
+        loadRecommendation()
+    }
+
+    private fun loadRecommendation() {
+        viewModelScope.launch {
+            val storage = VKPreferencesKeyValueStorage(getApplication())
+            val token = VKAccessToken.restore(storage) ?: return@launch
+
+            val response = ApiFactory.apiService.loadRecommendation(token.accessToken)
+            val feed = mapper.mapResponseToPosts(response)
+            _screenState.postValue(
+                NewsFeedScreenState.Posts(feed)
+            )
+        }
+    }
 
     @Throws(IllegalStateException::class)
     fun updateStatisticCount(post: FeedPostItem, statisticType: StatisticType) {
