@@ -1,6 +1,5 @@
 package com.katorabian.compose_news.presentation.screen.news
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,23 +19,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.katorabian.compose_news.domain.model.FeedPostItem
-import com.katorabian.compose_news.domain.constant.ZERO_INT
-import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 
 @Composable
 fun PostHeader(
-    feedPostItem: FeedPostItem = FeedPostItem(ZERO_INT)
+    feedPostItem: FeedPostItem
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.background(MaterialTheme.colorScheme.primary)
     ) {
-        Image(
-            painter = painterResource(id = feedPostItem.communityImageUrl),
+        AsyncImage(
+            model = feedPostItem.communityImageUrl,
             contentDescription = null,
             modifier = Modifier
                 .size(50.dp)
@@ -66,21 +62,5 @@ fun PostHeader(
             contentDescription = "more",
             tint = MaterialTheme.colorScheme.onSecondary
         )
-    }
-}
-
-@Preview
-@Composable
-private fun PostCardHeaderLight() {
-    ComposeNewsTheme(darkTheme = false) {
-        PostHeader()
-    }
-}
-
-@Preview
-@Composable
-private fun PostCardHeaderDark() {
-    ComposeNewsTheme(darkTheme = true) {
-        PostHeader()
     }
 }

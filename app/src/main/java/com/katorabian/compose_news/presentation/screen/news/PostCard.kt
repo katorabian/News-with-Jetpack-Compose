@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -18,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticItem
 import com.katorabian.compose_news.domain.constant.ZERO_INT
@@ -50,12 +52,12 @@ fun PostCard(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = feedPost.contentText)
                 Spacer(modifier = Modifier.height(8.dp))
-                Image(
-                    painter = painterResource(id = feedPost.contentImageUrl),
-                    contentDescription = null,
+                AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp),
+                        .wrapContentHeight(),
+                    model = feedPost.contentImageUrl,
+                    contentDescription = null,
                     contentScale = ContentScale.FillWidth
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -70,13 +72,3 @@ fun PostCard(
         }
     }
 }
-
-@Preview
-@Composable
-fun PostCardPreview() = PostCard(
-    feedPost = FeedPostItem(ZERO_INT),
-    onViewsClickListener = {},
-    onShareClickListener = {},
-    onCommentClickListener = {},
-    onLikeClickListener = {}
-)

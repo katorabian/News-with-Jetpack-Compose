@@ -98,15 +98,6 @@ fun CommentsScreen(
     }
 }
 
-@Preview
-@Composable
-fun CommentsScreenPreview() = ComposeNewsTheme {
-    CommentsScreen(
-        feedPost = FeedPostItem(ZERO_INT),
-        onNavigateUp = {}
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentsScreenHeader(
@@ -138,16 +129,6 @@ fun CommentsScreenHeader(
         )
     )
 }
-
-@Preview
-@Composable
-private fun CommentsScreenHeaderPreview()  = ComposeNewsTheme {
-    CommentsScreenHeader(
-        postItem = FeedPostItem(id = ZERO_INT),
-        onNavigateUp = {}
-    )
-}
-
 
 @Composable
 private fun CommentItem(
