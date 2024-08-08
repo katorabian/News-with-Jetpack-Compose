@@ -51,7 +51,7 @@ fun PostCard(
                 Text(text = feedPost.contentText)
                 Spacer(modifier = Modifier.height(8.dp))
                 Image(
-                    painter = painterResource(id = feedPost.contentImageResId),
+                    painter = painterResource(id = feedPost.contentImageUrl),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

@@ -36,7 +36,7 @@ fun PostHeader(
         modifier = Modifier.background(MaterialTheme.colorScheme.primary)
     ) {
         Image(
-            painter = painterResource(id = feedPostItem.avatarResId),
+            painter = painterResource(id = feedPostItem.communityImageUrl),
             contentDescription = null,
             modifier = Modifier
                 .size(50.dp)
