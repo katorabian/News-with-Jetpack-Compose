@@ -32,7 +32,8 @@ class NewsFeedViewModel(application: Application): AndroidViewModel(application)
     fun changeLikeStatus(feedPostItem: FeedPostItem) {
         viewModelScope.launch {
             if (feedPostItem.isLiked) {
-                //TODO
+                repository.deleteLike(feedPostItem)
+                _screenState.value = NewsFeedScreenState.Posts(posts = repository.feedPosts)
             } else {
                 repository.addLike(feedPostItem)
                 _screenState.value = NewsFeedScreenState.Posts(posts = repository.feedPosts)

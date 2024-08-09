@@ -21,4 +21,11 @@ interface VkApi {
         @Query("owner_id") ownerId: Long,
         @Query("item_id") postId: Long
     ): LikesCountResponseDto
+
+    @GET("./likes.delete?v=$VK_API_VER&type=post")
+    suspend fun deleteLike(
+        @Query("access_token") token: String,
+        @Query("owner_id") ownerId: Long,
+        @Query("item_id") postId: Long
+    ): LikesCountResponseDto
 }
