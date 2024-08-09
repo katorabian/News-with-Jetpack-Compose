@@ -3,6 +3,7 @@ package com.katorabian.compose_news.domain.mapper
 import com.katorabian.compose_news.data.model.NewsFeedResponseDto
 import com.katorabian.compose_news.data.model.PostDto
 import com.katorabian.compose_news.domain.annotation.DateTimeFormatting
+import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticItem
 import com.katorabian.compose_news.domain.model.StatisticType
@@ -29,7 +30,8 @@ class NewsFeedMapper {
                 communityImageUrl = group.imageUrl,
                 contentText = post.text,
                 contentImageUrl = post.getFirstPhotoMaxQuality(),
-                statistics = post.extractStatistics()
+                statistics = post.extractStatistics(),
+                isLiked = post.likes.userLikes > ZERO_INT
             )
             result.add(feedPost)
         }

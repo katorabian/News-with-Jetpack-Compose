@@ -1,5 +1,6 @@
 package com.katorabian.compose_news.data.network
 
+import com.katorabian.compose_news.data.model.LikesCountResponseDto
 import com.katorabian.compose_news.data.model.NewsFeedResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -19,5 +20,5 @@ interface VkApi {
         @Query("access_token") token: String,
         @Query("owner_id") ownerId: Long,
         @Query("item_id") postId: Long
-    )
+    ): LikesCountResponseDto
 }

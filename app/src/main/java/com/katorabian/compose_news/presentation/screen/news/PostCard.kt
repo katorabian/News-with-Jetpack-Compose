@@ -1,7 +1,6 @@
 package com.katorabian.compose_news.presentation.screen.news
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,13 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticItem
-import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 
 @Composable
@@ -67,7 +63,7 @@ fun PostCard(
                     onShareClickListener = onShareClickListener,
                     onCommentClickListener = onCommentClickListener,
                     onLikeClickListener = onLikeClickListener,
-                    isFavourite = feedPost.isFavourite
+                    isFavourite = feedPost.isLiked
                 )
             }
         }

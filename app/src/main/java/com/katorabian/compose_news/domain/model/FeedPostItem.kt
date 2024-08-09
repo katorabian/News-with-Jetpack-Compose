@@ -6,7 +6,6 @@ import androidx.navigation.NavType
 import com.google.gson.Gson
 import com.katorabian.compose_news.domain.annotation.Temp
 import kotlinx.parcelize.Parcelize
-import kotlin.random.Random
 
 @Temp("Until REST provide")
 @Parcelize
@@ -19,7 +18,7 @@ data class FeedPostItem(
     val contentText: String,
     val contentImageUrl: String?,
     val statistics: List<StatisticItem>,
-    val isFavourite: Boolean = @Temp Random.nextBoolean()
+    val isLiked: Boolean
 ): Parcelable {
     companion object {
         val NavigationType: NavType<FeedPostItem> = object : NavType<FeedPostItem>(

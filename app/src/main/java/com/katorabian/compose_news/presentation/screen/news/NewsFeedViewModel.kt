@@ -4,17 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.map.Mapper
-import com.katorabian.compose_news.data.network.ApiFactory
 import com.katorabian.compose_news.data.repository.NewsFeedRepository
-import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticType
-import com.vk.api.sdk.VKPreferencesKeyValueStorage
-import com.vk.api.sdk.auth.VKAccessToken
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class NewsFeedViewModel(application: Application): AndroidViewModel(application) {
@@ -38,10 +31,11 @@ class NewsFeedViewModel(application: Application): AndroidViewModel(application)
 
     fun changeLikeStatus(feedPostItem: FeedPostItem) {
         viewModelScope.launch {
-            if (feedPostItem.isFavourite) {
+            if (feedPostItem.isLiked) {
                 //TODO
             } else {
                 repository.addLike(feedPostItem)
+                _screenState.value = NewsFeedScreenState.Posts(posts = repository.feedPosts)
             }
         }
     }
