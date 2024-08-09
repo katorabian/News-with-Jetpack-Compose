@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.map.Mapper
 import com.katorabian.compose_news.data.network.ApiFactory
+import com.katorabian.compose_news.data.repository.NewsFeedRepository
 import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticType
@@ -23,22 +24,15 @@ class NewsFeedViewModel(application: Application): AndroidViewModel(application)
     private val _screenState = MutableLiveData<NewsFeedScreenState>(initialState)
     val screenState: LiveData<NewsFeedScreenState> = _screenState
 
-    private val mapper = NewsFeedMapper()
-
+    private val repository = NewsFeedRepository(application)
     init {
         loadRecommendation()
     }
 
     private fun loadRecommendation() {
         viewModelScope.launch {
-            val storage = VKPreferencesKeyValueStorage(getApplication())
-            val token = VKAccessToken.restore(storage) ?: return@launch
-
-            val response = ApiFactory.apiService.loadRecommendation(token.accessToken)
-            val feed = mapper.mapResponseToPosts(response)
-            _screenState.postValue(
-                NewsFeedScreenState.Posts(feed)
-            )
+            val newsFeed = repository.loadRecommendations()
+            _screenState.postValue(NewsFeedScreenState.Posts(newsFeed))
         }
     }
 
