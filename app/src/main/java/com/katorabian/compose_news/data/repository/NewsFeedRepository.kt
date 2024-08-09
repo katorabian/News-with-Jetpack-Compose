@@ -1,6 +1,7 @@
 package com.katorabian.compose_news.data.repository
 
 import android.app.Application
+import com.katorabian.compose_news.data.model.LikesCountResponseDto
 import com.katorabian.compose_news.data.network.VkApiFactory
 import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
@@ -32,12 +33,20 @@ class NewsFeedRepository(application: Application) {
             ?: throw IllegalStateException("Token is null")
     }
 
-    suspend fun addLike(feedPost: FeedPostItem) {
-        val response = vkApi.addLike(
-            token = getAccessToken(),
-            ownerId = feedPost.communityId,
-            postId = feedPost.id
-        )
+    suspend fun changeLikeStatus(feedPost: FeedPostItem) {
+        val response = if (feedPost.isLiked) {
+            vkApi.deleteLike(
+                token = getAccessToken(),
+                ownerId = feedPost.communityId,
+                postId = feedPost.id
+            )
+        } else {
+            vkApi.addLike(
+                token = getAccessToken(),
+                ownerId = feedPost.communityId,
+                postId = feedPost.id
+            )
+        }
 
         val newLikesCount = response.likes.count
         val newStatistics = feedPost.statistics.toMutableList().apply {
@@ -51,33 +60,7 @@ class NewsFeedRepository(application: Application) {
         }
         val newPost = feedPost.copy(
             statistics = newStatistics,
-            isLiked = true
-        )
-
-        val postIndex = _feedPosts.indexOf(feedPost)
-        _feedPosts[postIndex] = newPost
-    }
-
-    suspend fun deleteLike(feedPost: FeedPostItem) {
-        val response = vkApi.deleteLike(
-            token = getAccessToken(),
-            ownerId = feedPost.communityId,
-            postId = feedPost.id
-        )
-
-        val newLikesCount = response.likes.count
-        val newStatistics = feedPost.statistics.toMutableList().apply {
-            removeIf { it.type == StatisticType.LIKES }
-            add(
-                StatisticItem(
-                    type = StatisticType.LIKES,
-                    count = newLikesCount
-                )
-            )
-        }
-        val newPost = feedPost.copy(
-            statistics = newStatistics,
-            isLiked = false
+            isLiked = !feedPost.isLiked
         )
 
         val postIndex = _feedPosts.indexOf(feedPost)
