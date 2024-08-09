@@ -11,7 +11,8 @@ import kotlin.random.Random
 @Temp("Until REST provide")
 @Parcelize
 data class FeedPostItem(
-    val id: String,
+    val id: Long,
+    val communityId: Long,
     val communityName: String,
     val publicationDate: String,
     val communityImageUrl: String,

@@ -36,6 +36,16 @@ class NewsFeedViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
+    fun changeLikeStatus(feedPostItem: FeedPostItem) {
+        viewModelScope.launch {
+            if (feedPostItem.isFavourite) {
+                //TODO
+            } else {
+                repository.addLike(feedPostItem)
+            }
+        }
+    }
+
     @Throws(IllegalStateException::class)
     fun updateStatisticCount(post: FeedPostItem, statisticType: StatisticType) {
         val currentState = screenState.value

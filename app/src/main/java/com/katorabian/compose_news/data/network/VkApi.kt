@@ -13,4 +13,11 @@ interface VkApi {
     suspend fun loadRecommendation(
         @Query("access_token") token: String
     ): NewsFeedResponseDto
+
+    @GET("./likes.add?v=$VK_API_VER&type=post")
+    suspend fun addLike(
+        @Query("access_token") token: String,
+        @Query("owner_id") ownerId: Long,
+        @Query("item_id") postId: Long
+    )
 }

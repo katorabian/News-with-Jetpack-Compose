@@ -24,4 +24,12 @@ class NewsFeedRepository(application: Application) {
         return token?.accessToken
             ?: throw IllegalStateException("Token is null")
     }
+
+    suspend fun addLike(feedPost: FeedPostItem) {
+        apiService.addLike(
+            token = getAccessToken(),
+            ownerId = feedPost.communityId,
+            postId = feedPost.id
+        )
+    }
 }
