@@ -1,8 +1,7 @@
 package com.katorabian.compose_news.presentation.screen.comments
 
 import android.app.Application
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -36,18 +34,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.katorabian.compose_news.domain.constant.ZERO_INT
+import com.katorabian.compose_news.R
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
-import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 import com.katorabian.compose_news.presentation.theme.DarkBlue
 
 @Composable
@@ -82,7 +78,8 @@ fun CommentsScreen(
                         start = 8.dp,
                         end = 8.dp,
                         bottom = 72.dp
-                    )
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     if (feedPost.contentText.isNotBlank()) {
                         item {
@@ -130,7 +127,7 @@ fun CommentsScreenHeader(
         modifier = Modifier.shadow(4.dp),
         title = {
             Text(
-                text = "Comments for FeedPost Id: ${postItem.id}",
+                text = stringResource(R.string.comments_title),
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(start = 8.dp)
             )
@@ -164,7 +161,7 @@ private fun CommentItem(
     ) {
         AsyncImage(
             modifier = Modifier
-                .size(24.dp)
+                .size(48.dp)
                 .clip(CircleShape),
             model = commentItem.authorAvatarUrl,
             contentDescription = null
@@ -172,7 +169,7 @@ private fun CommentItem(
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(
-                text = "${commentItem.authorName} CommentId: ${commentItem.id}",
+                text = commentItem.authorName,
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onPrimary,
                 lineHeight = 17.sp

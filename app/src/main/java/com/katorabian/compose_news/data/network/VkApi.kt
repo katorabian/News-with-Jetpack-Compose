@@ -1,6 +1,6 @@
 package com.katorabian.compose_news.data.network
 
-import com.katorabian.compose_news.data.model.CommentsResponseDto
+import com.katorabian.compose_news.data.model.CommentsContentDto
 import com.katorabian.compose_news.data.model.LikesCountDto
 import com.katorabian.compose_news.data.model.NewsFeedContentDto
 import com.katorabian.compose_news.data.model.VkBaseResponseDto
@@ -49,6 +49,6 @@ interface VkApi {
         @Query("access_token") token: String,
         @Query("owner_id") ownerId: Long,
         @Query("post_id") postId: Long
-    ): VkBaseResponseDto<CommentsResponseDto>
+    ): VkBaseResponseDto<CommentsContentDto>
 
 }

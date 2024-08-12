@@ -1,6 +1,6 @@
 package com.katorabian.compose_news.domain.mapper
 
-import com.katorabian.compose_news.data.model.CommentsResponseDto
+import com.katorabian.compose_news.data.model.CommentsContentDto
 import com.katorabian.compose_news.data.model.GroupShortDto
 import com.katorabian.compose_news.data.model.NewsFeedContentDto
 import com.katorabian.compose_news.data.model.PostDto
@@ -31,7 +31,7 @@ class NewsFeedMapper {
                 id = post.id,
                 communityId = post.communityId,
                 communityName = group.name,
-                publicationDate = mapTimestampToDate(post.date * 1000),
+                publicationDate = mapTimestampToDate(post.date),
                 communityImageUrl = group.imageUrl,
                 contentText = post.text,
                 contentImageUrl = post.getFirstPhotoMaxQuality(),
@@ -44,30 +44,28 @@ class NewsFeedMapper {
         return result
     }
 
-    fun mapResponseToComments(responseDto: CommentsResponseDto): List<PostCommentItem> {
+    fun mapResponseToComments(responseDto: CommentsContentDto): List<PostCommentItem> {
         val comments = mutableListOf<PostCommentItem>()
         for (comment in responseDto.comments) {
             val (authorName, authorAvatar) = responseDto.let {
                 it.profiles.find { it.id == comment.authorId }?.getNameAndAvatar()?:
-                it.communities.find { it.id == comment.authorId.absoluteValue }?.getNameAndAvatar()?:
-                throw IllegalStateException("There is no post author")
-            }
-            comments.add(
-                PostCommentItem(
-                    id = comment.id,
-                    authorName = authorName,
-                    authorAvatarUrl = authorAvatar,
-                    commentText = comment.text.takeIf { it.isNotBlank() }?: "Non-text comment",
-                    publicationDate = mapTimestampToDate(comment.date)
+                it.communities.find { it.id == comment.authorId.absoluteValue }?.getNameAndAvatar()
+            }?: continue
 
-                )
+            val postComment = PostCommentItem(
+                id = comment.id,
+                authorName = authorName,
+                authorAvatarUrl = authorAvatar,
+                commentText = comment.text.takeIf { it.isNotBlank() }?: continue, // hide non text comments
+                publicationDate = mapTimestampToDate(comment.date)
             )
+            comments.add(postComment)
         }
         return comments
     }
 
     private fun ProfileShortDto.getFullName() = "$firstName $secondName"
-    private fun ProfileShortDto.getNameAndAvatar() = getFullName() to avatar
+    private fun ProfileShortDto.getNameAndAvatar() = getFullName() to avatarUrl
     private fun GroupShortDto.getNameAndAvatar() = name to avatar
 
     private fun PostDto.extractStatistics(): List<StatisticItem> {
@@ -87,7 +85,7 @@ class NewsFeedMapper {
 
     @DateTimeFormatting
     private fun mapTimestampToDate(timestamp: Long): String {
-        val date = Date(timestamp)
+        val date = Date(timestamp * 1000)
         val dateFormat = SimpleDateFormat(DATE_PATTERN, Locale.getDefault())
         return dateFormat.format(date)
     }
