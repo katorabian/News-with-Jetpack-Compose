@@ -1,7 +1,6 @@
 package com.katorabian.compose_news.data.repository
 
 import android.app.Application
-import com.katorabian.compose_news.data.model.LikesCountResponseDto
 import com.katorabian.compose_news.data.network.VkApiFactory
 import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
@@ -78,5 +77,14 @@ class NewsFeedRepository(application: Application) {
 
         val postIndex = _feedPosts.indexOf(feedPost)
         _feedPosts[postIndex] = newPost
+    }
+
+    suspend fun deletePost(feedPost: FeedPostItem) {
+        vkApi.ignorePost(
+            token = getAccessToken(),
+            ownerId = feedPost.communityId,
+            postId = feedPost.id
+        )
+        _feedPosts.removeIf { it.id == feedPost.id }
     }
 }

@@ -34,4 +34,12 @@ interface VkApi {
         @Query("owner_id") ownerId: Long,
         @Query("item_id") postId: Long
     ): LikesCountResponseDto
+
+    @GET("./newsfeed.ignoreItem?v=$VK_API_VER&type=wall")
+    suspend fun ignorePost(
+        @Query("access_token") token: String,
+        @Query("owner_id") ownerId: Long,
+        @Query("item_id") postId: Long
+    )
+
 }
