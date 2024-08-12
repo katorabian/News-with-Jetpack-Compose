@@ -1,10 +1,14 @@
 package com.katorabian.compose_news.domain.mapper
 
+import com.katorabian.compose_news.data.model.CommentsResponseDto
+import com.katorabian.compose_news.data.model.GroupShortDto
 import com.katorabian.compose_news.data.model.NewsFeedResponseDto
 import com.katorabian.compose_news.data.model.PostDto
+import com.katorabian.compose_news.data.model.ProfileShortDto
 import com.katorabian.compose_news.domain.annotation.DateTimeFormatting
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
+import com.katorabian.compose_news.domain.model.PostCommentItem
 import com.katorabian.compose_news.domain.model.StatisticItem
 import com.katorabian.compose_news.domain.model.StatisticType
 import java.text.SimpleDateFormat
@@ -38,6 +42,32 @@ class NewsFeedMapper {
 
         return result
     }
+
+    fun mapResponseToComments(responseDto: CommentsResponseDto): List<PostCommentItem> {
+        val comments = mutableListOf<PostCommentItem>()
+        for (comment in responseDto.comments) {
+            val (authorName, authorAvatar) = responseDto.let {
+                it.profiles.find { it.id == comment.authorId }?.getNameAndAvatar()?:
+                it.communities.find { it.id == comment.authorId.absoluteValue }?.getNameAndAvatar()?:
+                throw IllegalStateException("There is no post author")
+            }
+            comments.add(
+                PostCommentItem(
+                    id = comment.id,
+                    authorName = authorName,
+                    authorAvatarUrl = authorAvatar,
+                    commentText = comment.text.takeIf { it.isNotBlank() }?: "Non-text comment",
+                    publicationDate = mapTimestampToDate(comment.date)
+
+                )
+            )
+        }
+        return comments
+    }
+
+    private fun ProfileShortDto.getFullName() = "$firstName $secondName"
+    private fun ProfileShortDto.getNameAndAvatar() = getFullName() to avatar
+    private fun GroupShortDto.getNameAndAvatar() = name to avatar
 
     private fun PostDto.extractStatistics(): List<StatisticItem> {
         return listOf(

@@ -1,7 +1,11 @@
 package com.katorabian.compose_news.data.network
 
+import com.katorabian.compose_news.data.model.CommentsDto
+import com.katorabian.compose_news.data.model.CommentsResponseDto
 import com.katorabian.compose_news.data.model.LikesCountResponseDto
 import com.katorabian.compose_news.data.model.NewsFeedResponseDto
+import com.katorabian.compose_news.data.model.VkBaseResponseDto
+import com.katorabian.compose_news.domain.model.FeedPostItem
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -41,5 +45,12 @@ interface VkApi {
         @Query("owner_id") ownerId: Long,
         @Query("item_id") postId: Long
     )
+
+    @GET("./wall.getComments?v=$VK_API_VER&extended=1&fields=photo_100")
+    suspend fun getComments(
+        @Query("access_token") token: String,
+        @Query("owner_id") ownerId: Long,
+        @Query("post_id") postId: Long
+    ): VkBaseResponseDto<CommentsResponseDto>
 
 }
