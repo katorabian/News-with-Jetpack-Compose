@@ -1,6 +1,7 @@
 package com.katorabian.practice.flow.lesson2
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 
 object UsersRepository {
 
@@ -11,8 +12,10 @@ object UsersRepository {
         users.add(user)
     }
 
-    suspend fun loadUsers(): List<String> {
-        delay(10)
-        return users.toList()
+    suspend fun loadUsers() = flow {
+        while (true) {
+            emit(users.toList())
+            delay(500)
+        }
     }
 }

@@ -26,10 +26,12 @@ fun getFlowByFlowOfBuilder(): Flow<Int> {
 
 fun getFlowByBuilder(): Flow<Int> {
     val numbers = listOf(3, 4, 8, 16, 5, 7, 11, 32, 41, 28, 43, 47, 84, 116, 53, 59, 61)
+
     return flow {
         numbers.forEach {
             emit(it)
         }
+
         val a = 43
         emit(a)
         println("Emitted: $a")
