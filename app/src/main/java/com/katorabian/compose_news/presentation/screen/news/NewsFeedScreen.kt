@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,6 +44,14 @@ fun NewsFeedScreen(
                 onCommentClickListener = onCommentClickListener,
                 nextDataIsLoading = currentState.nextDataIsLoading
             )
+        }
+        NewsFeedScreenState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center, 
+            ) {
+                CircularProgressIndicator(color = DarkBlue)
+            }
         }
         NewsFeedScreenState.Initial -> {
             /* do nothing */
@@ -120,9 +129,7 @@ private fun FeedPosts(
                         .padding(16.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(
-                        color = DarkBlue
-                    )
+                    CircularProgressIndicator(color = DarkBlue)
                 }
             } else {
                 SideEffect {

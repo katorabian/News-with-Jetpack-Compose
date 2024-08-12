@@ -6,6 +6,8 @@ sealed class NewsFeedScreenState {
 
     data object Initial: NewsFeedScreenState()
 
+    data object Loading: NewsFeedScreenState()
+
     data class Posts(
         val posts: List<FeedPostItem>,
         val nextDataIsLoading: Boolean = false
