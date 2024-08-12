@@ -1,4 +1,4 @@
-package com.katorabian.practice
+package com.katorabian.practice.other
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

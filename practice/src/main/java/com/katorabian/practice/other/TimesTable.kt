@@ -1,4 +1,4 @@
-package com.katorabian.practice
+package com.katorabian.practice.other
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

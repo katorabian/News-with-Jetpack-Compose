@@ -1,4 +1,4 @@
-package com.katorabian.practice
+package com.katorabian.practice.other
 
 import android.os.Handler
 import androidx.compose.foundation.layout.Column
