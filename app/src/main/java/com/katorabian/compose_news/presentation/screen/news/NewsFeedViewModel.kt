@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.katorabian.compose_news.data.repository.NewsFeedRepository
 import com.katorabian.compose_news.domain.model.FeedPostItem
-import com.katorabian.compose_news.domain.model.StatisticType
 import kotlinx.coroutines.launch
 
 class NewsFeedViewModel(application: Application): AndroidViewModel(application) {
@@ -43,37 +42,6 @@ class NewsFeedViewModel(application: Application): AndroidViewModel(application)
             repository.changeLikeStatus(feedPostItem)
             _screenState.value = NewsFeedScreenState.Posts(posts = repository.feedPosts)
         }
-    }
-
-    @Throws(IllegalStateException::class)
-    fun updateStatisticCount(post: FeedPostItem, statisticType: StatisticType) {
-        val currentState = screenState.value
-        if (currentState !is NewsFeedScreenState.Posts) return
-
-        val oldPosts = currentState.posts.toMutableList()
-        val oldStatistics = post.statistics
-        val newStatistics = oldStatistics.toMutableList().apply {
-            replaceAll { oldItem ->
-                if (oldItem.type == statisticType) {
-                    oldItem.copy(
-                        count = oldItem.count + 1
-                    )
-                } else {
-                    oldItem
-                }
-            }
-        }
-
-        val newFeedPost = post.copy(statistics = newStatistics)
-        val newPosts = oldPosts.apply {
-            replaceAll {
-                if (it.id == newFeedPost.id)
-                    newFeedPost
-                else
-                    it
-            }
-        }
-        _screenState.value = NewsFeedScreenState.Posts(newPosts)
     }
 
     fun removePostItem(post: FeedPostItem) {

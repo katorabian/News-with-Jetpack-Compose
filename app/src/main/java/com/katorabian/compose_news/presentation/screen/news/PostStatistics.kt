@@ -26,8 +26,6 @@ import com.katorabian.compose_news.presentation.theme.DarkRed
 @Composable
 fun PostStatistics(
     statistics: List<StatisticItem>,
-    onViewsClickListener: (StatisticItem) -> Unit,
-    onShareClickListener: (StatisticItem) -> Unit,
     onCommentClickListener: (StatisticItem) -> Unit,
     onLikeClickListener: (StatisticItem) -> Unit,
     isFavourite: Boolean
@@ -37,8 +35,7 @@ fun PostStatistics(
             val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
                 iconResId = R.drawable.ic_views_count,
-                value = viewsItem.getCountFormated(),
-                onItemClickListener = { onViewsClickListener(viewsItem) }
+                value = viewsItem.getCountFormated()
             )
         }
         Row(
@@ -48,8 +45,7 @@ fun PostStatistics(
             val sharesItem = statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
                 iconResId = R.drawable.ic_share,
-                value = sharesItem.getCountFormated(),
-                onItemClickListener = { onShareClickListener(sharesItem) }
+                value = sharesItem.getCountFormated()
             )
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
@@ -78,11 +74,17 @@ fun IconWithText(
     @DrawableRes iconResId: Int,
     value: String,
     iconTint: Color = MaterialTheme.colorScheme.onSecondary,
-    onItemClickListener: () -> Unit
+    onItemClickListener: (() -> Unit)? = null
 ) {
-    Row(
-        modifier = Modifier.clickable(onClick = onItemClickListener),
-    ) {
+    val modifier = if (onItemClickListener == null) {
+        Modifier
+    } else {
+        Modifier.clickable {
+            onItemClickListener()
+        }
+    }
+
+    Row(modifier = modifier) {
         Icon(
             modifier = Modifier
                 .align(Alignment.CenterVertically)

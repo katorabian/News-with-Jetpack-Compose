@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.katorabian.compose_news.domain.model.FeedPostItem
-import com.katorabian.compose_news.domain.model.StatisticType
 import com.katorabian.compose_news.presentation.theme.DarkBlue
 
 @Composable
@@ -105,12 +104,6 @@ private fun FeedPosts(
             ) {
                 PostCard(
                     feedPost = post,
-                    onViewsClickListener = {
-                        viewModel.updateStatisticCount(post, StatisticType.VIEWS)
-                    },
-                    onShareClickListener = {
-                        viewModel.updateStatisticCount(post, StatisticType.SHARES)
-                    },
                     onCommentClickListener = {
                         onCommentClickListener(post)
                     },

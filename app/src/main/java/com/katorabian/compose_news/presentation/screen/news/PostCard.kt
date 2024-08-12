@@ -25,8 +25,6 @@ import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPostItem,
-    onViewsClickListener: (StatisticItem) -> Unit,
-    onShareClickListener: (StatisticItem) -> Unit,
     onCommentClickListener: (StatisticItem) -> Unit,
     onLikeClickListener: (StatisticItem) -> Unit
 ) {
@@ -59,8 +57,6 @@ fun PostCard(
                 Spacer(modifier = Modifier.height(8.dp))
                 PostStatistics(
                     statistics = feedPost.statistics,
-                    onViewsClickListener = onViewsClickListener,
-                    onShareClickListener = onShareClickListener,
                     onCommentClickListener = onCommentClickListener,
                     onLikeClickListener = onLikeClickListener,
                     isFavourite = feedPost.isLiked
