@@ -19,14 +19,22 @@ class NewsFeedViewModel(application: Application): AndroidViewModel(application)
 
     private val repository = NewsFeedRepository(application)
     init {
-        loadRecommendation()
+        loadRecommendations()
     }
 
-    private fun loadRecommendation() {
+    private fun loadRecommendations() {
         viewModelScope.launch {
             val newsFeed = repository.loadRecommendations()
             _screenState.postValue(NewsFeedScreenState.Posts(newsFeed))
         }
+    }
+
+    fun loadNextRecommendations() {
+        _screenState.value = NewsFeedScreenState.Posts(
+            posts = repository.feedPosts,
+            nextDataIsLoading = true
+        )
+        loadRecommendations()
     }
 
     fun changeLikeStatus(feedPostItem: FeedPostItem) {

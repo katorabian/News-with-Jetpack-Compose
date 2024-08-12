@@ -19,13 +19,26 @@ class NewsFeedRepository(application: Application) {
     private val mapper = NewsFeedMapper()
 
     private val _feedPosts = mutableListOf<FeedPostItem>()
-    val feedPosts: List<FeedPostItem> get() = _feedPosts.toList()
+    val feedPosts: List<FeedPostItem>
+        get() = _feedPosts.toList()
+
+    private var nextFrom: String? = null
 
     suspend fun loadRecommendations(): List<FeedPostItem> {
-        val response = vkApi.loadRecommendation(getAccessToken())
+        val startFrom = nextFrom
+
+        if (startFrom == null && feedPosts.isNotEmpty())
+            return feedPosts
+
+        val response = if (startFrom == null) {
+            vkApi.loadRecommendation(getAccessToken())
+        } else {
+            vkApi.loadRecommendation(getAccessToken(), startFrom)
+        }
+        nextFrom = response.newsFeedContentDto.nextFrom
         val posts = mapper.mapResponseToPosts(response)
         _feedPosts.addAll(posts)
-        return posts
+        return feedPosts
     }
 
     private fun getAccessToken(): String {
