@@ -34,7 +34,7 @@ class NewsFeedRepository(application: Application) {
         } else {
             vkApi.loadRecommendation(getAccessToken(), startFrom)
         }
-        nextFrom = response.newsFeedContentDto.nextFrom
+        nextFrom = response.generic.nextFrom
         val posts = mapper.mapResponseToPosts(response)
         _feedPosts.addAll(posts)
         return feedPosts
@@ -60,7 +60,7 @@ class NewsFeedRepository(application: Application) {
             )
         }
 
-        val newLikesCount = response.likes.count
+        val newLikesCount = response.generic.count
         val newStatistics = feedPost.statistics.toMutableList().apply {
             removeIf { it.type == StatisticType.LIKES }
             add(

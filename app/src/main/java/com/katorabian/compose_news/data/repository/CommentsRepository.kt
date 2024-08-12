@@ -5,8 +5,6 @@ import com.katorabian.compose_news.data.network.VkApiFactory
 import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
-import com.katorabian.compose_news.domain.model.StatisticItem
-import com.katorabian.compose_news.domain.model.StatisticType
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 
@@ -34,7 +32,7 @@ class CommentsRepository(application: Application) {
             token = getAccessToken(),
             ownerId = feedPost.communityId,
             postId = feedPost.id
-        ).response
+        ).generic
         val comments = mapper.mapResponseToComments(response)
         _comments.addAll(comments)
     }

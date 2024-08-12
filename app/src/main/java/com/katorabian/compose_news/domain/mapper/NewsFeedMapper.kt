@@ -2,9 +2,10 @@ package com.katorabian.compose_news.domain.mapper
 
 import com.katorabian.compose_news.data.model.CommentsResponseDto
 import com.katorabian.compose_news.data.model.GroupShortDto
-import com.katorabian.compose_news.data.model.NewsFeedResponseDto
+import com.katorabian.compose_news.data.model.NewsFeedContentDto
 import com.katorabian.compose_news.data.model.PostDto
 import com.katorabian.compose_news.data.model.ProfileShortDto
+import com.katorabian.compose_news.data.model.VkBaseResponseDto
 import com.katorabian.compose_news.domain.annotation.DateTimeFormatting
 import com.katorabian.compose_news.domain.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
@@ -18,11 +19,11 @@ import kotlin.math.absoluteValue
 
 class NewsFeedMapper {
 
-    fun mapResponseToPosts(responseDto: NewsFeedResponseDto): List<FeedPostItem> {
+    fun mapResponseToPosts(responseDto: VkBaseResponseDto<NewsFeedContentDto>): List<FeedPostItem> {
         val result = mutableListOf<FeedPostItem>()
 
-        val posts = responseDto.newsFeedContentDto.posts
-        val groups = responseDto.newsFeedContentDto.groups
+        val posts = responseDto.generic.posts
+        val groups = responseDto.generic.groups
 
         for (post in posts) {
             val group = groups.find { it.id == post.communityId.absoluteValue } ?: continue
