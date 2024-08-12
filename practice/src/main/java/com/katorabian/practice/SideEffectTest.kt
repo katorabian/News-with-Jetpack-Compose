@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.screen.samples
+package com.katorabian.practice
 
 import android.os.Handler
 import androidx.compose.foundation.layout.Column

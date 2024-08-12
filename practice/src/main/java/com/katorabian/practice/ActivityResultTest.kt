@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.screen.samples
+package com.katorabian.practice
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

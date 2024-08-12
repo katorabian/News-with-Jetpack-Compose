@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.screen.samples.instagram
+package com.katorabian.practice.instagram
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -31,7 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.katorabian.compose_news.R
+import com.katorabian.practice.R
 
 @Composable
 fun InstagramProfileCard(

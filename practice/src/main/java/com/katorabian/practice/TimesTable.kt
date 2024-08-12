@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.presentation.screen.samples
+package com.katorabian.practice
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
