@@ -5,19 +5,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 
 suspend fun main() {
-    getFlowByBuilder()
+    val result = getFlowByBuilder()
         .filter { it.isPrime() }
         .filter { it > 20 }
         .map {
             println("Map")
             "Number: $it"
         }
-        .collect { println(it) }
+//        .toList()
+//        .first()
+        .last()
+    println(result)
 }
 
 fun getFlowByFlowOfBuilder(): Flow<Int> {
@@ -31,7 +37,11 @@ fun getFlowByBuilder(): Flow<Int> {
 //            println("Emitted from first flow: $it")
 //            emit(it)
 //        }
-        emitAll(firstFlow)
+//        emitAll(firstFlow)
+        var i = 0
+        while (true) {
+            emit(i++)
+        }
     }
 }
 
