@@ -4,13 +4,19 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.katorabian.compose_news.common.constant.FLOW_RETRY_TIMEOUT_MILLIS
 import com.katorabian.compose_news.data.repository.CommentsRepository
 import com.katorabian.compose_news.domain.annotation.Temp
 import com.katorabian.compose_news.domain.model.FeedPostItem
+import com.katorabian.compose_news.domain.model.PostCommentItem
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
 
 class CommentsViewModel(
@@ -19,31 +25,42 @@ class CommentsViewModel(
 ): ViewModel() {
 
     private val repository = CommentsRepository(application)
-    private val excHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e(this@CommentsViewModel::class.simpleName, Log.getStackTraceString(exception))
-    }
 
-    private val _commentsState = MutableStateFlow(CommentsScreenState())
-    val commentsState = _commentsState.asStateFlow()
-
-    init {
-        loadComments()
-    }
-
-    fun loadComments() {
-        viewModelScope.launch(excHandler) {
-            @Temp("Т.к. не добавлял отметку о последнем полученном элементе, нет смысла оставлять возможность дозагрузки")
-            if (_commentsState.value.comments.isNotEmpty()) return@launch
-
-            _commentsState.value = _commentsState.value.copy(
-                isLoading = true
+    private var commentsSaved: List<PostCommentItem> = emptyList()
+    private val commentsUpdateTrigger = MutableSharedFlow<Unit>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
+    val commentsState: Flow<CommentsScreenState> = flow {
+        emit(CommentsScreenState.FirstLoad)
+        @Temp delay(500)
+        commentsUpdateTrigger.collect {
+            if (commentsSaved.isNotEmpty()) return@collect
+            emit(
+                CommentsScreenState.CommentsList(
+                    comments = commentsSaved,
+                    isLoadMore = true
+                )
             )
-            @Temp delay(2000)
-            val newList = repository.getComments(feedPost)
-            _commentsState.value = _commentsState.value.copy(
-                isLoading = false,
-                comments = (_commentsState.value.comments + newList).distinctBy { it.id }
+            val resultList = (commentsSaved + loadComments()).distinctBy { it.id }
+            commentsSaved = resultList
+            emit(
+                CommentsScreenState.CommentsList(
+                    comments = resultList,
+                    isLoadMore = false
+                )
             )
         }
+    }.retry {
+        delay(FLOW_RETRY_TIMEOUT_MILLIS)
+        true
+    }
+
+    private suspend fun loadComments(): List<PostCommentItem> {
+        return repository.getComments(feedPost)
+    }
+
+    fun triggerLoadComments() = viewModelScope.launch {
+        commentsUpdateTrigger.emit(Unit)
     }
 }

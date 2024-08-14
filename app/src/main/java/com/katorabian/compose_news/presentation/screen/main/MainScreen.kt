@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.katorabian.compose_news.domain.constant.ZERO_INT
+import com.katorabian.compose_news.common.constant.ZERO_INT
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
 import com.katorabian.compose_news.presentation.navigation.rememberNavigationState
 import com.katorabian.compose_news.presentation.screen.comments.CommentsScreen

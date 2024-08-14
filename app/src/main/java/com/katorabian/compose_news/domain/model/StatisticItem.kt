@@ -1,7 +1,7 @@
 package com.katorabian.compose_news.domain.model
 
 import android.os.Parcelable
-import com.katorabian.compose_news.domain.constant.ZERO_INT
+import com.katorabian.compose_news.common.constant.ZERO_INT
 import kotlinx.parcelize.Parcelize
 import java.util.Locale
 

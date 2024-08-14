@@ -7,7 +7,7 @@ import com.katorabian.compose_news.data.model.PostDto
 import com.katorabian.compose_news.data.model.ProfileShortDto
 import com.katorabian.compose_news.data.model.VkBaseResponseDto
 import com.katorabian.compose_news.domain.annotation.DateTimeFormatting
-import com.katorabian.compose_news.domain.constant.ZERO_INT
+import com.katorabian.compose_news.common.constant.ZERO_INT
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
 import com.katorabian.compose_news.domain.model.StatisticItem

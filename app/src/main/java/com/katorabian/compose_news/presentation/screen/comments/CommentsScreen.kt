@@ -63,7 +63,7 @@ fun CommentsScreen(
             feedPost = feedPost
         )
     )
-    val screenState = viewModel.commentsState.collectAsState(CommentsScreenState())
+    val screenState = viewModel.commentsState.collectAsState(CommentsScreenState.Initial)
 
     Scaffold(
         modifier = modifier,
@@ -74,60 +74,72 @@ fun CommentsScreen(
             )
         }
     ) {
-        if (screenState.value.isInitial) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = DarkBlue)
+
+        when (val currState = screenState.value) {
+
+            CommentsScreenState.FirstLoad -> {
+                SideEffect {
+                    viewModel.triggerLoadComments()
+                }
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = DarkBlue)
+                }
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier.padding(it),
-                contentPadding = PaddingValues(
-                    top = 16.dp,
-                    start = 8.dp,
-                    end = 8.dp,
-                    bottom = 72.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                if (feedPost.contentText.isNotBlank()) {
-                    item(key = feedPost.id) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = feedPost.contentText,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center
+
+            is CommentsScreenState.CommentsList -> {
+                LazyColumn(
+                    modifier = Modifier.padding(it),
+                    contentPadding = PaddingValues(
+                        top = 16.dp,
+                        start = 8.dp,
+                        end = 8.dp,
+                        bottom = 72.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    if (feedPost.contentText.isNotBlank()) {
+                        item(key = feedPost.id) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = feedPost.contentText,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                    items(
+                        items = currState.comments,
+                        key = { item -> item.id }
+                    ) { commentItem ->
+                        CommentItem(
+                            commentItem = commentItem
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
-                }
-                items(
-                    items = screenState.value.comments,
-                    key = { item -> item.id }
-                ) { commentItem ->
-                    CommentItem(
-                        commentItem = commentItem
-                    )
-                }
-                item(key = LOAD_MORE_KEY) {
-                    if (screenState.value.isLoading) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(color = DarkBlue)
-                        }
-                    } else {
-                        SideEffect {
-                            viewModel.loadComments()
+                    item(key = LOAD_MORE_KEY) {
+                        if (currState.isLoadMore) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(color = DarkBlue)
+                            }
+                        } else {
+                            SideEffect {
+                                viewModel.triggerLoadComments()
+                            }
                         }
                     }
                 }
+            }
+            CommentsScreenState.Initial -> {
+                /* do nothing */
             }
         }
     }

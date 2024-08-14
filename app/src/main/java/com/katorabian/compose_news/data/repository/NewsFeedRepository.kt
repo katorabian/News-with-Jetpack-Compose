@@ -1,6 +1,7 @@
 package com.katorabian.compose_news.data.repository
 
 import android.app.Application
+import com.katorabian.compose_news.common.constant.FLOW_RETRY_TIMEOUT_MILLIS
 import com.katorabian.compose_news.common.extensions.mergeWith
 import com.katorabian.compose_news.data.network.VkApiFactory
 import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
@@ -51,7 +52,7 @@ class NewsFeedRepository(application: Application) {
             emit(feedPosts)
         }
     }.retry {
-        delay(RETRY_TIMEOUT_MILLIS)
+        delay(FLOW_RETRY_TIMEOUT_MILLIS)
         true
     }
 
@@ -125,9 +126,5 @@ class NewsFeedRepository(application: Application) {
         )
         _feedPosts.removeIf { it.id == feedPost.id }
         refreshedListFlow.emit(feedPosts)
-    }
-
-    companion object {
-        private const val RETRY_TIMEOUT_MILLIS = 3_000L
     }
 }
