@@ -8,11 +8,23 @@ import com.katorabian.compose_news.domain.model.StatisticItem
 import com.katorabian.compose_news.domain.model.StatisticType
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 
 class NewsFeedRepository(application: Application) {
 
     private val storage = VKPreferencesKeyValueStorage(application)
     private val token = VKAccessToken.restore(storage)
+
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val nextDataNeededEvents = MutableSharedFlow<Unit>(replay = 1)
 
     private val vkApi = VkApiFactory.apiService
     private val mapper = NewsFeedMapper()
@@ -23,21 +35,34 @@ class NewsFeedRepository(application: Application) {
 
     private var nextFrom: String? = null
 
-    suspend fun loadRecommendations(): List<FeedPostItem> {
-        val startFrom = nextFrom
+    val recommendations: Flow<List<FeedPostItem>> = flow {
+        nextDataNeededEvents.emit(Unit)
+        nextDataNeededEvents.collect {
+            val startFrom = nextFrom
 
-        if (startFrom == null && feedPosts.isNotEmpty())
-            return feedPosts
+            if (startFrom == null && feedPosts.isNotEmpty()) { //end of feed
+                emit(feedPosts)
+                return@collect
+            }
 
-        val response = if (startFrom == null) {
-            vkApi.loadRecommendation(getAccessToken())
-        } else {
-            vkApi.loadRecommendation(getAccessToken(), startFrom)
+            val response = if (startFrom == null) {
+                vkApi.loadRecommendation(getAccessToken())
+            } else {
+                vkApi.loadRecommendation(getAccessToken(), startFrom)
+            }
+            nextFrom = response.generic.nextFrom
+            val posts = mapper.mapResponseToPosts(response)
+            _feedPosts.addAll(posts)
+            emit(feedPosts)
         }
-        nextFrom = response.generic.nextFrom
-        val posts = mapper.mapResponseToPosts(response)
-        _feedPosts.addAll(posts)
-        return feedPosts
+    }.stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Lazily,
+        initialValue = feedPosts
+    )
+
+    suspend fun loadNextData() {
+        nextDataNeededEvents.emit(Unit)
     }
 
     private fun getAccessToken(): String {

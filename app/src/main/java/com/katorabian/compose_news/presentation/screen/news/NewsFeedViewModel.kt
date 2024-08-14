@@ -6,7 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.katorabian.compose_news.data.repository.NewsFeedRepository
+import com.katorabian.compose_news.domain.annotation.Temp
 import com.katorabian.compose_news.domain.model.FeedPostItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class NewsFeedViewModel(application: Application): AndroidViewModel(application) {
@@ -24,8 +27,11 @@ class NewsFeedViewModel(application: Application): AndroidViewModel(application)
 
     private fun loadRecommendations() {
         viewModelScope.launch {
-            val newsFeed = repository.loadRecommendations()
-            _screenState.postValue(NewsFeedScreenState.Posts(newsFeed))
+            repository.recommendations
+                .filter { it.isNotEmpty() }
+                .collect {
+                    _screenState.value = NewsFeedScreenState.Posts(posts = it)
+                }
         }
     }
 
@@ -34,7 +40,10 @@ class NewsFeedViewModel(application: Application): AndroidViewModel(application)
             posts = repository.feedPosts,
             nextDataIsLoading = true
         )
-        loadRecommendations()
+        viewModelScope.launch {
+            @Temp delay(500)
+            repository.loadNextData()
+        }
     }
 
     fun changeLikeStatus(feedPostItem: FeedPostItem) {
