@@ -1,6 +1,7 @@
 package com.katorabian.compose_news.data.repository
 
 import android.app.Application
+import com.katorabian.compose_news.common.extensions.mergeWith
 import com.katorabian.compose_news.data.network.VkApiFactory
 import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
@@ -25,17 +26,8 @@ class NewsFeedRepository(application: Application) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val nextDataNeededEvents = MutableSharedFlow<Unit>(replay = 1)
-
-    private val vkApi = VkApiFactory.apiService
-    private val mapper = NewsFeedMapper()
-
-    private val _feedPosts = mutableListOf<FeedPostItem>()
-    val feedPosts: List<FeedPostItem>
-        get() = _feedPosts.toList()
-
-    private var nextFrom: String? = null
-
-    val recommendations: Flow<List<FeedPostItem>> = flow {
+    private val refreshedListFlow = MutableSharedFlow<List<FeedPostItem>>()
+    private val loadedListFlow = flow {
         nextDataNeededEvents.emit(Unit)
         nextDataNeededEvents.collect {
             val startFrom = nextFrom
@@ -55,11 +47,25 @@ class NewsFeedRepository(application: Application) {
             _feedPosts.addAll(posts)
             emit(feedPosts)
         }
-    }.stateIn(
-        scope = coroutineScope,
-        started = SharingStarted.Lazily,
-        initialValue = feedPosts
-    )
+    }
+
+
+    private val vkApi = VkApiFactory.apiService
+    private val mapper = NewsFeedMapper()
+
+    private val _feedPosts = mutableListOf<FeedPostItem>()
+    private val feedPosts: List<FeedPostItem>
+        get() = _feedPosts.toList()
+
+    private var nextFrom: String? = null
+
+    val recommendations: StateFlow<List<FeedPostItem>> = loadedListFlow
+        .mergeWith(refreshedListFlow)
+        .stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.Lazily,
+            initialValue = feedPosts
+        )
 
     suspend fun loadNextData() {
         nextDataNeededEvents.emit(Unit)
@@ -102,6 +108,7 @@ class NewsFeedRepository(application: Application) {
 
         val postIndex = _feedPosts.indexOf(feedPost)
         _feedPosts[postIndex] = newPost
+        refreshedListFlow.emit(feedPosts)
     }
 
     suspend fun deletePost(feedPost: FeedPostItem) {
@@ -111,5 +118,6 @@ class NewsFeedRepository(application: Application) {
             postId = feedPost.id
         )
         _feedPosts.removeIf { it.id == feedPost.id }
+        refreshedListFlow.emit(feedPosts)
     }
 }
