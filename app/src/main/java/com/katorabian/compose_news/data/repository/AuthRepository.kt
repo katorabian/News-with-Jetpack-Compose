@@ -1,0 +1,42 @@
+package com.katorabian.compose_news.data.repository
+
+import android.app.Application
+import com.katorabian.compose_news.domain.model.AuthState
+import com.vk.api.sdk.VKPreferencesKeyValueStorage
+import com.vk.api.sdk.auth.VKAccessToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
+
+class AuthRepository(application: Application) {
+
+    private val storage = VKPreferencesKeyValueStorage(application)
+    private val token: VKAccessToken?
+        get() = VKAccessToken.restore(storage)
+
+    private val checkAuthStateEvents = MutableSharedFlow<Unit>(replay = 1)
+    val authStateFlow = flow {
+        checkAuthStateEvents.emit(Unit)
+        checkAuthStateEvents.collect {
+            val currToken = token
+            val isLoggedIn = currToken?.isValid == true
+            val authState =
+                if (isLoggedIn) AuthState.Authorized
+                else AuthState.Unauthorized
+
+            emit(authState)
+        }
+    }.stateIn(
+        scope = CoroutineScope(Dispatchers.IO),
+        started = SharingStarted.Lazily,
+        initialValue = AuthState.Initial
+    )
+
+    suspend fun checkAuthState() {
+        checkAuthStateEvents.emit(Unit)
+    }
+
+}

@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.katorabian.compose_news.presentation.screen.main.LoginScreen
-import com.katorabian.compose_news.presentation.screen.main.LoginViewModel
+import com.katorabian.compose_news.presentation.screen.main.AuthViewModel
 import com.katorabian.compose_news.presentation.screen.main.MainScreen
-import com.katorabian.compose_news.presentation.screen.main.models.AuthState
+import com.katorabian.compose_news.domain.model.AuthState
 import com.katorabian.compose_news.presentation.theme.ComposeNewsTheme
 import com.vk.api.sdk.VK.getVKAuthActivityResultContract
 import com.vk.api.sdk.auth.VKScope
@@ -21,12 +21,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ComposeNewsTheme {
-                val viewModel: LoginViewModel = viewModel()
-                val authState = viewModel.authState.observeAsState(AuthState.Initial)
+                val viewModel: AuthViewModel = viewModel()
+                val authState = viewModel.authState.collectAsState(AuthState.Initial)
 
                 val launcher = rememberLauncherForActivityResult(
                     contract = getVKAuthActivityResultContract(),
-                    onResult = viewModel::handleAuthResult
+                    onResult = { viewModel.handleAuthResult() }
                 )
 
                 when (authState.value) {
