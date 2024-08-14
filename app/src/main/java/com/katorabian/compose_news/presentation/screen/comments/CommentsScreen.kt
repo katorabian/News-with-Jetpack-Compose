@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -28,7 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +47,9 @@ import com.katorabian.compose_news.R
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
 import com.katorabian.compose_news.presentation.theme.DarkBlue
+import kotlin.random.Random
+
+private val LOAD_MORE_KEY = Random.nextFloat()
 
 @Composable
 fun CommentsScreen(
@@ -58,60 +63,71 @@ fun CommentsScreen(
             feedPost = feedPost
         )
     )
-    val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
+    val screenState = viewModel.commentsState.collectAsState(CommentsScreenState())
 
-    when (val currentState = screenState.value) {
-        is CommentsScreenState.Comments -> {
-            Scaffold(
-                modifier = modifier,
-                topBar = {
-                    CommentsScreenHeader(
-                        postItem = currentState.feedPost,
-                        onNavigateUp = onNavigateUp
-                    )
-                }
-            ) {
-                LazyColumn(
-                    modifier = Modifier.padding(it),
-                    contentPadding = PaddingValues(
-                        top = 16.dp,
-                        start = 8.dp,
-                        end = 8.dp,
-                        bottom = 72.dp
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    if (feedPost.contentText.isNotBlank()) {
-                        item {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = feedPost.contentText,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                textAlign = TextAlign.Center
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-                    }
-                    items(
-                        items = currentState.comments,
-                        key = { item -> item.id }
-                    ) { commentItem ->
-                        CommentItem(
-                            commentItem = commentItem
-                        )
-                    }
-                }
-            }
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            CommentsScreenHeader(
+                postItem = feedPost,
+                onNavigateUp = onNavigateUp
+            )
         }
-        CommentsScreenState.Initial -> {
-            /* do nothing */
-        }
-        CommentsScreenState.Loading -> {
+    ) {
+        if (screenState.value.isInitial) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(color = DarkBlue)
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.padding(it),
+                contentPadding = PaddingValues(
+                    top = 16.dp,
+                    start = 8.dp,
+                    end = 8.dp,
+                    bottom = 72.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                if (feedPost.contentText.isNotBlank()) {
+                    item(key = feedPost.id) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = feedPost.contentText,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+                items(
+                    items = screenState.value.comments,
+                    key = { item -> item.id }
+                ) { commentItem ->
+                    CommentItem(
+                        commentItem = commentItem
+                    )
+                }
+                item(key = LOAD_MORE_KEY) {
+                    if (screenState.value.isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(color = DarkBlue)
+                        }
+                    } else {
+                        SideEffect {
+                            viewModel.loadComments()
+                        }
+                    }
+                }
             }
         }
     }

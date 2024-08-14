@@ -16,24 +16,18 @@ class CommentsRepository(application: Application) {
     private val vkApi = VkApiFactory.apiService
     private val mapper = NewsFeedMapper()
 
-    private val _comments = mutableListOf<PostCommentItem>()
-    val comments: List<PostCommentItem>
-        get() = _comments.toList()
-
-    private var nextFrom: String? = null
-
     private fun getAccessToken(): String {
         return token?.accessToken
             ?: throw IllegalStateException("Token is null")
     }
 
-    suspend fun getComments(feedPost: FeedPostItem) {
+    suspend fun getComments(feedPost: FeedPostItem): List<PostCommentItem> {
         val response = vkApi.getComments(
             token = getAccessToken(),
             ownerId = feedPost.communityId,
             postId = feedPost.id
         ).generic
         val comments = mapper.mapResponseToComments(response)
-        _comments.addAll(comments)
+        return comments
     }
 }
