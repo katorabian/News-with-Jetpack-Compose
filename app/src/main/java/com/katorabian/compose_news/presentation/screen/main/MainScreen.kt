@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.katorabian.compose_news.common.constant.ZERO_INT
+import com.katorabian.compose_news.presentation.ViewModelFactory
 import com.katorabian.compose_news.presentation.navigation.AppNavGraph
 import com.katorabian.compose_news.presentation.navigation.rememberNavigationState
 import com.katorabian.compose_news.presentation.screen.comments.CommentsScreen
@@ -30,7 +31,7 @@ import com.katorabian.compose_news.presentation.screen.main.models.BottomNavItem
 import com.katorabian.compose_news.presentation.screen.news.NewsFeedScreen
 
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModelFactory: ViewModelFactory) {
     val navigationState = rememberNavigationState()
 
     Scaffold(
@@ -92,6 +93,7 @@ fun MainScreen() {
             navHostController = navigationState.navHostController,
             newsFeedScreenContent = {
                 NewsFeedScreen(
+                    viewModelFactory = viewModelFactory,
                     paddingValues = paddingValues,
                     onCommentClickListener = { postItem ->
                         navigationState.navigateToComments(postItem)
@@ -100,6 +102,7 @@ fun MainScreen() {
             },
             commentsScreenContent = { postItem ->
                 CommentsScreen(
+                    viewModelFactory = viewModelFactory,
                     feedPost = postItem,
                     onNavigateUp = {
                         navigationState.navHostController.popBackStack()

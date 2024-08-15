@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ComposeNewsTheme {
-                val viewModel: AuthViewModel = viewModel()
+                val viewModel: AuthViewModel = viewModel(factory = viewModelFactory)
                 val authState = viewModel.authState.collectAsState(AuthState.Initial)
 
                 val launcher = rememberLauncherForActivityResult(
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
                 when (authState.value) {
                     is AuthState.Authorized -> {
-                        MainScreen()
+                        MainScreen(viewModelFactory)
                     }
                     is AuthState.Unauthorized -> {
                         LoginScreen {
