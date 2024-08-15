@@ -1,20 +1,18 @@
 package com.katorabian.compose_news.presentation.screen.comments
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.katorabian.compose_news.common.constant.FLOW_RETRY_TIMEOUT_MILLIS
-import com.katorabian.compose_news.data.repository.CommentsRepository
+import com.katorabian.compose_news.data.repository.CommentsRepositoryImpl
 import com.katorabian.compose_news.domain.annotation.Temp
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
-import kotlinx.coroutines.CoroutineExceptionHandler
+import com.katorabian.compose_news.domain.usecase.GetCommentsUseCase
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
@@ -24,7 +22,8 @@ class CommentsViewModel(
     private val feedPost: FeedPostItem
 ): ViewModel() {
 
-    private val repository = CommentsRepository(application)
+    private val repository = CommentsRepositoryImpl(application)
+    private val getCommentsUC = GetCommentsUseCase(repository)
 
     private var commentsSaved: List<PostCommentItem> = emptyList()
     private val commentsUpdateTrigger = MutableSharedFlow<Unit>(
@@ -57,7 +56,7 @@ class CommentsViewModel(
     }
 
     private suspend fun loadComments(): List<PostCommentItem> {
-        return repository.getComments(feedPost)
+        return getCommentsUC.get(feedPost)
     }
 
     fun triggerLoadComments() = viewModelScope.launch {

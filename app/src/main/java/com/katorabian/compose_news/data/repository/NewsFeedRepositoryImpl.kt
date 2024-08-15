@@ -8,22 +8,20 @@ import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticItem
 import com.katorabian.compose_news.domain.model.StatisticType
+import com.katorabian.compose_news.domain.repository.NewsFeedRepository
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 
-class NewsFeedRepository(application: Application) {
+class NewsFeedRepositoryImpl(application: Application): NewsFeedRepository {
 
     private val storage = VKPreferencesKeyValueStorage(application)
     private val token = VKAccessToken.restore(storage)
@@ -66,7 +64,7 @@ class NewsFeedRepository(application: Application) {
 
     private var nextFrom: String? = null
 
-    val recommendations: StateFlow<List<FeedPostItem>> = loadedListFlow
+    private val recommendations: StateFlow<List<FeedPostItem>> = loadedListFlow
         .mergeWith(refreshedListFlow)
         .stateIn(
             scope = coroutineScope,
@@ -74,7 +72,9 @@ class NewsFeedRepository(application: Application) {
             initialValue = feedPosts
         )
 
-    suspend fun loadNextData() {
+    override fun getRecommendations(): StateFlow<List<FeedPostItem>> = recommendations
+
+    override suspend fun loadNextData() {
         nextDataNeededEvents.emit(Unit)
     }
 
@@ -83,7 +83,7 @@ class NewsFeedRepository(application: Application) {
             ?: throw IllegalStateException("Token is null")
     }
 
-    suspend fun changeLikeStatus(feedPost: FeedPostItem) {
+    override suspend fun changeLikeStatus(feedPost: FeedPostItem) {
         val response = if (feedPost.isLiked) {
             vkApi.deleteLike(
                 token = getAccessToken(),
@@ -118,7 +118,7 @@ class NewsFeedRepository(application: Application) {
         refreshedListFlow.emit(feedPosts)
     }
 
-    suspend fun deletePost(feedPost: FeedPostItem) {
+    override suspend fun deletePost(feedPost: FeedPostItem) {
         vkApi.ignorePost(
             token = getAccessToken(),
             ownerId = feedPost.communityId,

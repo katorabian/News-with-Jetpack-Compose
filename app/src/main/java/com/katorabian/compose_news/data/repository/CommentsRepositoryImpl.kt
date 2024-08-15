@@ -5,10 +5,11 @@ import com.katorabian.compose_news.data.network.VkApiFactory
 import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
+import com.katorabian.compose_news.domain.repository.CommentsRepository
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 
-class CommentsRepository(application: Application) {
+class CommentsRepositoryImpl(application: Application): CommentsRepository {
 
     private val storage = VKPreferencesKeyValueStorage(application)
     private val token = VKAccessToken.restore(storage)
@@ -21,7 +22,7 @@ class CommentsRepository(application: Application) {
             ?: throw IllegalStateException("Token is null")
     }
 
-    suspend fun getComments(feedPost: FeedPostItem): List<PostCommentItem> {
+    override suspend fun getComments(feedPost: FeedPostItem): List<PostCommentItem> {
         val response = vkApi.getComments(
             token = getAccessToken(),
             ownerId = feedPost.communityId,
