@@ -17,20 +17,26 @@ import dagger.Provides
 @Module
 interface DataModule {
 
+    @ApplicationScope
     @Binds
     fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+
+    @ApplicationScope
     @Binds
     fun bindNewsFeedRepository(impl: NewsFeedRepositoryImpl): NewsFeedRepository
+    
     @Binds
     fun bindCommentsRepository(impl: CommentsRepositoryImpl): CommentsRepository
 
 
     companion object {
+        @ApplicationScope
         @Provides
         fun provideApiService(): VkApi {
             return VkApiFactory.apiService
         }
 
+        @ApplicationScope
         @Provides
         fun provideVkStorage(
             context: Context
