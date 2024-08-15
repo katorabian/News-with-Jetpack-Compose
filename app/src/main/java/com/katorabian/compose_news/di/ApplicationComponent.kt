@@ -3,6 +3,7 @@ package com.katorabian.compose_news.di
 import android.content.Context
 import com.katorabian.compose_news.domain.annotation.Temp
 import com.katorabian.compose_news.domain.model.FeedPostItem
+import com.katorabian.compose_news.presentation.activity.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 
@@ -13,6 +14,8 @@ import dagger.Component
     ]
 )
 interface ApplicationComponent {
+
+    fun inject(mainActivity: MainActivity)
 
     @Component.Factory
     interface Factory { // for providing all dependencies we need to create @Component
