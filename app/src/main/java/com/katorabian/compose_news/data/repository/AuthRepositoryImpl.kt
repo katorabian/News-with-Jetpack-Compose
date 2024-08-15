@@ -1,6 +1,5 @@
 package com.katorabian.compose_news.data.repository
 
-import android.app.Application
 import com.katorabian.compose_news.domain.model.AuthState
 import com.katorabian.compose_news.domain.repository.AuthRepository
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
@@ -12,10 +11,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class AuthRepositoryImpl(application: Application): AuthRepository {
+class AuthRepositoryImpl @Inject constructor(
+    private val storage: VKPreferencesKeyValueStorage
+): AuthRepository {
 
-    private val storage = VKPreferencesKeyValueStorage(application)
     private val token: VKAccessToken?
         get() = VKAccessToken.restore(storage)
 

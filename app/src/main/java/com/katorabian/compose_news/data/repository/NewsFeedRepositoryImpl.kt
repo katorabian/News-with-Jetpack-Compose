@@ -1,10 +1,9 @@
 package com.katorabian.compose_news.data.repository
 
-import android.app.Application
 import com.katorabian.compose_news.common.constant.FLOW_RETRY_TIMEOUT_MILLIS
 import com.katorabian.compose_news.common.extensions.mergeWith
-import com.katorabian.compose_news.data.network.VkApiFactory
-import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
+import com.katorabian.compose_news.data.mapper.NewsFeedMapper
+import com.katorabian.compose_news.data.network.VkApi
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.StatisticItem
 import com.katorabian.compose_news.domain.model.StatisticType
@@ -20,10 +19,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class NewsFeedRepositoryImpl(application: Application): NewsFeedRepository {
+class NewsFeedRepositoryImpl @Inject constructor(
+    private val vkApi: VkApi,
+    private val mapper: NewsFeedMapper,
+    storage: VKPreferencesKeyValueStorage
+): NewsFeedRepository {
 
-    private val storage = VKPreferencesKeyValueStorage(application)
     private val token = VKAccessToken.restore(storage)
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -53,10 +56,6 @@ class NewsFeedRepositoryImpl(application: Application): NewsFeedRepository {
         delay(FLOW_RETRY_TIMEOUT_MILLIS)
         true
     }
-
-
-    private val vkApi = VkApiFactory.apiService
-    private val mapper = NewsFeedMapper()
 
     private val _feedPosts = mutableListOf<FeedPostItem>()
     private val feedPosts: List<FeedPostItem>

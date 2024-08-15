@@ -1,4 +1,4 @@
-package com.katorabian.compose_news.domain.mapper
+package com.katorabian.compose_news.data.mapper
 
 import com.katorabian.compose_news.data.model.CommentsContentDto
 import com.katorabian.compose_news.data.model.GroupShortDto
@@ -15,9 +15,10 @@ import com.katorabian.compose_news.domain.model.StatisticType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class NewsFeedMapper {
+class NewsFeedMapper @Inject constructor() {
 
     fun mapResponseToPosts(responseDto: VkBaseResponseDto<NewsFeedContentDto>): List<FeedPostItem> {
         val result = mutableListOf<FeedPostItem>()

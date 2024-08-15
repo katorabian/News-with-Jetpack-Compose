@@ -1,21 +1,21 @@
 package com.katorabian.compose_news.data.repository
 
-import android.app.Application
-import com.katorabian.compose_news.data.network.VkApiFactory
-import com.katorabian.compose_news.domain.mapper.NewsFeedMapper
+import com.katorabian.compose_news.data.mapper.NewsFeedMapper
+import com.katorabian.compose_news.data.network.VkApi
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
 import com.katorabian.compose_news.domain.repository.CommentsRepository
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
+import javax.inject.Inject
 
-class CommentsRepositoryImpl(application: Application): CommentsRepository {
+class CommentsRepositoryImpl @Inject constructor(
+    private val vkApi: VkApi,
+    private val mapper: NewsFeedMapper,
+    storage: VKPreferencesKeyValueStorage
+): CommentsRepository {
 
-    private val storage = VKPreferencesKeyValueStorage(application)
     private val token = VKAccessToken.restore(storage)
-
-    private val vkApi = VkApiFactory.apiService
-    private val mapper = NewsFeedMapper()
 
     private fun getAccessToken(): String {
         return token?.accessToken

@@ -9,8 +9,11 @@ import com.katorabian.compose_news.domain.usecase.GetAuthStateFlowUseCase
 import com.katorabian.compose_news.domain.usecase.RefreshAuthStateUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel(application: Application): AndroidViewModel(application) {
+class AuthViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
 
     private val repository = AuthRepositoryImpl(application = application)
     private val getAuthStateFlow = GetAuthStateFlowUseCase(repository)

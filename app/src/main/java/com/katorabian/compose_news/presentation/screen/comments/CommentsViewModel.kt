@@ -16,8 +16,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CommentsViewModel(
+class CommentsViewModel @Inject constructor(
     application: Application,
     private val feedPost: FeedPostItem
 ): ViewModel() {

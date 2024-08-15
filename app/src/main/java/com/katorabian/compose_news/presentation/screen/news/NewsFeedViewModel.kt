@@ -19,8 +19,11 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NewsFeedViewModel(application: Application): AndroidViewModel(application) {
+class NewsFeedViewModel @Inject constructor(
+    application: Application
+): AndroidViewModel(application) {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
         Log.d("NewsFeedViewModel", "Exception caught by exception handler")
