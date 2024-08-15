@@ -1,10 +1,8 @@
 package com.katorabian.compose_news.presentation.screen.comments
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.katorabian.compose_news.common.constant.FLOW_RETRY_TIMEOUT_MILLIS
-import com.katorabian.compose_news.data.repository.CommentsRepositoryImpl
 import com.katorabian.compose_news.domain.annotation.Temp
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
@@ -19,12 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CommentsViewModel @Inject constructor(
-    application: Application,
-    private val feedPost: FeedPostItem
+    private val feedPost: FeedPostItem,
+    private val getCommentsUC: GetCommentsUseCase
 ): ViewModel() {
-
-    private val repository = CommentsRepositoryImpl(application)
-    private val getCommentsUC = GetCommentsUseCase(repository)
 
     private var commentsSaved: List<PostCommentItem> = emptyList()
     private val commentsUpdateTrigger = MutableSharedFlow<Unit>(

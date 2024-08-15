@@ -10,8 +10,20 @@ import kotlin.annotation.AnnotationTarget.PROPERTY
 import kotlin.annotation.AnnotationTarget.PROPERTY_GETTER
 import kotlin.annotation.AnnotationTarget.PROPERTY_SETTER
 import kotlin.annotation.AnnotationTarget.TYPEALIAS
+import kotlin.annotation.AnnotationTarget.VALUE_PARAMETER
 
 @Retention(AnnotationRetention.SOURCE)
-@Target(CLASS, FUNCTION, PROPERTY, CONSTRUCTOR, PROPERTY_SETTER, PROPERTY_GETTER, TYPEALIAS, LOCAL_VARIABLE, EXPRESSION)
+@Target(
+    CLASS,
+    FUNCTION,
+    PROPERTY,
+    CONSTRUCTOR,
+    PROPERTY_SETTER,
+    PROPERTY_GETTER,
+    TYPEALIAS,
+    LOCAL_VARIABLE,
+    EXPRESSION,
+    VALUE_PARAMETER
+)
 @MustBeDocumented
 public annotation class Temp(val message: String = EMPTY_STRING)

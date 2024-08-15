@@ -1,11 +1,9 @@
 package com.katorabian.compose_news.presentation.screen.news
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.katorabian.compose_news.common.extensions.mergeWith
-import com.katorabian.compose_news.data.repository.NewsFeedRepositoryImpl
 import com.katorabian.compose_news.domain.annotation.Temp
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.usecase.ChangeLikeStatusUseCase
@@ -22,17 +20,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NewsFeedViewModel @Inject constructor(
-    application: Application
-): AndroidViewModel(application) {
+    getRecommendationsUC: GetRecommendationUseCase,
+    private val loadNextDataUC: LoadNextRecommendationsUseCase,
+    private val changeLikeStatusUC: ChangeLikeStatusUseCase,
+    private val deletePostUC: DeleteRecommendationUseCase
+): ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
         Log.d("NewsFeedViewModel", "Exception caught by exception handler")
     }
-    private val repository = NewsFeedRepositoryImpl(application)
-    private val getRecommendationsUC = GetRecommendationUseCase(repository)
-    private val loadNextDataUC = LoadNextRecommendationsUseCase(repository)
-    private val changeLikeStatusUC = ChangeLikeStatusUseCase(repository)
-    private val deletePostUC = DeleteRecommendationUseCase(repository)
 
     private val recommendationsFlow = getRecommendationsUC.get()
     private val loadNextDataFlow = MutableSharedFlow<NewsFeedScreenState>()
