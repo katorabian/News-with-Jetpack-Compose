@@ -5,7 +5,11 @@ import dagger.BindsInstance
 import dagger.Component
 
 @ApplicationScope
-@Component
+@Component(
+    modules = [
+        DataModule::class,
+    ]
+)
 interface ApplicationComponent {
 
     @Component.Factory
