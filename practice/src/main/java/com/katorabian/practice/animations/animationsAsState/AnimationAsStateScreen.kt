@@ -3,6 +3,7 @@ package com.katorabian.practice.animations.animationsAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -70,17 +71,22 @@ fun Test() {
             text = "Shape",
             radiusPercent = radiusPercent
         )
-
+        /* ------------------------- */
+        var hasBlackBorder by remember { mutableStateOf(false) }
+        val borderWidth by animateDpAsState(targetValue = if (hasBlackBorder) 8.dp else 0.dp)
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {}
+            onClick = {
+                hasBlackBorder = !hasBlackBorder
+            }
         ) {
             Text(
                 text = "Animate border",
             )
         }
         AnimatedContainer(
-            text = "Border"
+            text = "Border",
+            borderWidth = borderWidth
         )
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -111,11 +117,18 @@ fun Test() {
 private fun AnimatedContainer(
     text: String,
     size: Dp = 200.dp,
-    radiusPercent: Int = 4
+    radiusPercent: Int = 4,
+    borderWidth: Dp = 0.dp
 ) {
+    val shape = RoundedCornerShape(radiusPercent)
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(radiusPercent))
+            .clip(shape)
+            .border(
+                width = borderWidth,
+                color = Color.Black,
+                shape = shape
+            )
             .background(Color.Blue)
             .size(size),
         contentAlignment = Alignment.Center
