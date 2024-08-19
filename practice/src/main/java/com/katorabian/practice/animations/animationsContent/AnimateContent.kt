@@ -42,7 +42,7 @@ fun AnimateContent() {
             transitionSpec = {
                 slideIn(tween(2000)) { IntOffset(0, -it.height) }
                     .togetherWith(
-                slideOut(tween(2000)) { IntOffset(0, -it.height) }
+                slideOut(tween(2000)) { IntOffset(0, it.height) }
                     )
             },
         ) { shouldLaunchFirstScreen ->
