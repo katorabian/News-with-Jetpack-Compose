@@ -1,9 +1,14 @@
 package com.katorabian.practice.animations.animationsAsState
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -42,7 +47,15 @@ fun Test() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         var isIncreased by remember { mutableStateOf(true) }
-        val size by animateDpAsState(targetValue = if (isIncreased) 200.dp else 100.dp)
+        val infiniteTransition = rememberInfiniteTransition()
+        val size by infiniteTransition.animateFloat(
+            initialValue = 200F,
+            targetValue = 100F,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 2000),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
@@ -55,7 +68,7 @@ fun Test() {
         }
         AnimatedContainer(
             text = "Size",
-            size = size
+            size = size.dp
         )
         /* ------------------------- */
         var isRect by remember { mutableStateOf(true) }
