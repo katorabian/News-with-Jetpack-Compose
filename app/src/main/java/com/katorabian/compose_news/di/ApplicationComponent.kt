@@ -1,9 +1,7 @@
 package com.katorabian.compose_news.di
 
 import android.content.Context
-import com.katorabian.compose_news.domain.annotation.Temp
-import com.katorabian.compose_news.domain.model.FeedPostItem
-import com.katorabian.compose_news.presentation.activity.MainActivity
+import com.katorabian.compose_news.presentation.ViewModelFactory
 import dagger.BindsInstance
 import dagger.Component
 
@@ -16,7 +14,7 @@ import dagger.Component
 )
 interface ApplicationComponent {
 
-    fun inject(mainActivity: MainActivity)
+    fun getViewModelFactory(): ViewModelFactory
 
     fun getCommentsScreenComponentFactory(): CommentsScreenComponent.Factory
 

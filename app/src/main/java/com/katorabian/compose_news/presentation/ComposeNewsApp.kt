@@ -1,11 +1,10 @@
 package com.katorabian.compose_news.presentation
 
 import android.app.Application
-import com.katorabian.compose_news.common.constant.EMPTY_STRING
-import com.katorabian.compose_news.common.constant.ZERO_LONG
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import com.katorabian.compose_news.di.ApplicationComponent
 import com.katorabian.compose_news.di.DaggerApplicationComponent
-import com.katorabian.compose_news.domain.model.FeedPostItem
 
 class ComposeNewsApp: Application() {
 
@@ -14,4 +13,9 @@ class ComposeNewsApp: Application() {
             context = this
         )
     }
+}
+
+@Composable
+fun getApplicationComponent(): ApplicationComponent {
+    return (LocalContext.current.applicationContext as ComposeNewsApp).component
 }

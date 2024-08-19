@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -45,11 +44,10 @@ import coil.compose.AsyncImage
 import com.katorabian.compose_news.R
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
-import com.katorabian.compose_news.presentation.ComposeNewsApp
+import com.katorabian.compose_news.presentation.getApplicationComponent
 import com.katorabian.compose_news.presentation.theme.DarkBlue
-import kotlin.random.Random
 
-private val LOAD_MORE_KEY = Random.nextFloat()
+private const val LOAD_MORE_KEY = 12345678L
 
 @Composable
 fun CommentsScreen(
@@ -57,8 +55,7 @@ fun CommentsScreen(
     feedPost: FeedPostItem,
     onNavigateUp: () -> Unit
 ) {
-    val component = (LocalContext.current.applicationContext as ComposeNewsApp)
-        .component
+    val component = getApplicationComponent()
         .getCommentsScreenComponentFactory()
         .create(feedPost)
 
