@@ -2,6 +2,7 @@ package com.katorabian.practice.animations.animationsAsState
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,11 +24,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.katorabian.practice.ui.theme.Pink80
 
 @Composable
 fun Test() {
@@ -109,16 +110,22 @@ fun Test() {
             text = "Color",
             contentColor = contentColor
         )
+        /* ------------------------- */
+        var isTransparent by remember { mutableStateOf(false) }
+        val alpha by animateFloatAsState(targetValue = if (isTransparent) 0F else 1F)
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {}
+            onClick = {
+                isTransparent = !isTransparent
+            }
         ) {
             Text(
                 text = "Animate visibility",
             )
         }
         AnimatedContainer(
-            text = "Visibility"
+            text = "Visibility",
+            alpha = alpha
         )
     }
 }
@@ -129,11 +136,13 @@ private fun AnimatedContainer(
     size: Dp = 200.dp,
     radiusPercent: Int = 4,
     borderWidth: Dp = 0.dp,
-    contentColor: Color = Color.Blue
+    contentColor: Color = Color.Blue,
+    alpha: Float = 1F
 ) {
     val shape = RoundedCornerShape(radiusPercent)
     Box(
         modifier = Modifier
+            .alpha(alpha)
             .clip(shape)
             .border(
                 width = borderWidth,
