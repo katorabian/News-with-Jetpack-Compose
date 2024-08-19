@@ -21,16 +21,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val component = getApplicationComponent()
+            val viewModel: AuthViewModel = viewModel(factory = component.getViewModelFactory())
+            val authState = viewModel.authState.collectAsState(AuthState.Initial)
+
+            val launcher = rememberLauncherForActivityResult(
+                contract = getVKAuthActivityResultContract(),
+                onResult = { viewModel.handleAuthResult() }
+            )
+
             ComposeNewsTheme {
-                val component = getApplicationComponent()
-                val viewModel: AuthViewModel = viewModel(factory = component.getViewModelFactory())
-                val authState = viewModel.authState.collectAsState(AuthState.Initial)
-
-                val launcher = rememberLauncherForActivityResult(
-                    contract = getVKAuthActivityResultContract(),
-                    onResult = { viewModel.handleAuthResult() }
-                )
-
                 when (authState.value) {
                     is AuthState.Authorized -> {
                         MainScreen()
