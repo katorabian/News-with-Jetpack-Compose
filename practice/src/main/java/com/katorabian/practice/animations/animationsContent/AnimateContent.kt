@@ -1,6 +1,11 @@
 package com.katorabian.practice.animations.animationsContent
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -31,6 +36,11 @@ fun AnimateContent() {
 
         AnimatedContent(
             targetState = isFirstScreenLaunched,
+            transitionSpec = {
+                (fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)))
+                    .togetherWith(fadeOut(animationSpec = tween(90)))
+            },
         ) { shouldLaunchFirstScreen ->
             if (shouldLaunchFirstScreen) {
                 Screen1()
