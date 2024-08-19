@@ -1,5 +1,6 @@
 package com.katorabian.practice.animations.animationsContent
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -27,10 +28,15 @@ fun AnimateContent() {
         ) {
             Text(text = "Switch screens")
         }
-        if (isFirstScreenLaunched) {
-            Screen1()
-        } else {
-            Screen2()
+
+        AnimatedContent(
+            targetState = isFirstScreenLaunched,
+        ) { shouldLaunchFirstScreen ->
+            if (shouldLaunchFirstScreen) {
+                Screen1()
+            } else {
+                Screen2()
+            }
         }
     }
 }
