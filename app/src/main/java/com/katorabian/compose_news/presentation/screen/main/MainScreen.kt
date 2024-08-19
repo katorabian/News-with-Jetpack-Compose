@@ -102,7 +102,6 @@ fun MainScreen(viewModelFactory: ViewModelFactory) {
             },
             commentsScreenContent = { postItem ->
                 CommentsScreen(
-                    viewModelFactory = viewModelFactory,
                     feedPost = postItem,
                     onNavigateUp = {
                         navigationState.navHostController.popBackStack()

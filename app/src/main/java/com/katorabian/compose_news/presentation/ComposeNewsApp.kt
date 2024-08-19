@@ -11,12 +11,7 @@ class ComposeNewsApp: Application() {
 
     val component: ApplicationComponent by lazy {
         DaggerApplicationComponent.factory().create(
-            context = this,
-            feedPost = FeedPostItem(
-                ZERO_LONG, ZERO_LONG,
-                EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING,
-                null, emptyList(), false
-            )
+            context = this
         )
     }
 }

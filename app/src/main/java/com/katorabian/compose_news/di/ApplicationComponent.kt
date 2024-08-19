@@ -18,12 +18,13 @@ interface ApplicationComponent {
 
     fun inject(mainActivity: MainActivity)
 
+    fun getCommentsScreenComponentFactory(): CommentsScreenComponent.Factory
+
     @Component.Factory
     interface Factory { // for providing all dependencies we need to create @Component
 
         fun create(
-            @BindsInstance context: Context, //in current case we need just 1 parameter for @Component creation
-            @BindsInstance @Temp("Comments screen will not work now") feedPost: FeedPostItem
+            @BindsInstance context: Context //in current case we need just 1 parameter for @Component creation
         ): ApplicationComponent
     }
 }

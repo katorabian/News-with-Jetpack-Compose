@@ -1,6 +1,5 @@
 package com.katorabian.compose_news.presentation.screen.comments
 
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,7 +45,7 @@ import coil.compose.AsyncImage
 import com.katorabian.compose_news.R
 import com.katorabian.compose_news.domain.model.FeedPostItem
 import com.katorabian.compose_news.domain.model.PostCommentItem
-import com.katorabian.compose_news.presentation.ViewModelFactory
+import com.katorabian.compose_news.presentation.ComposeNewsApp
 import com.katorabian.compose_news.presentation.theme.DarkBlue
 import kotlin.random.Random
 
@@ -54,18 +53,16 @@ private val LOAD_MORE_KEY = Random.nextFloat()
 
 @Composable
 fun CommentsScreen(
-    viewModelFactory: ViewModelFactory,
     modifier: Modifier = Modifier,
     feedPost: FeedPostItem,
     onNavigateUp: () -> Unit
 ) {
-    val viewModel: CommentsViewModel = viewModel(
-        factory = viewModelFactory
-//        factory = CommentsViewModelFactory(
-//            application = LocalContext.current.applicationContext as Application,
-//            feedPost = feedPost
-//        )
-    )
+    val component = (LocalContext.current.applicationContext as ComposeNewsApp)
+        .component
+        .getCommentsScreenComponentFactory()
+        .create(feedPost)
+
+    val viewModel: CommentsViewModel = viewModel(factory = component.getViewModelFactory())
     val screenState = viewModel.commentsState.collectAsState(CommentsScreenState.Initial)
 
     Scaffold(
