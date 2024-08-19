@@ -29,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,6 +63,23 @@ fun CommentsScreen(
     val viewModel: CommentsViewModel = viewModel(factory = component.getViewModelFactory())
     val screenState = viewModel.commentsState.collectAsState(CommentsScreenState.Initial)
 
+    CommentsScreenContent(
+        modifier = modifier,
+        viewModel = viewModel,
+        screenState = screenState,
+        feedPost = feedPost,
+        onNavigateUp = onNavigateUp
+    )
+}
+
+@Composable
+private fun CommentsScreenContent(
+    modifier: Modifier,
+    screenState: State<CommentsScreenState>,
+    viewModel: CommentsViewModel,
+    feedPost: FeedPostItem,
+    onNavigateUp: () -> Unit
+) {
     Scaffold(
         modifier = modifier,
         topBar = {

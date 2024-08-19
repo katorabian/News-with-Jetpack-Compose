@@ -2,12 +2,13 @@ package com.katorabian.compose_news.domain.model
 
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import androidx.navigation.NavType
 import com.google.gson.Gson
 import com.katorabian.compose_news.domain.annotation.Temp
 import kotlinx.parcelize.Parcelize
 
-@Temp("Until REST provide")
+@Immutable
 @Parcelize
 data class FeedPostItem(
     val id: Long,

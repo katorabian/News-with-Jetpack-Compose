@@ -101,9 +101,7 @@ fun MainScreen() {
             commentsScreenContent = { postItem ->
                 CommentsScreen(
                     feedPost = postItem,
-                    onNavigateUp = {
-                        navigationState.navHostController.popBackStack()
-                    }
+                    onNavigateUp = navigationState.navHostController::popBackStack
                 )
             },
             favoriteScreenContent = { TextCounter(name = "NavigationItem.Favorite") },
