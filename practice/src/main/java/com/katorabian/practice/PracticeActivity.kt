@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.katorabian.practice.animations.animationsAsState.Test
 import com.katorabian.practice.instagram.InstagramScreen
 import com.katorabian.practice.instagram.InstagramViewModel
 import com.katorabian.practice.ui.theme.ComposeNewsTheme
@@ -15,7 +16,8 @@ class PracticeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeNewsTheme {
-                InstagramScreen(viewModel = instagramViewModel)
+//                InstagramScreen(viewModel = instagramViewModel)
+                Test()
             }
         }
     }
