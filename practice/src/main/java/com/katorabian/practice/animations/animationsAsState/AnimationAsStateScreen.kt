@@ -1,13 +1,17 @@
 package com.katorabian.practice.animations.animationsAsState
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -69,6 +74,28 @@ fun Test() {
         AnimatedContainer(
             text = "Size",
             size = size.dp
+        )
+        /* ------------------------- */
+        val infiniteRotation = rememberInfiniteTransition()
+        val rotateDegree by infiniteRotation.animateFloat(
+            initialValue = 0F,
+            targetValue = 360F,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1000),
+                repeatMode = RepeatMode.Restart
+            )
+        )
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {}
+        ) {
+            Text(
+                text = "Animate shape",
+            )
+        }
+        AnimatedContainer(
+            text = "Shape",
+            rotateDegree = rotateDegree
         )
         /* ------------------------- */
         var isRect by remember { mutableStateOf(true) }
@@ -150,12 +177,14 @@ private fun AnimatedContainer(
     radiusPercent: Int = 4,
     borderWidth: Dp = 0.dp,
     contentColor: Color = Color.Blue,
-    alpha: Float = 1F
+    alpha: Float = 1F,
+    rotateDegree: Float = 0F
 ) {
     val shape = RoundedCornerShape(radiusPercent)
     Box(
         modifier = Modifier
             .alpha(alpha)
+            .rotate(rotateDegree)
             .clip(shape)
             .border(
                 width = borderWidth,
