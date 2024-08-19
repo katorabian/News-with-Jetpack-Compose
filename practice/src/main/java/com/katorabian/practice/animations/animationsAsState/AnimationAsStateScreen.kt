@@ -1,6 +1,7 @@
 package com.katorabian.practice.animations.animationsAsState
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,17 +54,23 @@ fun Test() {
             size = size
         )
         /* ------------------------- */
+        var isRect by remember { mutableStateOf(true) }
+        val radiusPercent by animateIntAsState(targetValue = if (isRect) 4 else 100)
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {}
+            onClick = {
+                isRect = !isRect
+            }
         ) {
             Text(
                 text = "Animate shape",
             )
         }
         AnimatedContainer(
-            text = "Shape"
+            text = "Shape",
+            radiusPercent = radiusPercent
         )
+
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {}
@@ -103,11 +110,12 @@ fun Test() {
 @Composable
 private fun AnimatedContainer(
     text: String,
-    size: Dp = 200.dp
+    size: Dp = 200.dp,
+    radiusPercent: Int = 4
 ) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(radiusPercent))
             .background(Color.Blue)
             .size(size),
         contentAlignment = Alignment.Center
