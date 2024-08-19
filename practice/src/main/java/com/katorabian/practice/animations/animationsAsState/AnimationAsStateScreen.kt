@@ -1,5 +1,6 @@
 package com.katorabian.practice.animations.animationsAsState
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.background
@@ -26,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.katorabian.practice.ui.theme.Pink80
 
 @Composable
 fun Test() {
@@ -88,16 +90,24 @@ fun Test() {
             text = "Border",
             borderWidth = borderWidth
         )
+        /* ------------------------- */
+        var isBlue by remember { mutableStateOf(true) }
+        val contentColor by animateColorAsState(
+            targetValue = if (isBlue) Color.Blue else Color.Magenta
+        )
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {}
+            onClick = {
+                isBlue = !isBlue
+            }
         ) {
             Text(
                 text = "Animate color",
             )
         }
         AnimatedContainer(
-            text = "Color"
+            text = "Color",
+            contentColor = contentColor
         )
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -118,7 +128,8 @@ private fun AnimatedContainer(
     text: String,
     size: Dp = 200.dp,
     radiusPercent: Int = 4,
-    borderWidth: Dp = 0.dp
+    borderWidth: Dp = 0.dp,
+    contentColor: Color = Color.Blue
 ) {
     val shape = RoundedCornerShape(radiusPercent)
     Box(
@@ -129,7 +140,7 @@ private fun AnimatedContainer(
                 color = Color.Black,
                 shape = shape
             )
-            .background(Color.Blue)
+            .background(contentColor)
             .size(size),
         contentAlignment = Alignment.Center
     ) {
