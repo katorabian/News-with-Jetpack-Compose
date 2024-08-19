@@ -16,6 +16,7 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,21 @@ fun NewsFeedScreen(
     val viewModel: NewsFeedViewModel = viewModel(factory = component.getViewModelFactory())
     val screenState = viewModel.screenState.collectAsState(NewsFeedScreenState.Initial)
 
+    NewsFeedScreenContent(
+        screenState = screenState,
+        paddingValues = paddingValues,
+        onCommentClickListener = onCommentClickListener,
+        viewModel = viewModel
+    )
+}
+
+@Composable
+fun NewsFeedScreenContent(
+    screenState: State<NewsFeedScreenState>,
+    paddingValues: PaddingValues,
+    onCommentClickListener: (FeedPostItem) -> Unit,
+    viewModel: NewsFeedViewModel
+) {
     when(val currentState = screenState.value) {
         is NewsFeedScreenState.Posts -> {
             FeedPosts(
@@ -49,7 +65,7 @@ fun NewsFeedScreen(
         NewsFeedScreenState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center, 
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(color = DarkBlue)
             }
