@@ -44,10 +44,17 @@ fun AnimateContent() {
         AnimatedContent(
             targetState = isFirstScreenLaunched,
             transitionSpec = {
-                slideInHorizontally(tween(2000)) { -it }
-                    .togetherWith(
-                slideOutHorizontally(tween(2000)) { it }
-                    )
+                if (targetState) {
+                    slideInHorizontally(tween(2000)) { -it }
+                        .togetherWith(
+                    slideOutHorizontally(tween(2000)) { it }
+                        )
+                } else {
+                    slideInHorizontally(tween(2000)) { it }
+                        .togetherWith(
+                    slideOutHorizontally(tween(2000)) { -it }
+                        )
+                }
             },
         ) { shouldLaunchFirstScreen ->
             if (shouldLaunchFirstScreen) {
