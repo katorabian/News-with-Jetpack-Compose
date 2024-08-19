@@ -37,7 +37,7 @@ fun AnimateContent() {
         AnimatedContent(
             targetState = isFirstScreenLaunched,
             transitionSpec = {
-                fadeIn().togetherWith(fadeOut())
+                fadeIn(tween(2000)).togetherWith(fadeOut(tween(2000)))
             },
         ) { shouldLaunchFirstScreen ->
             if (shouldLaunchFirstScreen) {
