@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Compose News"
 include(":app")
 include(":practice")
+include(":custom_view")
