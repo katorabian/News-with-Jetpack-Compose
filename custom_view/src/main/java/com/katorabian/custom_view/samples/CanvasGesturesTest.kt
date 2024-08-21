@@ -3,11 +3,13 @@ package com.katorabian.custom_view.samples
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -18,6 +20,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Preview
 @Composable
 fun CanvasGesturesTest() {
@@ -30,9 +33,14 @@ fun CanvasGesturesTest() {
             .fillMaxSize()
             .background(Color.White)
             .pointerInput(key1 = Unit) {
-                detectTapGestures {
-                    Log.d("CanvasGesturesTest", it.toString())
-                    points.value += it
+                detectDragGestures { change, _ ->
+                    val newPoints = change.historical.map { it.position }
+                    points.value += newPoints
+                    Log.d("CanvasGesturesTest",
+                        newPoints
+                            .lastOrNull()
+                            .toString()
+                    )
                 }
             }
     ) {
@@ -44,11 +52,6 @@ fun CanvasGesturesTest() {
         points.value.forEachIndexed { index, offset ->
             if (index == 0) {
                 path.moveTo(offset.x, offset.y)
-                drawCircle(
-                    brush = brush,
-                    center = offset,
-                    radius = 5.dp.toPx()
-                )
             } else {
                 path.lineTo(offset.x, offset.y)
             }
