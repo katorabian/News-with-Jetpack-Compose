@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,7 +21,7 @@ import androidx.compose.ui.unit.dp
 @Preview
 @Composable
 fun CanvasGesturesTest() {
-    val circles = rememberSaveable {
+    val points = rememberSaveable {
         mutableStateOf<List<Offset>>(emptyList())
     }
 
@@ -30,18 +32,31 @@ fun CanvasGesturesTest() {
             .pointerInput(key1 = Unit) {
                 detectTapGestures {
                     Log.d("CanvasGesturesTest", it.toString())
-                    circles.value += it
+                    points.value += it
                 }
             }
     ) {
-        circles.value.forEach { offset ->
-            drawCircle(
-                brush = Brush.linearGradient(
-                    listOf(Color.Magenta, Color.Cyan, Color.Red)
-                ),
-                radius = 10.dp.toPx(),
-                center = offset
-            )
+        val path = Path()
+        val brush = Brush.linearGradient(
+            listOf(Color.Cyan, Color.Magenta, Color.Red)
+        )
+
+        points.value.forEachIndexed { index, offset ->
+            if (index == 0) {
+                path.moveTo(offset.x, offset.y)
+                drawCircle(
+                    brush = brush,
+                    center = offset,
+                    radius = 5.dp.toPx()
+                )
+            } else {
+                path.lineTo(offset.x, offset.y)
+            }
         }
+        drawPath(
+            path = path,
+            brush = brush,
+            style = Stroke(width = 10.dp.toPx())
+        )
     }
 }
