@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CanvasGesturesTest() {
     val points = rememberSaveable {
-        mutableStateOf<List<Offset>>(emptyList())
+        mutableStateOf<List<Point>>(emptyList())
     }
 
     Canvas(
@@ -33,15 +33,28 @@ fun CanvasGesturesTest() {
             .fillMaxSize()
             .background(Color.White)
             .pointerInput(key1 = Unit) {
-                detectDragGestures { change, _ ->
-                    val newPoints = change.historical.map { it.position }
-                    points.value += newPoints
-                    Log.d("CanvasGesturesTest",
-                        newPoints
-                            .lastOrNull()
-                            .toString()
-                    )
-                }
+                detectDragGestures(
+                    onDragStart = {
+                        points.value += Point(
+                            offset = it,
+                            isStartedPosition = true
+                        )
+                    },
+                    onDrag = { change, _ ->
+                        val newPoints = change.historical.map {
+                            Point(
+                                offset = it.position,
+                                isStartedPosition = false
+                            )
+                        }
+                        points.value += newPoints
+                        Log.d("CanvasGesturesTest",
+                            newPoints
+                                .lastOrNull()
+                                .toString()
+                        )
+                    }
+                )
             }
     ) {
         val path = Path()
@@ -49,11 +62,11 @@ fun CanvasGesturesTest() {
             listOf(Color.Cyan, Color.Magenta, Color.Red)
         )
 
-        points.value.forEachIndexed { index, offset ->
-            if (index == 0) {
-                path.moveTo(offset.x, offset.y)
+        points.value.forEach { point ->
+            if (point.isStartedPosition) {
+                path.moveTo(point.offset.x, point.offset.y)
             } else {
-                path.lineTo(offset.x, offset.y)
+                path.lineTo(point.offset.x, point.offset.y)
             }
         }
         drawPath(
@@ -63,3 +76,8 @@ fun CanvasGesturesTest() {
         )
     }
 }
+
+data class Point(
+    val offset: Offset,
+    val isStartedPosition: Boolean
+)
