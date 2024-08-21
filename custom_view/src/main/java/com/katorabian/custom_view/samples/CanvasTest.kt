@@ -111,8 +111,3 @@ fun DrawStar() {
     }
 
 }
-
-@Composable
-private fun Dp.toPx() = with(LocalDensity.current) {
-    this@toPx.toPx()
-}

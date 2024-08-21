@@ -3,17 +3,13 @@ package com.katorabian.custom_view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
-import com.katorabian.custom_view.samples.CanvasTest
-import com.katorabian.custom_view.ui.theme.CustomViewTheme
+import com.katorabian.custom_view.samples.CanvasGesturesTest
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CanvasTest()
+            CanvasGesturesTest()
         }
     }
 }
