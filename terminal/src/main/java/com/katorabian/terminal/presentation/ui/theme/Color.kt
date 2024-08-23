@@ -1,4 +1,4 @@
-package com.katorabian.terminal.ui.theme
+package com.katorabian.terminal.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

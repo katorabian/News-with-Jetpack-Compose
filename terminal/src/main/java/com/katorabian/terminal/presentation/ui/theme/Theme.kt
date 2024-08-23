@@ -1,4 +1,4 @@
-package com.katorabian.terminal.ui.theme
+package com.katorabian.terminal.presentation.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
