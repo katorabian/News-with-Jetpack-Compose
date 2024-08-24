@@ -20,14 +20,16 @@ fun TerminalGraphic(
             .background(Color.Black)
     ) {
         val max = bars.maxOf { it.high }
+        val min = bars.minOf { it.low }
+        val difference = max - min
         val barWidth = size.width / bars.count()
-        val pxPerPoint = size.height / max
+        val pxPerPoint = size.height / difference
         bars.forEachIndexed { index, bar ->
             val offsetX = index * barWidth
             drawLine(
                 color = Color.White,
-                start = Offset(offsetX, size.height - (bar.low * pxPerPoint)),
-                end = Offset(offsetX, size.height - (bar.high * pxPerPoint)),
+                start = Offset(offsetX, size.height - ((bar.low - min) * pxPerPoint)),
+                end = Offset(offsetX, size.height - ((bar.high - min) * pxPerPoint)),
                 strokeWidth = 1F.toDp().toPx()
             )
         }
