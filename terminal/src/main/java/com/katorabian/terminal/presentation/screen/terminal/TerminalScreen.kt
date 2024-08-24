@@ -1,6 +1,5 @@
 package com.katorabian.terminal.presentation.screen.terminal
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
@@ -14,7 +13,7 @@ fun TerminalScreen() {
 
     when (val currState = screenState.value) {
         is TerminalScreenState.Content -> {
-            Log.d("TerminalScreen", currState.barList.toString())
+            TerminalGraphic(bars = currState.barList)
         }
 
         is TerminalScreenState.Initial -> {
