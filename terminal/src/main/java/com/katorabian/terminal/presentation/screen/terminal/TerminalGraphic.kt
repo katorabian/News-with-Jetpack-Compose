@@ -33,6 +33,10 @@ fun TerminalGraphic(
         mutableStateOf(0F)
     }
 
+    var terminalWidth by remember {
+        mutableStateOf(0F)
+    }
+
     var scrolledBy by remember {
         mutableStateOf(0F)
     }
@@ -44,7 +48,7 @@ fun TerminalGraphic(
 
         scrolledBy = (scrolledBy + panChange.x)
             .coerceAtLeast(0F)
-            .coerceAtMost(barWidth * bars.count())
+            .coerceAtMost(barWidth * bars.count() - terminalWidth)
     }
 
     Canvas(
@@ -53,6 +57,7 @@ fun TerminalGraphic(
             .background(Color.Black)
             .transformable(transformableState)
     ) {
+        terminalWidth = size.width
         val max = bars.maxOf { it.high }
         val min = bars.minOf { it.low }
         val difference = max - min
