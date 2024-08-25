@@ -52,9 +52,17 @@ fun TerminalGraphic(
                 end = Offset(offsetX, size.height - ((bar.high - min) * pxPerPoint)),
                 strokeWidth = 1F.toDp().toPx()
             )
+            drawLine(
+                color = bar.getColor(),
+                start = Offset(offsetX, size.height - ((bar.open - min) * pxPerPoint)),
+                end = Offset(offsetX, size.height - ((bar.close - min) * pxPerPoint)),
+                strokeWidth = barWidth / 2
+            )
         }
     }
 }
+
+fun BarDto.getColor() = if (open < close) Color.Green else Color.Red
 
 
 @Preview
