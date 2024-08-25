@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import com.katorabian.terminal.data.dto.BarDto
 import kotlin.math.roundToInt
@@ -27,6 +28,11 @@ fun TerminalGraphic(
     var visibleBarsCount by remember {
         mutableStateOf(100)
     }
+
+    var barWidth by remember {
+        mutableStateOf(0F)
+    }
+
     var scrolledBy by remember {
         mutableStateOf(0F)
     }
@@ -36,7 +42,9 @@ fun TerminalGraphic(
         visibleBarsCount = newCount
             .coerceIn(MIN_VISIBLE_BARS_COUNT, bars.size)
 
-        scrolledBy += panChange.x
+        scrolledBy = (scrolledBy + panChange.x)
+            .coerceAtLeast(0F)
+            .coerceAtMost(barWidth * bars.count())
     }
 
     Canvas(
@@ -48,7 +56,7 @@ fun TerminalGraphic(
         val max = bars.maxOf { it.high }
         val min = bars.minOf { it.low }
         val difference = max - min
-        val barWidth = size.width / visibleBarsCount
+        barWidth = size.width / visibleBarsCount
         val pxPerPoint = size.height / difference
         translate(left = scrolledBy) {
             bars.forEachIndexed { index, bar ->
