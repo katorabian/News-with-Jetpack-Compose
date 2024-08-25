@@ -45,7 +45,7 @@ fun TerminalGraphic(
         val barWidth = size.width / visibleBarsCount
         val pxPerPoint = size.height / difference
         bars.take(visibleBarsCount).forEachIndexed { index, bar ->
-            val offsetX = index * barWidth
+            val offsetX = size.width - index * barWidth
             drawLine(
                 color = Color.White,
                 start = Offset(offsetX, size.height - ((bar.low - min) * pxPerPoint)),
