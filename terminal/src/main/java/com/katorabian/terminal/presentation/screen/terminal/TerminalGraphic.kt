@@ -28,7 +28,10 @@ fun TerminalGraphic(
     }
 
     val transformableState = TransformableState { zoomChange, _, _ ->
-        visibleBarsCount = (visibleBarsCount / zoomChange).roundToInt()
+        val newCount = (visibleBarsCount / zoomChange).roundToInt()
+        visibleBarsCount = newCount
+            .coerceAtLeast(MIN_VISIBLE_BARS_COUNT)
+            .coerceAtMost(bars.size)
     }
 
     Canvas(
