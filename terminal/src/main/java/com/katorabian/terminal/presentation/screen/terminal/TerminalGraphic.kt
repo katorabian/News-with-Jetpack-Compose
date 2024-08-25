@@ -51,7 +51,7 @@ fun TerminalGraphic(
         val barWidth = size.width / visibleBarsCount
         val pxPerPoint = size.height / difference
         translate(left = scrolledBy) {
-            bars.take(visibleBarsCount).forEachIndexed { index, bar ->
+            bars.forEachIndexed { index, bar ->
                 val offsetX = size.width - index * barWidth
                 drawLine(
                     color = Color.White,
