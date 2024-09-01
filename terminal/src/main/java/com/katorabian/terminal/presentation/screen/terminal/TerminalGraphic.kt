@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,12 +30,14 @@ fun TerminalGraphic(
         mutableStateOf(100)
     }
 
-    var barWidth by remember {
+    var terminalWidth by remember {
         mutableStateOf(0F)
     }
 
-    var terminalWidth by remember {
-        mutableStateOf(0F)
+    val barWidth by remember {
+        derivedStateOf {
+            terminalWidth / visibleBarsCount
+        }
     }
 
     var scrolledBy by remember {
@@ -61,7 +64,6 @@ fun TerminalGraphic(
         val max = bars.maxOf { it.high }
         val min = bars.minOf { it.low }
         val difference = max - min
-        barWidth = size.width / visibleBarsCount
         val pxPerPoint = size.height / difference
         translate(left = scrolledBy) {
             bars.forEachIndexed { index, bar ->
