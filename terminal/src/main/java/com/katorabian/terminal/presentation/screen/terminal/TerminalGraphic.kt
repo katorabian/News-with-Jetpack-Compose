@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import com.katorabian.terminal.data.dto.BarDto
 import kotlin.math.roundToInt
@@ -26,22 +25,21 @@ private const val MIN_VISIBLE_BARS_COUNT = 20
 fun TerminalGraphic(
     bars: List<BarDto>
 ) {
-    var visibleBarsCount by remember {
-        mutableStateOf(100)
-    }
-
-    var terminalWidth by remember {
-        mutableStateOf(0F)
-    }
-
+    var visibleBarsCount by remember { mutableStateOf(100) }
+    var terminalWidth by remember { mutableStateOf(0F) }
     val barWidth by remember {
         derivedStateOf {
             terminalWidth / visibleBarsCount
         }
     }
 
-    var scrolledBy by remember {
-        mutableStateOf(0F)
+    var scrolledBy by remember { mutableStateOf(0F) }
+    val visibleBars by remember {
+        derivedStateOf {
+            val startIndex = (scrolledBy / barWidth).roundToInt().coerceAtLeast(0)
+            val endIndex = (startIndex + visibleBarsCount).coerceAtMost(bars.size)
+            bars.subList(startIndex, endIndex)
+        }
     }
 
     val transformableState = TransformableState { zoomChange, panChange, _ ->
@@ -61,8 +59,8 @@ fun TerminalGraphic(
             .transformable(transformableState)
     ) {
         terminalWidth = size.width
-        val max = bars.maxOf { it.high }
-        val min = bars.minOf { it.low }
+        val max = visibleBars.maxOf { it.high }
+        val min = visibleBars.minOf { it.low }
         val difference = max - min
         val pxPerPoint = size.height / difference
         translate(left = scrolledBy) {
