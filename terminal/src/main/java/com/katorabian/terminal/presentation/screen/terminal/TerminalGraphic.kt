@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import com.katorabian.terminal.data.dto.BarDto
 import com.katorabian.terminal.presentation.TerminalState
@@ -48,10 +49,12 @@ fun TerminalGraphic(
             .fillMaxSize()
             .background(Color.Black)
             .transformable(transformableState)
+            .onSizeChanged {
+                terminalState = terminalState.copy(
+                    terminalWidth = it.width.toFloat()
+                )
+            }
     ) {
-        terminalState = terminalState.copy(
-            terminalWidth = size.width
-        )
         val max = terminalState.visibleBars.maxOf { it.high }
         val min = terminalState.visibleBars.minOf { it.low }
         val difference = max - min
