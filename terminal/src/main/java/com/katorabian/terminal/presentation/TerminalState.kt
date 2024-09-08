@@ -1,17 +1,17 @@
 package com.katorabian.terminal.presentation
 
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import android.os.Parcelable
 import com.katorabian.terminal.data.dto.BarDto
+import kotlinx.parcelize.Parcelize
 import kotlin.math.roundToInt
 
+@Parcelize
 data class TerminalState(
     val barList: List<BarDto>,
     val visibleBarsCount: Int = 100,
     val terminalWidth: Float = 0F,
     val scrolledBy: Float = 0F,
-) {
+): Parcelable {
     val barWidth: Float
         get() = terminalWidth / visibleBarsCount
 
