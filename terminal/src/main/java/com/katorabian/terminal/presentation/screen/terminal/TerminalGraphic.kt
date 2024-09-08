@@ -19,6 +19,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import com.katorabian.terminal.data.dto.BarDto
 import com.katorabian.terminal.presentation.TerminalState
+import com.katorabian.terminal.presentation.rememberTerminalState
 import kotlin.math.roundToInt
 
 private const val MIN_VISIBLE_BARS_COUNT = 20
@@ -27,9 +28,7 @@ private const val MIN_VISIBLE_BARS_COUNT = 20
 fun TerminalGraphic(
     bars: List<BarDto>
 ) {
-    var terminalState by rememberSaveable {
-        mutableStateOf(TerminalState(barList = bars))
-    }
+    var terminalState by rememberTerminalState(bars = bars)
 
     val transformableState = TransformableState { zoomChange, panChange, _ ->
         val visibleBarsCount = (terminalState.visibleBarsCount / zoomChange).roundToInt()

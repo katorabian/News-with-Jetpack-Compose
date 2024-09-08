@@ -1,6 +1,10 @@
 package com.katorabian.terminal.presentation
 
 import android.os.Parcelable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.katorabian.terminal.data.dto.BarDto
 import kotlinx.parcelize.Parcelize
 import kotlin.math.roundToInt
@@ -21,4 +25,11 @@ data class TerminalState(
             val endIndex = (startIndex + visibleBarsCount).coerceAtMost(barList.size)
             return barList.subList(startIndex, endIndex)
         }
+}
+
+@Composable
+fun rememberTerminalState(bars: List<BarDto>): MutableState<TerminalState> {
+    return rememberSaveable {
+        mutableStateOf(TerminalState(bars))
+    }
 }
