@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.katorabian.terminal.data.dto.BarDto
 import com.katorabian.terminal.presentation.TerminalState
 import com.katorabian.terminal.presentation.rememberTerminalState
@@ -49,6 +51,10 @@ fun TerminalGraphic(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
+            .padding(
+                top = 32.dp,
+                bottom = 32.dp
+            )
             .transformable(transformableState)
             .onSizeChanged {
                 terminalState = terminalState.copy(
