@@ -8,20 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.katorabian.terminal.data.dto.BarDto
-import com.katorabian.terminal.presentation.TerminalState
 import com.katorabian.terminal.presentation.rememberTerminalState
 import kotlin.math.roundToInt
 
@@ -103,12 +99,20 @@ private fun DrawScope.drawPrices(
     lastPrice: Float,
     pxPerPoint: Float
 ) {
+    val dashEffect = PathEffect.dashPathEffect(
+        intervals = floatArrayOf(
+            4.dp.toPx(), 4.dp.toPx(),
+        )
+    )
+
     // max price
     drawLine(
         color = Color.White,
         start = Offset(0F, size.height - ((max - min) * pxPerPoint)),
         end = Offset(size.width, size.height - ((max - min) * pxPerPoint)),
-        strokeWidth = 1F
+        strokeWidth = 1.dp.toPx(),
+        pathEffect = dashEffect
+
     )
 
     // last price
@@ -116,7 +120,8 @@ private fun DrawScope.drawPrices(
         color = Color.White,
         start = Offset(0F, size.height - ((lastPrice - min) * pxPerPoint)),
         end = Offset(size.width, size.height - ((lastPrice - min) * pxPerPoint)),
-        strokeWidth = 1F
+        strokeWidth = 1.dp.toPx(),
+        pathEffect = dashEffect
     )
 
     // min price
@@ -124,6 +129,7 @@ private fun DrawScope.drawPrices(
         color = Color.White,
         start = Offset(0F, size.height - ((min - min) * pxPerPoint)),
         end = Offset(size.width, size.height - ((min - min) * pxPerPoint)),
-        strokeWidth = 1F
+        strokeWidth = 1.dp.toPx(),
+        pathEffect = dashEffect
     )
 }
