@@ -99,37 +99,41 @@ private fun DrawScope.drawPrices(
     lastPrice: Float,
     pxPerPoint: Float
 ) {
-    val dashEffect = PathEffect.dashPathEffect(
-        intervals = floatArrayOf(
-            4.dp.toPx(), 4.dp.toPx(),
-        )
-    )
-
     // max price
-    drawLine(
-        color = Color.White,
+    drawDashLine(
         start = Offset(0F, size.height - ((max - min) * pxPerPoint)),
         end = Offset(size.width, size.height - ((max - min) * pxPerPoint)),
-        strokeWidth = 1.dp.toPx(),
-        pathEffect = dashEffect
 
     )
 
     // last price
-    drawLine(
-        color = Color.White,
+    drawDashLine(
         start = Offset(0F, size.height - ((lastPrice - min) * pxPerPoint)),
         end = Offset(size.width, size.height - ((lastPrice - min) * pxPerPoint)),
-        strokeWidth = 1.dp.toPx(),
-        pathEffect = dashEffect
     )
 
     // min price
-    drawLine(
-        color = Color.White,
+    drawDashLine(
         start = Offset(0F, size.height - ((min - min) * pxPerPoint)),
         end = Offset(size.width, size.height - ((min - min) * pxPerPoint)),
-        strokeWidth = 1.dp.toPx(),
-        pathEffect = dashEffect
+    )
+}
+
+private fun DrawScope.drawDashLine(
+    color: Color = Color.White,
+    start: Offset,
+    end: Offset,
+    strokeWidth: Float = 1.dp.toPx()
+) {
+    drawLine(
+        color = color,
+        start = start,
+        end = end,
+        strokeWidth = strokeWidth,
+        pathEffect = PathEffect.dashPathEffect(
+            intervals = floatArrayOf(
+                4.dp.toPx(), 4.dp.toPx(),
+            )
+        )
     )
 }
