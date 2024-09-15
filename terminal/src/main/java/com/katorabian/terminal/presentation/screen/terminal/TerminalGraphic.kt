@@ -101,9 +101,8 @@ private fun DrawScope.drawPrices(
 ) {
     // max price
     drawDashLine(
-        start = Offset(0F, size.height - ((max - min) * pxPerPoint)),
-        end = Offset(size.width, size.height - ((max - min) * pxPerPoint)),
-
+        start = Offset(0F, 0F), // y = size.height - ((max - min) * pxPerPoint)
+        end = Offset(size.width, 0F)
     )
 
     // last price
@@ -114,8 +113,8 @@ private fun DrawScope.drawPrices(
 
     // min price
     drawDashLine(
-        start = Offset(0F, size.height - ((min - min) * pxPerPoint)),
-        end = Offset(size.width, size.height - ((min - min) * pxPerPoint)),
+        start = Offset(0F, size.height), // y = size.height - ((min - min) * pxPerPoint)
+        end = Offset(size.width, size.height),
     )
 }
 
