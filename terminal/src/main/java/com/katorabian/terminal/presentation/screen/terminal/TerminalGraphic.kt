@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,14 +77,47 @@ fun TerminalGraphic(
                 )
             }
         }
+        terminalState.visibleBars.firstOrNull()?.let {
+            drawPrices(
+                max = max,
+                min = min,
+                lastPrice = it.close,
+                pxPerPoint = pxPerPoint
+            )
+        }
     }
 }
 
 fun BarDto.getColor() = if (open < close) Color.Green else Color.Red
 
 
-@Preview
-@Composable
-private fun TerminalGraphicPreview() {
-    TerminalGraphic(bars = emptyList())
+private fun DrawScope.drawPrices(
+    max: Float,
+    min: Float,
+    lastPrice: Float,
+    pxPerPoint: Float
+) {
+    // max price
+    drawLine(
+        color = Color.White,
+        start = Offset(0F, size.height - ((max - min) * pxPerPoint)),
+        end = Offset(size.width, size.height - ((max - min) * pxPerPoint)),
+        strokeWidth = 1F
+    )
+
+    // last price
+    drawLine(
+        color = Color.White,
+        start = Offset(0F, size.height - ((lastPrice - min) * pxPerPoint)),
+        end = Offset(size.width, size.height - ((lastPrice - min) * pxPerPoint)),
+        strokeWidth = 1F
+    )
+
+    // min price
+    drawLine(
+        color = Color.White,
+        start = Offset(0F, size.height - ((min - min) * pxPerPoint)),
+        end = Offset(size.width, size.height - ((min - min) * pxPerPoint)),
+        strokeWidth = 1F
+    )
 }
