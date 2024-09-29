@@ -16,7 +16,12 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.katorabian.terminal.data.dto.BarDto
 import com.katorabian.terminal.presentation.rememberTerminalState
 import kotlin.math.roundToInt
@@ -42,6 +47,8 @@ fun TerminalGraphic(
             scrolledBy = scrolledBy
         )
     }
+
+    val textMeasurer = rememberTextMeasurer()
 
     Canvas(
         modifier = Modifier
@@ -84,7 +91,8 @@ fun TerminalGraphic(
                 max = max,
                 min = min,
                 lastPrice = it.close,
-                pxPerPoint = pxPerPoint
+                pxPerPoint = pxPerPoint,
+                textMeasurer = textMeasurer
             )
         }
     }
@@ -97,12 +105,24 @@ private fun DrawScope.drawPrices(
     max: Float,
     min: Float,
     lastPrice: Float,
-    pxPerPoint: Float
+    pxPerPoint: Float,
+    textMeasurer: TextMeasurer
 ) {
     // max price
     drawDashLine(
         start = Offset(0F, 0F), // y = size.height - ((max - min) * pxPerPoint)
         end = Offset(size.width, 0F)
+    )
+    val textLayoutResult = textMeasurer.measure(
+        text = max.toString(),
+        style = TextStyle(
+            color = Color.White,
+            fontSize = 12.sp
+        )
+    )
+    drawText(
+        textLayoutResult = textLayoutResult,
+        topLeft = Offset(size.width - textLayoutResult.size.width, 0F)
     )
 
     // last price
