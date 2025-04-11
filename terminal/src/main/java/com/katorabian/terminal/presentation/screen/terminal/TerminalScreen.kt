@@ -29,6 +29,7 @@ import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.DrawerDefaults
@@ -47,6 +48,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,32 +71,34 @@ import com.katorabian.terminal.presentation.ui.theme.TerminalTheme
 @Preview
 @Composable
 fun TerminalScreen() {
-    val viewModel: TerminalViewModel = viewModel()
-    val screenState = viewModel.state.collectAsState()
-
-    when (val currState = screenState.value) {
-        is TerminalScreenState.Content -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(modifier = Modifier.size(350.dp)) {
-                    TerminalGraphic(bars = currState.barList)
-                }
-            }
-        }
-
-        is TerminalScreenState.Initial -> {
-
-        }
-    }
+//    val viewModel: TerminalViewModel = viewModel()
+//    val screenState = viewModel.state.collectAsState()
+//
+//    when (val currState = screenState.value) {
+//        is TerminalScreenState.Content -> {
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(Color.White),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Box(modifier = Modifier.size(350.dp)) {
+//                    TerminalGraphic(bars = currState.barList)
+//                }
+//            }
+//        }
+//
+//        is TerminalScreenState.Initial -> {
+//
+//        }
+//    }
+    NewsListItem()
 }
 
 @Composable
 @Preview
 fun NewsListItem() {
+    val buttonState = remember { mutableStateOf(false) }
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
@@ -148,6 +153,22 @@ fun NewsListItem() {
                     }
                 }
             )
+        }
+
+        OutlinedButton(
+            onClick = { buttonState.value = !buttonState.value },
+            modifier = Modifier.align(Alignment.End),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors().run {
+                val bg = if (buttonState.value) Color.Red else Color.Green
+                val content = if (buttonState.value) Color.White else Color.Black
+                copy(
+                    containerColor = bg,
+                    contentColor = content
+                )
+            }
+        ) {
+            Text("Привет")
         }
     }
 }
