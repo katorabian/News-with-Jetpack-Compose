@@ -7,6 +7,7 @@ import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.katorabian.terminal.data.dto.BarDto
 import com.katorabian.terminal.presentation.TerminalState
 import com.katorabian.terminal.presentation.rememberTerminalState
@@ -31,28 +33,39 @@ import kotlin.math.roundToInt
 private const val MIN_VISIBLE_BARS_COUNT = 20
 
 @Composable
-fun TerminalGraphic(
-    modifier: Modifier = Modifier,
-    bars: List<BarDto>
+fun Terminal(
+    modifier: Modifier = Modifier
 ) {
-    var terminalState by rememberTerminalState(bars = bars)
+    val viewModel: TerminalViewModel = viewModel()
+    val screenState = viewModel.state.collectAsState()
 
-    Chart(
-        modifier = modifier,
-        terminalState = terminalState,
-        onTerminalStateChange =  { newTerminalState ->
-            terminalState = newTerminalState
+    when (val currState = screenState.value) {
+        is TerminalScreenState.Content -> {
+            val bars = currState.barList
+            var terminalState by rememberTerminalState(bars = bars)
+
+            Chart(
+                modifier = modifier,
+                terminalState = terminalState,
+                onTerminalStateChange =  { newTerminalState ->
+                    terminalState = newTerminalState
+                }
+            )
+
+            bars.firstOrNull()?.let {
+                Prices(
+                    modifier = modifier,
+                    max = terminalState.max,
+                    min = terminalState.min,
+                    pxPerPoint = terminalState.pxPerPoint,
+                    lastPrice = it.close
+                )
+            }
         }
-    )
 
-    bars.firstOrNull()?.let {
-        Prices(
-            modifier = modifier,
-            max = terminalState.max,
-            min = terminalState.min,
-            pxPerPoint = terminalState.pxPerPoint,
-            lastPrice = it.close
-        )
+        is TerminalScreenState.Initial -> {
+
+        }
     }
 }
 

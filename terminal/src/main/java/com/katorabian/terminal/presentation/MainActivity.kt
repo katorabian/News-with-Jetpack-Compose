@@ -3,7 +3,7 @@ package com.katorabian.terminal.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.katorabian.terminal.presentation.screen.terminal.TerminalScreen
+import com.katorabian.terminal.presentation.screen.terminal.Terminal
 import com.katorabian.terminal.presentation.ui.theme.TerminalTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TerminalTheme {
-                TerminalScreen()
+                Terminal()
             }
         }
     }
