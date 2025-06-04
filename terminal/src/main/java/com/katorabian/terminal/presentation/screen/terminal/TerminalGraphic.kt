@@ -2,13 +2,11 @@ package com.katorabian.terminal.presentation.screen.terminal
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -34,11 +32,13 @@ private const val MIN_VISIBLE_BARS_COUNT = 20
 
 @Composable
 fun TerminalGraphic(
+    modifier: Modifier = Modifier,
     bars: List<BarDto>
 ) {
     var terminalState by rememberTerminalState(bars = bars)
 
     Chart(
+        modifier = modifier,
         terminalState = terminalState,
         onTerminalStateChange =  { newTerminalState ->
             terminalState = newTerminalState
@@ -47,6 +47,7 @@ fun TerminalGraphic(
 
     bars.firstOrNull()?.let {
         Prices(
+            modifier = modifier,
             max = terminalState.max,
             min = terminalState.min,
             pxPerPoint = terminalState.pxPerPoint,
@@ -57,6 +58,7 @@ fun TerminalGraphic(
 
 @Composable
 private fun Chart(
+    modifier: Modifier = Modifier,
     terminalState: TerminalState,
     onTerminalStateChange: (TerminalState) -> Unit
 ) {
@@ -78,7 +80,7 @@ private fun Chart(
     }
 
     Canvas(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Color.Black)
             .clipToBounds()
@@ -123,6 +125,7 @@ fun BarDto.getColor() = if (open < close) Color.Green else Color.Red
 
 @Composable
 private fun Prices(
+    modifier: Modifier = Modifier,
     max: Float,
     min: Float,
     pxPerPoint: Float,
@@ -130,7 +133,7 @@ private fun Prices(
 ) {
     val textMeasurer = rememberTextMeasurer()
     Canvas(
-        Modifier
+        modifier
             .fillMaxSize()
             .clipToBounds()
             .padding(vertical = 32.dp)
