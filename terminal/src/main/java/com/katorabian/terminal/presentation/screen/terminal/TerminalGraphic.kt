@@ -204,7 +204,7 @@ private fun DrawScope.drawTextPrice(
     )
     drawText(
         textLayoutResult = textLayoutResult,
-        topLeft = Offset(size.width - textLayoutResult.size.width, offsetY)
+        topLeft = Offset(size.width - textLayoutResult.size.width - 4.dp.toPx(), offsetY)
     )
 }
 
