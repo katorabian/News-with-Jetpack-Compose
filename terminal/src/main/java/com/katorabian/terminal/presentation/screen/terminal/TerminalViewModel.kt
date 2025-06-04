@@ -38,6 +38,7 @@ class TerminalViewModel: ViewModel() {
     }
 
     private fun loadBarList() {
+        _state.value = TerminalScreenState.Loading
         viewModelScope.launch(exceptionHandler) {
             val range = get2YearsRange()
             val barList = apiService.loadBars(range.first, range.second).barList
