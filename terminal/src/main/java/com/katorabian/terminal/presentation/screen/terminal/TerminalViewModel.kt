@@ -4,6 +4,8 @@ import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.katorabian.terminal.data.dto.PathDateRange
+import com.katorabian.terminal.data.dto.to
 import com.katorabian.terminal.data.net.ApiFactory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,8 +45,8 @@ class TerminalViewModel: ViewModel() {
         viewModelScope.launch(exceptionHandler) {
             val range = get2YearsRange()
             val barList = apiService.loadBars(
-                from = range.first,
-                to = range.second,
+                from = range.from,
+                to = range.to,
                 timeframe = timeFrame.urlPath
             ).barList
 
@@ -55,7 +57,7 @@ class TerminalViewModel: ViewModel() {
         }
     }
 
-    private fun get2YearsRange(): Pair<String, String> {
+    private fun get2YearsRange(): PathDateRange {
         val today = getCurrentDate()
         val dateFormat = SimpleDateFormat(API_DATE_PATTERN, Locale.UK)
         val to = dateFormat.format(today)
