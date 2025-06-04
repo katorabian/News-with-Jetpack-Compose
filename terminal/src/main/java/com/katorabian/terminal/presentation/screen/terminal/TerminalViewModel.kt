@@ -28,7 +28,10 @@ class TerminalViewModel: ViewModel() {
     private val _state = MutableStateFlow<TerminalScreenState>(TerminalScreenState.Initial)
     val state = _state.asStateFlow()
 
+    private var lastState: TerminalScreenState = TerminalScreenState.Initial
+
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _state.value = lastState
         Log.e(
             this@TerminalViewModel::class.java.simpleName,
             "Exception caught:\n${Log.getStackTraceString(throwable)}"
@@ -40,6 +43,7 @@ class TerminalViewModel: ViewModel() {
     }
 
     fun loadBarList(timeFrame: TimeFrame = TimeFrame.HOUR_1) {
+        lastState = _state.value
         _state.value = TerminalScreenState.Loading
 
         viewModelScope.launch(exceptionHandler) {
