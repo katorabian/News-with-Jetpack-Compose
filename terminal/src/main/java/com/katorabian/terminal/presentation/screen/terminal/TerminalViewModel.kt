@@ -37,12 +37,21 @@ class TerminalViewModel: ViewModel() {
         loadBarList()
     }
 
-    private fun loadBarList() {
+    fun loadBarList(timeFrame: TimeFrame = TimeFrame.HOUR_1) {
         _state.value = TerminalScreenState.Loading
+
         viewModelScope.launch(exceptionHandler) {
             val range = get2YearsRange()
-            val barList = apiService.loadBars(range.first, range.second).barList
-            _state.value = TerminalScreenState.Content(barList = barList)
+            val barList = apiService.loadBars(
+                from = range.first,
+                to = range.second,
+                timeframe = timeFrame.urlPath
+            ).barList
+
+            _state.value = TerminalScreenState.Content(
+                barList = barList,
+                timeFrame = timeFrame
+            )
         }
     }
 
