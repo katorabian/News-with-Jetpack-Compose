@@ -7,9 +7,8 @@ import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
@@ -42,22 +41,20 @@ fun Terminal(
     when (val currState = screenState.value) {
         is TerminalScreenState.Content -> {
             val bars = currState.barList
-            var terminalState by rememberTerminalState(bars = bars)
+            val terminalState = rememberTerminalState(bars = bars)
 
             Chart(
                 modifier = modifier,
                 terminalState = terminalState,
                 onTerminalStateChange =  { newTerminalState ->
-                    terminalState = newTerminalState
+                    terminalState.value = newTerminalState
                 }
             )
 
             bars.firstOrNull()?.let {
                 Prices(
                     modifier = modifier,
-                    max = terminalState.max,
-                    min = terminalState.min,
-                    pxPerPoint = terminalState.pxPerPoint,
+                    terminalState = terminalState,
                     lastPrice = it.close
                 )
             }
@@ -72,20 +69,21 @@ fun Terminal(
 @Composable
 private fun Chart(
     modifier: Modifier = Modifier,
-    terminalState: TerminalState,
+    terminalState: State<TerminalState>,
     onTerminalStateChange: (TerminalState) -> Unit
 ) {
-    val bars = terminalState.barList
+    val currentState = terminalState.value
+    val bars = currentState.barList
     val transformableState = rememberTransformableState { zoomChange, panChange, _ ->
-        val visibleBarsCount = (terminalState.visibleBarsCount / zoomChange).roundToInt()
+        val visibleBarsCount = (currentState.visibleBarsCount / zoomChange).roundToInt()
             .coerceIn(MIN_VISIBLE_BARS_COUNT, bars.size)
 
-        val scrolledBy = (terminalState.scrolledBy + panChange.x)
+        val scrolledBy = (currentState.scrolledBy + panChange.x)
             .coerceAtLeast(0F)
-            .coerceAtMost(terminalState.barWidth * bars.count() - terminalState.terminalWidth)
+            .coerceAtMost(currentState.barWidth * bars.count() - currentState.terminalWidth)
 
         onTerminalStateChange(
-            terminalState.copy(
+            currentState.copy(
                 visibleBarsCount = visibleBarsCount,
                 scrolledBy = scrolledBy
             )
@@ -105,18 +103,18 @@ private fun Chart(
             .transformable(transformableState)
             .onSizeChanged {
                 onTerminalStateChange(
-                    terminalState.copy(
+                    currentState.copy(
                         terminalWidth = it.width.toFloat(),
                         terminalHeight = it.height.toFloat()
                     )
                 )
             }
     ) {
-        val min = terminalState.min
-        val pxPerPoint = terminalState.pxPerPoint
-        translate(left = terminalState.scrolledBy) {
+        val min = currentState.min
+        val pxPerPoint = currentState.pxPerPoint
+        translate(left = currentState.scrolledBy) {
             bars.forEachIndexed { index, bar ->
-                val offsetX = size.width - index * terminalState.barWidth
+                val offsetX = size.width - index * currentState.barWidth
                 drawLine(
                     color = Color.White,
                     start = Offset(offsetX, size.height - ((bar.low - min) * pxPerPoint)),
@@ -127,7 +125,7 @@ private fun Chart(
                     color = bar.getColor(),
                     start = Offset(offsetX, size.height - ((bar.open - min) * pxPerPoint)),
                     end = Offset(offsetX, size.height - ((bar.close - min) * pxPerPoint)),
-                    strokeWidth = terminalState.barWidth / 2
+                    strokeWidth = currentState.barWidth / 2
                 )
             }
         }
@@ -139,12 +137,16 @@ fun BarDto.getColor() = if (open < close) Color.Green else Color.Red
 @Composable
 private fun Prices(
     modifier: Modifier = Modifier,
-    max: Float,
-    min: Float,
-    pxPerPoint: Float,
+    terminalState: State<TerminalState>,
     lastPrice: Float
 ) {
+    val currentState = terminalState.value
     val textMeasurer = rememberTextMeasurer()
+
+    val min = currentState.min
+    val max = currentState.max
+    val pxPerPoint = currentState.pxPerPoint
+
     Canvas(
         modifier
             .fillMaxSize()
