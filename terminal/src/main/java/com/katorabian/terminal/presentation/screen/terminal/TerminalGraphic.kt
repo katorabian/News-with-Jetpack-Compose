@@ -61,7 +61,8 @@ fun TerminalGraphic(
             .clipToBounds()
             .padding(
                 top = 32.dp,
-                bottom = 32.dp
+                bottom = 32.dp,
+                end = 40.dp
             )
             .transformable(transformableState)
             .onSizeChanged {
