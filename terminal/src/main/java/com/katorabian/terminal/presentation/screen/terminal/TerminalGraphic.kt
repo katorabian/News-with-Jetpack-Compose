@@ -52,8 +52,6 @@ fun TerminalGraphic(
 
     Log.d("TAG", terminalState.terminalWidth.toString())
 
-    val textMeasurer = rememberTextMeasurer()
-
     Canvas(
         modifier = Modifier
             .fillMaxSize()
@@ -67,14 +65,13 @@ fun TerminalGraphic(
             .transformable(transformableState)
             .onSizeChanged {
                 terminalState = terminalState.copy(
-                    terminalWidth = it.width.toFloat()
+                    terminalWidth = it.width.toFloat(),
+                    terminalHeight = it.height.toFloat()
                 )
             }
     ) {
-        val max = terminalState.visibleBars.maxOf { it.high }
-        val min = terminalState.visibleBars.minOf { it.low }
-        val difference = max - min
-        val pxPerPoint = size.height / difference
+        val min = terminalState.min
+        val pxPerPoint = terminalState.pxPerPoint
         translate(left = terminalState.scrolledBy) {
             bars.forEachIndexed { index, bar ->
                 val offsetX = size.width - index * terminalState.barWidth
@@ -92,20 +89,42 @@ fun TerminalGraphic(
                 )
             }
         }
-        terminalState.visibleBars.firstOrNull()?.let {
-            drawPrices(
-                max = max,
-                min = min,
-                lastPrice = it.close,
-                pxPerPoint = pxPerPoint,
-                textMeasurer = textMeasurer
-            )
-        }
+    }
+    bars.firstOrNull()?.let {
+        Prices(
+            max = terminalState.max,
+            min = terminalState.min,
+            pxPerPoint = terminalState.pxPerPoint,
+            lastPrice = it.close
+        )
     }
 }
 
 fun BarDto.getColor() = if (open < close) Color.Green else Color.Red
 
+@Composable
+private fun Prices(
+    max: Float,
+    min: Float,
+    pxPerPoint: Float,
+    lastPrice: Float
+) {
+    val textMeasurer = rememberTextMeasurer()
+    Canvas(
+        Modifier
+            .fillMaxSize()
+            .clipToBounds()
+            .padding(vertical = 32.dp)
+    ) {
+        drawPrices(
+            max = max,
+            min = min,
+            lastPrice = lastPrice,
+            pxPerPoint = pxPerPoint,
+            textMeasurer = textMeasurer
+        )
+    }
+}
 
 private fun DrawScope.drawPrices(
     max: Float,
