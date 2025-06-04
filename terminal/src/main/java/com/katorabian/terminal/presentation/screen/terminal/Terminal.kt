@@ -153,8 +153,7 @@ private fun Chart(
             .clipToBounds()
             .padding(
                 top = 32.dp,
-                bottom = 32.dp,
-                end = 40.dp
+                bottom = 32.dp
             )
             .transformable(transformableState)
             .onSizeChanged {
@@ -170,6 +169,8 @@ private fun Chart(
         val pxPerPoint = currentState.pxPerPoint
         translate(left = currentState.scrolledBy) {
             bars.forEachIndexed { index, bar ->
+                if (bar !in currentState.visibleBars) return@forEachIndexed // 1
+
                 val offsetX = size.width - index * currentState.barWidth
                 drawTimeDelimiter(
                     bar = bar,
