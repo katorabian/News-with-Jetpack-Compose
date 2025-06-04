@@ -39,6 +39,7 @@ import com.katorabian.terminal.presentation.TerminalState
 import com.katorabian.terminal.presentation.rememberTerminalState
 import java.util.Calendar
 import java.util.Locale
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 private const val MIN_VISIBLE_BARS_COUNT = 20
@@ -145,6 +146,7 @@ private fun Chart(
         )
     }
     val textMeasurer = rememberTextMeasurer()
+    val paddingEnd = 48.dp
 
     Canvas(
         modifier = modifier
@@ -153,7 +155,8 @@ private fun Chart(
             .clipToBounds()
             .padding(
                 top = 32.dp,
-                bottom = 32.dp
+                bottom = 32.dp,
+                end = paddingEnd
             )
             .transformable(transformableState)
             .onSizeChanged {
@@ -167,11 +170,17 @@ private fun Chart(
     ) {
         val min = currentState.min
         val pxPerPoint = currentState.pxPerPoint
+        val firstVisible = bars.indexOf(currentState.visibleBars.firstOrNull())
+        val lastVisible = bars.indexOf(currentState.visibleBars.lastOrNull())
+
         translate(left = currentState.scrolledBy) {
             bars.forEachIndexed { index, bar ->
-                if (bar !in currentState.visibleBars) return@forEachIndexed // 1
-
                 val offsetX = size.width - index * currentState.barWidth
+                val hiddenCount = ceil(paddingEnd.toPx() / currentState.barWidth)
+                val isNotFirstHidden = index < firstVisible - hiddenCount
+                val isOutOfLastVisible = index > lastVisible
+                if (isNotFirstHidden || isOutOfLastVisible) return@forEachIndexed
+
                 drawTimeDelimiter(
                     bar = bar,
                     nextBar = if (index < bars.lastIndex)
