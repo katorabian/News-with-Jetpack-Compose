@@ -4,13 +4,21 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -20,6 +28,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -61,6 +70,11 @@ fun Terminal(
                     lastPrice = it.close
                 )
             }
+
+            TimeFrames(
+                selectedFrame = currState.timeFrame,
+                onTimeFrameSelect = { viewModel.loadBarList(it) }
+            )
         }
 
         is TerminalScreenState.Loading -> {
@@ -77,6 +91,31 @@ fun Terminal(
         }
 
         is TerminalScreenState.Initial -> { /*do nothing*/ }
+    }
+}
+
+@Composable
+fun TimeFrames(
+    selectedFrame: TimeFrame = TimeFrame.HOUR_1,
+    onTimeFrameSelect: (TimeFrame) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .wrapContentSize()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        TimeFrame.entries.forEach { timeFrame ->
+            val isSelected = timeFrame == selectedFrame
+            AssistChip(
+                onClick = { onTimeFrameSelect(timeFrame) },
+                label = { Text(text = stringResource(id = timeFrame.labelResId)) },
+                colors = AssistChipDefaults.assistChipColors().copy(
+                    containerColor = if (isSelected) Color.White else Color.Black,
+                    labelColor = if (isSelected) Color.Black else Color.White
+                )
+            )
+        }
     }
 }
 

@@ -8,5 +8,8 @@ sealed class TerminalScreenState {
 
     data object Loading: TerminalScreenState()
 
-    data class Content(val barList: List<BarDto>): TerminalScreenState()
+    data class Content(
+        val barList: List<BarDto>,
+        val timeFrame: TimeFrame
+    ): TerminalScreenState()
 }
