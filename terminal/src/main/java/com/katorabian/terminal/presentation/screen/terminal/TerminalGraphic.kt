@@ -1,13 +1,14 @@
 package com.katorabian.terminal.presentation.screen.terminal
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.TransformableState
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.katorabian.terminal.data.dto.BarDto
+import com.katorabian.terminal.presentation.TerminalState
 import com.katorabian.terminal.presentation.rememberTerminalState
 import kotlin.math.roundToInt
 
@@ -36,6 +38,29 @@ fun TerminalGraphic(
 ) {
     var terminalState by rememberTerminalState(bars = bars)
 
+    Chart(
+        terminalState = terminalState,
+        onTerminalStateChange =  { newTerminalState ->
+            terminalState = newTerminalState
+        }
+    )
+
+    bars.firstOrNull()?.let {
+        Prices(
+            max = terminalState.max,
+            min = terminalState.min,
+            pxPerPoint = terminalState.pxPerPoint,
+            lastPrice = it.close
+        )
+    }
+}
+
+@Composable
+private fun Chart(
+    terminalState: TerminalState,
+    onTerminalStateChange: (TerminalState) -> Unit
+) {
+    val bars = terminalState.barList
     val transformableState = rememberTransformableState { zoomChange, panChange, _ ->
         val visibleBarsCount = (terminalState.visibleBarsCount / zoomChange).roundToInt()
             .coerceIn(MIN_VISIBLE_BARS_COUNT, bars.size)
@@ -44,13 +69,13 @@ fun TerminalGraphic(
             .coerceAtLeast(0F)
             .coerceAtMost(terminalState.barWidth * bars.count() - terminalState.terminalWidth)
 
-        terminalState = terminalState.copy(
-            visibleBarsCount = visibleBarsCount,
-            scrolledBy = scrolledBy
+        onTerminalStateChange(
+            terminalState.copy(
+                visibleBarsCount = visibleBarsCount,
+                scrolledBy = scrolledBy
+            )
         )
     }
-
-    Log.d("TAG", terminalState.terminalWidth.toString())
 
     Canvas(
         modifier = Modifier
@@ -64,9 +89,11 @@ fun TerminalGraphic(
             )
             .transformable(transformableState)
             .onSizeChanged {
-                terminalState = terminalState.copy(
-                    terminalWidth = it.width.toFloat(),
-                    terminalHeight = it.height.toFloat()
+                onTerminalStateChange(
+                    terminalState.copy(
+                        terminalWidth = it.width.toFloat(),
+                        terminalHeight = it.height.toFloat()
+                    )
                 )
             }
     ) {
@@ -89,14 +116,6 @@ fun TerminalGraphic(
                 )
             }
         }
-    }
-    bars.firstOrNull()?.let {
-        Prices(
-            max = terminalState.max,
-            min = terminalState.min,
-            pxPerPoint = terminalState.pxPerPoint,
-            lastPrice = it.close
-        )
     }
 }
 
