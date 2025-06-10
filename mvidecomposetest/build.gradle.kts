@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.decompose)
+    implementation(libs.decompose.compose.extensions)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

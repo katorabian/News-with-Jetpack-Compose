@@ -35,6 +35,7 @@ converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-compose-extensions = { module = "com.arkivanov.decompose:extensions-compose-jetpack", version.ref = "decompose" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
