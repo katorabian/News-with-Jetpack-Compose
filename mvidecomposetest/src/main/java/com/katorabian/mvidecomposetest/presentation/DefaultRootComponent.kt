@@ -2,12 +2,17 @@ package com.katorabian.mvidecomposetest.presentation
 
 import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.push
 import com.katorabian.mvidecomposetest.domain.Contact
 import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent(
     componentContext: ComponentContext
 ) : RootComponent, ComponentContext by componentContext {
+
+    val navigation = StackNavigation<Config>()
 
     fun child(
         componentContext: ComponentContext,
@@ -16,20 +21,32 @@ class DefaultRootComponent(
         return when (config) {
             Config.AddContact -> {
                 DefaultAddContactComponent(
-                    componentContext = componentContext
+                    componentContext = componentContext,
+                    onContactSaved = {
+                        navigation.pop()
+                    }
                 )
             }
             Config.ContactList -> {
                 DefaultContactListComponent(
                     componentContext = componentContext,
-                    onEditContactRequest = {},
-                    onAddContactRequest = {}
+                    onAddContactRequest = {
+                        navigation.push(Config.AddContact)
+                    },
+                    onEditContactRequest = { contact ->
+                        navigation.push(
+                            Config.EditContact(contact = contact)
+                        )
+                    }
                 )
             }
             is Config.EditContact -> {
                 DefaultEditContactComponent(
                     componentContext = componentContext,
-                    contact = config.contact
+                    contact = config.contact,
+                    onContactSaved = {
+                        navigation.pop()
+                    }
                 )
             }
         }
