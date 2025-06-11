@@ -16,7 +16,7 @@ class DefaultRootComponent(
 ) : RootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Config>()
-    val stack: Value<ChildStack<Config, ComponentContext>> = childStack(
+    val stack: Value<ChildStack<Config, Child>> = childStack(
         source = navigation,
         initialConfiguration = Config.ContactList,
         handleBackButton = true,
@@ -26,18 +26,19 @@ class DefaultRootComponent(
     private fun child(
         config: Config,
         componentContext: ComponentContext
-    ): ComponentContext {
+    ): Child {
         return when (config) {
             Config.AddContact -> {
-                DefaultAddContactComponent(
+                val component = DefaultAddContactComponent(
                     componentContext = componentContext,
                     onContactSaved = {
                         navigation.pop()
                     }
                 )
+                Child.AddContact(component)
             }
             Config.ContactList -> {
-                DefaultContactListComponent(
+                val component = DefaultContactListComponent(
                     componentContext = componentContext,
                     onAddContactRequest = {
                         navigation.push(Config.AddContact)
@@ -48,17 +49,25 @@ class DefaultRootComponent(
                         )
                     }
                 )
+                Child.ContactList(component)
             }
             is Config.EditContact -> {
-                DefaultEditContactComponent(
+                val component = DefaultEditContactComponent(
                     componentContext = componentContext,
                     contact = config.contact,
                     onContactSaved = {
                         navigation.pop()
                     }
                 )
+                Child.EditContact(component)
             }
         }
+    }
+
+    sealed interface Child {
+        class AddContact(val component: AddContactComponent): Child
+        class ContactList(val component: ContactListComponent): Child
+        class EditContact(val component: EditContactComponent): Child
     }
 
     sealed interface Config: Parcelable {
