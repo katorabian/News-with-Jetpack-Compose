@@ -1,6 +1,5 @@
 package com.katorabian.mvidecomposetest.presentation
 
-import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -8,50 +7,48 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.katorabian.mvidecomposetest.domain.Contact
-import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent(
     componentContext: ComponentContext
 ) : RootComponent, ComponentContext by componentContext {
 
-    private val navigation = StackNavigation<Config>()
-    val stack: Value<ChildStack<Config, Child>> = childStack(
+    private val navigation = StackNavigation<RootComponent.Config>()
+    override val stack: Value<ChildStack<RootComponent.Config, RootComponent.Child>> = childStack(
         source = navigation,
-        initialConfiguration = Config.ContactList,
+        initialConfiguration = RootComponent.Config.ContactList,
         handleBackButton = true,
         childFactory = ::child
     )
 
     private fun child(
-        config: Config,
+        config: RootComponent.Config,
         componentContext: ComponentContext
-    ): Child {
+    ): RootComponent.Child {
         return when (config) {
-            Config.AddContact -> {
+            RootComponent.Config.AddContact -> {
                 val component = DefaultAddContactComponent(
                     componentContext = componentContext,
                     onContactSaved = {
                         navigation.pop()
                     }
                 )
-                Child.AddContact(component)
+                RootComponent.Child.AddContact(component)
             }
-            Config.ContactList -> {
+            RootComponent.Config.ContactList -> {
                 val component = DefaultContactListComponent(
                     componentContext = componentContext,
                     onAddContactRequest = {
-                        navigation.push(Config.AddContact)
+                        navigation.push(RootComponent.Config.AddContact)
                     },
                     onEditContactRequest = { contact ->
                         navigation.push(
-                            Config.EditContact(contact = contact)
+                            RootComponent.Config.EditContact(contact = contact)
                         )
                     }
                 )
-                Child.ContactList(component)
+                RootComponent.Child.ContactList(component)
             }
-            is Config.EditContact -> {
+            is RootComponent.Config.EditContact -> {
                 val component = DefaultEditContactComponent(
                     componentContext = componentContext,
                     contact = config.contact,
@@ -59,23 +56,8 @@ class DefaultRootComponent(
                         navigation.pop()
                     }
                 )
-                Child.EditContact(component)
+                RootComponent.Child.EditContact(component)
             }
         }
-    }
-
-    sealed interface Child {
-        class AddContact(val component: AddContactComponent): Child
-        class ContactList(val component: ContactListComponent): Child
-        class EditContact(val component: EditContactComponent): Child
-    }
-
-    sealed interface Config: Parcelable {
-        @Parcelize
-        data object ContactList: Config
-        @Parcelize
-        data object AddContact: Config
-        @Parcelize
-        data class EditContact(val contact: Contact): Config
     }
 }
