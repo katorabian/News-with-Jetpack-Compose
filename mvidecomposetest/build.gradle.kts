@@ -63,6 +63,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.decompose)
     implementation(libs.decompose.compose.extensions)
+    implementation(libs.decompose.mvikotlin)
+    implementation(libs.decompose.mvikotlin.main)
+    implementation(libs.decompose.mvikotlin.coroutines)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

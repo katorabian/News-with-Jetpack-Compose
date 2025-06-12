@@ -1,52 +1,68 @@
 package com.katorabian.mvidecomposetest.presentation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.statekeeper.consume
-import com.katorabian.mvidecomposetest.data.RepositoryImpl
-import com.katorabian.mvidecomposetest.domain.AddContactUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
+import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.katorabian.mvidecomposetest.core.componentScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class DefaultAddContactComponent(
     componentContext: ComponentContext,
-    private val onContactSaved: () -> Unit
+    onContactSaved: () -> Unit
 ) : AddContactComponent, ComponentContext by componentContext {
 
-    private val repository = RepositoryImpl
-    private val addContactUseCase = AddContactUseCase(repository)
+    private val coroutineScope by lazy { componentScope() }
+    private lateinit var store: AddContactStore
 
     init {
-        stateKeeper.register(KEY) {
-            model.value
+        coroutineScope.launch {
+            store.labels.onEach {
+                when (it) {
+                    AddContactStore.Label.ContactSaved -> {
+                        onContactSaved()
+                    }
+                }
+            }.collect()
         }
     }
 
-    private val _model = MutableStateFlow(
-        stateKeeper.consume(KEY) ?: AddContactComponent.Model(
-            username = "",
-            phone = ""
-        )
-    )
+    @OptIn(ExperimentalCoroutinesApi::class)
     override val model: StateFlow<AddContactComponent.Model>
-        get() = _model.asStateFlow()
+        get() = store.stateFlow
+            .map {
+                AddContactComponent.Model(
+                    username = it.username,
+                    phone = it.phone
+                )
+            }.stateIn(
+                scope = coroutineScope,
+                started = SharingStarted.Lazily,
+                AddContactComponent.Model("", "")
+            )
 
     override fun onUsernameChanged(username: String) {
-        _model.value = model.value.copy(
-            username = username
+        store.accept(
+            AddContactStore.Intent.ChangeUsername(username)
         )
     }
 
     override fun onPhoneChanged(phone: String) {
-        _model.value = model.value.copy(
-            phone = phone
+        store.accept(
+            AddContactStore.Intent.ChangePhone(phone)
         )
     }
 
     override fun onSaveContactClicked() {
-        val (username, phone) = model.value
-        addContactUseCase(username, phone)
-        onContactSaved()
+        store.accept(
+            AddContactStore.Intent.SaveContact
+        )
     }
 
     companion object {
