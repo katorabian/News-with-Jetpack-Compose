@@ -12,3 +12,11 @@ fun ComponentContext.componentScope(): CoroutineScope = CoroutineScope(
 ).apply {
     lifecycle.doOnDestroy { cancel() }
 }
+
+fun ComponentContext.lazyComponentScope(): Lazy<CoroutineScope> = lazy {
+    CoroutineScope(
+        Dispatchers.Main.immediate + SupervisorJob()
+    ).apply {
+        lifecycle.doOnDestroy { cancel() }
+    }
+}

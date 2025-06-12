@@ -3,7 +3,7 @@ package com.katorabian.mvidecomposetest.presentation
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.katorabian.mvidecomposetest.core.componentScope
+import com.katorabian.mvidecomposetest.core.lazyComponentScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +18,7 @@ class DefaultAddContactComponent(
     onContactSaved: () -> Unit
 ) : AddContactComponent, ComponentContext by componentContext {
 
-    private val coroutineScope by lazy { componentScope() }
+    private val coroutineScope by lazyComponentScope()
     private lateinit var store: AddContactStore
 
     init {
