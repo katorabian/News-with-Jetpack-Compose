@@ -3,12 +3,16 @@ package com.katorabian.mvidecomposetest.presentation
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.katorabian.mvidecomposetest.domain.Contact
+import com.katorabian.mvidecomposetest.domain.EditContactUseCase
 import com.katorabian.mvidecomposetest.presentation.EditContactStore.Intent
 import com.katorabian.mvidecomposetest.presentation.EditContactStore.Label
 import com.katorabian.mvidecomposetest.presentation.EditContactStore.State
 
 class EditContentStoreFactory(
-    private val storeFactory: StoreFactory
+    private val storeFactory: StoreFactory,
+    private val editContactUseCase: EditContactUseCase
 ) {
 
     private val store: Store<Intent, State, Label> = storeFactory.create(
@@ -17,7 +21,8 @@ class EditContentStoreFactory(
             username = "",
             phone = ""
         ),
-
+        reducer = ReducerImpl,
+        executorFactory = ::ExecutorImpl
     )
 
     private sealed interface Action
@@ -27,7 +32,30 @@ class EditContentStoreFactory(
         data class ChangePhone(val phone: String): Msg
     }
 
-    private class ReducerImpl: Reducer<State, Msg> {
+    private inner class ExecutorImpl: CoroutineExecutor<Intent, Action, State, Msg, Label>() {
+
+        override fun executeIntent(intent: Intent, getState: () -> State) {
+            when (intent) {
+                is Intent.ChangePhone -> {
+                    dispatch(Msg.ChangePhone(phone = intent.phone))
+                }
+                is Intent.ChangeUsername -> {
+                    dispatch(Msg.ChangeUsername(username = intent.username))
+                }
+                Intent.SaveContact -> {
+                    val state = getState()
+                    val contact = Contact(
+                        username = state.username,
+                        phone = state.phone
+                    )
+                    editContactUseCase(contact = contact)
+                    publish(Label.ContactSaved)
+                }
+            }
+        }
+    }
+
+    private object ReducerImpl: Reducer<State, Msg> {
         override fun State.reduce(msg: Msg) = when (msg) {
             is Msg.ChangePhone -> {
                 copy(phone = phone)
