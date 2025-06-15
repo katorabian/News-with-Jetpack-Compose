@@ -6,6 +6,7 @@ import com.katorabian.mvidecomposetest.presentation.EditContactStore.*
 interface EditContactStore: Store<Intent, State, Label> {
 
     data class State(
+        val id: Int,
         val username: String,
         val phone: String
     )

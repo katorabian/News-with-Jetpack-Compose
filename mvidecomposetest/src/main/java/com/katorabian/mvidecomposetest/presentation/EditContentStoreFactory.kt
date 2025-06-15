@@ -15,15 +15,17 @@ class EditContentStoreFactory(
     private val editContactUseCase: EditContactUseCase
 ) {
 
-    private val store: Store<Intent, State, Label> = storeFactory.create(
-        name = EditContactStore::class.java.simpleName,
-        initialState = State(
-            username = "",
-            phone = ""
-        ),
-        reducer = ReducerImpl,
-        executorFactory = ::ExecutorImpl
-    )
+    fun create(contact: Contact): EditContactStore =
+        object : EditContactStore, Store<Intent, State, Label> by storeFactory.create(
+            name = EditContactStore::class.java.simpleName,
+            initialState = State(
+                id = contact.id,
+                username = contact.username,
+                phone = contact.phone
+            ),
+            reducer = ReducerImpl,
+            executorFactory = ::ExecutorImpl
+        ) {}
 
     private sealed interface Action
 
@@ -45,6 +47,7 @@ class EditContentStoreFactory(
                 Intent.SaveContact -> {
                     val state = getState()
                     val contact = Contact(
+                        id = state.id,
                         username = state.username,
                         phone = state.phone
                     )
