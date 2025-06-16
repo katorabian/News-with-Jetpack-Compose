@@ -18,8 +18,9 @@ class DefaultAddContactComponent(
     onContactSaved: () -> Unit
 ) : AddContactComponent, ComponentContext by componentContext {
 
+    private val storeFactory = AddContactStoreFactory()
+    private val store: AddContactStore = storeFactory.create()
     private val coroutineScope by lazyComponentScope()
-    private lateinit var store: AddContactStore
 
     init {
         coroutineScope.launch {

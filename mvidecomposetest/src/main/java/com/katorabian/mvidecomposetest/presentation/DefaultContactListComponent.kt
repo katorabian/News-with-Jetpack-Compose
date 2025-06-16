@@ -20,9 +20,9 @@ class DefaultContactListComponent(
     val onAddContactRequest: () -> Unit
 ) : ContactListComponent, ComponentContext by componentContext {
 
+    private val storeFactory = ContactListStoreFactory()
+    private val store: ContactListStore = storeFactory.create()
     private val coroutineScope by lazyComponentScope()
-
-    lateinit var store: ContactListStore
 
     init {
         coroutineScope.launch {

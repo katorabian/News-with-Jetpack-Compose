@@ -16,12 +16,13 @@ import kotlinx.coroutines.launch
 
 class DefaultEditContactComponent(
     componentContext: ComponentContext,
-    private val contact: Contact,
+    contact: Contact,
     onContactSaved: () -> Unit
 ) : EditContactComponent, ComponentContext by componentContext {
 
+    private val storeFactory = EditContentStoreFactory()
+    private val store: EditContactStore = storeFactory.create(contact)
     private val coroutineScope by lazyComponentScope()
-    private lateinit var store: EditContactStore
 
     init {
         coroutineScope.launch {

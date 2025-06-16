@@ -5,15 +5,18 @@ import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.katorabian.mvidecomposetest.data.RepositoryImpl
 import com.katorabian.mvidecomposetest.domain.AddContactUseCase
 import com.katorabian.mvidecomposetest.presentation.AddContactStore.Intent
 import com.katorabian.mvidecomposetest.presentation.AddContactStore.Label
 import com.katorabian.mvidecomposetest.presentation.AddContactStore.State
 
-class AddContactStoreFactory(
-    private val storeFactory: StoreFactory,
-    private val addContactUseCase: AddContactUseCase
-) {
+class AddContactStoreFactory {
+
+    private val storeFactory: StoreFactory = DefaultStoreFactory()
+    private val repository = RepositoryImpl
+    private val addContactUseCase: AddContactUseCase = AddContactUseCase(repository)
 
     fun create(): AddContactStore =
         object : AddContactStore, Store<Intent, State, Label> by storeFactory.create(
