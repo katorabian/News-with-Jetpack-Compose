@@ -1,7 +1,9 @@
 package com.katorabian.mvidecomposetest.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.katorabian.mvidecomposetest.presentation.AddContactStore.*
+import com.katorabian.mvidecomposetest.presentation.AddContactStore.Intent
+import com.katorabian.mvidecomposetest.presentation.AddContactStore.Label
+import com.katorabian.mvidecomposetest.presentation.AddContactStore.State
 
 interface AddContactStore: Store<Intent, State, Label> {
 

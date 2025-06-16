@@ -1,6 +1,7 @@
 package com.katorabian.mvidecomposetest.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.katorabian.mvidecomposetest.core.lazyComponentScope
@@ -20,9 +21,11 @@ class DefaultContactListComponent(
     val onAddContactRequest: () -> Unit
 ) : ContactListComponent, ComponentContext by componentContext {
 
-    private val storeFactory = ContactListStoreFactory()
-    private val store: ContactListStore = storeFactory.create()
     private val coroutineScope by lazyComponentScope()
+    private val store: ContactListStore = instanceKeeper.getStore {
+        val storeFactory = ContactListStoreFactory()
+        storeFactory.create()
+    }
 
     init {
         coroutineScope.launch {

@@ -1,5 +1,6 @@
 package com.katorabian.mvidecomposetest.presentation
 
+import android.util.Log
 import com.arkivanov.mvikotlin.core.store.Executor
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
@@ -27,7 +28,9 @@ class AddContactStoreFactory {
             ),
             reducer = ReducerImpl,
             executorFactory = ::ExecutorImpl
-        ) {}
+        ) {}.apply {
+            Log.d("STORE_FACTORY", "CREATED ${this@AddContactStoreFactory::class.java.simpleName}")
+        }
 
     private sealed interface Action
 
