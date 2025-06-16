@@ -58,6 +58,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 material3 = { module = "androidx.compose.material3:material3" }
 decompose-mvikotlin = { module = "com.arkivanov.mvikotlin:mvikotlin", version.ref = "mvikotlin" }
 decompose-mvikotlin-main = { module = "com.arkivanov.mvikotlin:mvikotlin-main", version.ref = "mvikotlin" }
+decompose-mvikotlin-logging = { module = "com.arkivanov.mvikotlin:mvikotlin-logging", version.ref = "mvikotlin" }
 decompose-mvikotlin-coroutines = { module = "com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines", version.ref = "mvikotlin" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }

@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.decompose.compose.extensions)
     implementation(libs.decompose.mvikotlin)
     implementation(libs.decompose.mvikotlin.main)
+    implementation(libs.decompose.mvikotlin.logging)
     implementation(libs.decompose.mvikotlin.coroutines)
 
     testImplementation(libs.junit)

@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.katorabian.mvidecomposetest.data.RepositoryImpl
 import com.katorabian.mvidecomposetest.domain.Contact
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class ContactListStoreFactory {
 
-    private val storeFactory: StoreFactory = DefaultStoreFactory()
+    private val storeFactory: StoreFactory = LoggingStoreFactory(DefaultStoreFactory())
     private val repository = RepositoryImpl
     private val getContactsUseCase: GetContactsUseCase = GetContactsUseCase(repository)
 
