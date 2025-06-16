@@ -61,10 +61,10 @@ class EditContentStoreFactory(
     private object ReducerImpl: Reducer<State, Msg> {
         override fun State.reduce(msg: Msg) = when (msg) {
             is Msg.ChangePhone -> {
-                copy(phone = phone)
+                copy(phone = msg.phone)
             }
             is Msg.ChangeUsername -> {
-                copy(username = username)
+                copy(username = msg.username)
             }
         }
     }
