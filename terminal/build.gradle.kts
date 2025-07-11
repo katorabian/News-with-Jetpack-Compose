@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -14,6 +16,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        val apiKey = property("apiKey")?.toString() ?: error("You should add apiKey into gradle.properties")
+        buildConfigField("String", "TERMINAL_API_KEY", apiKey)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -39,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
